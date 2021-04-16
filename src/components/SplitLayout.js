@@ -17,16 +17,19 @@ const RightSection = styled.div`
   color: green;
 `;
 
-export default function SplitLayout({ left, right }) {
+export default function SplitLayout({ leftContent, rightContent }) {
   return (
     <SplitLayoutWrapper>
-      <LeftSection>{left}</LeftSection>
-      <RightSection>{right}</RightSection>
+      <LeftSection>{leftContent}</LeftSection>
+      <RightSection>{rightContent}</RightSection>
     </SplitLayoutWrapper>
   );
 }
 
 SplitLayout.propTypes = {
-  left: PropTypes.element.isRequired,
-  right: PropTypes.element,
+  leftContent: PropTypes.element.isRequired,
+  rightContent: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]).isRequired,
 };
