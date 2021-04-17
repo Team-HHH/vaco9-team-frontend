@@ -8,7 +8,9 @@ export default function RegisterPage() {
     email: '',
     name: '',
     password: '',
+    companyName: '',
     companyEmail: '',
+    companyRegistrationNumber: '',
   });
   const [isRegistered, setIsRegistered] = useState(false);
   const [isUserExists, setIsUserExists] = useState(false);
@@ -16,14 +18,13 @@ export default function RegisterPage() {
 
   function handleRegisterInputsChange(e) {
     const { name, value, } = e.target;
-
     setUserInputs({
       ...userInputs,
       [name]: value,
     });
   }
 
-  async function handleRegisterFormSubmit(e) {
+  function handleRegisterFormSubmit(e) {
     e.preventDefault();
 
     try {
