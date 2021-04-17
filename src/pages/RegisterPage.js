@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SplitLayout from '../components/SplitLayout';
 import RegisterForm from '../components/RegisterForm';
 import { saveRegistrationData } from '../apis/register';
 
@@ -40,12 +41,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <RegisterForm
-      isUserExists={isUserExists}
-      isRegistered={isRegistered}
-      isError={isError}
-      onRegisterInputChange={handleRegisterInputsChange}
-      onRegisterFormSubmit={handleRegisterFormSubmit}
-    />
+    <SplitLayout>
+      <RegisterForm
+        isUserExists={isUserExists}
+        isRegistered={isRegistered}
+        isError={isError}
+        onRegisterInputChange={handleRegisterInputsChange}
+        onRegisterFormSubmit={handleRegisterFormSubmit}
+      />
+    </SplitLayout>
   );
 }
