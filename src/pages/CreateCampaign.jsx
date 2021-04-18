@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { parseISO, differenceInCalendarDays } from 'date-fns';
 import CampaignForm from '../components/CampaignForm';
 import { fetchNewCampaign, fetchPaymentResult } from '../apis/payment';
 
@@ -12,42 +13,41 @@ export default function CreateCampaign() {
   IMP.init(process.env.REACT_APP_IMPORT_ID);
 
   async function handleNewCampaignFormSubmit(data) {
-    console.log(data);
+    const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
+
     try {
       const response = await fetchNewCampaign(data);
+      const responseBody = await response.json();
 
       if (!response.ok) {
-        console.log('결제에 실패했습니다.');
         return;
       }
 
-      const { merchantId } = response.body.data;
+      const { merchantId } = responseBody.data;
 
       IMP.request_pay({
         pg: 'html5_inicis',
         pay_method: 'card',
         merchant_uid: merchantId,
         name: data.title,
-        amount: data.dailyBudget,
-        buyer_email: 'hcplays@gmail.com',
-        buyer_name: '김희찬',
-        buyer_tel: '010-8895-8278',
-      }, rsp => {
+        amount: data.dailyBudget * campaignDuration,
+        buyer_email: 'test@gmail.com',
+        buyer_name: '홍길동',
+        buyer_tel: '010-1234-5678',
+      }, async (rsp) => {
         if (rsp.success) {
-          console.log('결제 성공');
-          const response = await fetchPaymentResult(rsp);
+          const { imp_uid, merchant_uid } = rsp;
+          const response = await fetchPaymentResult({ imp_uid, merchant_uid });
 
           if (!response.ok) {
-            console.log('결제에 실패했습니다.');
             return;
           }
         } else {
-          console.log('결제 실패');
-          console.log(rsp);
+          return;
         }
       });
     } catch (err) {
-      console.log(err);
+      return;
     }
   }
 
