@@ -73,12 +73,12 @@ export default function CampaignForm({ onFormSubmit }) {
               />
             </Card>
             <Card title="배너이미지 추가하기">
-              <label htmlFor="banner">URL </label>
+              <label htmlFor="content">URL </label>
               <input
                 type="text"
-                id="banner"
-                name="bannerUrl"
-                {...register('banner')}
+                id="content"
+                name="content"
+                {...register('content')}
               />
             </Card>
             <Card title="기간">
