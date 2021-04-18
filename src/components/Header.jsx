@@ -46,7 +46,7 @@ export default function Header() {
       <LeftHeader>
         <HeaderItem>Logo</HeaderItem>
         <HeaderItem>
-          <HeaderLink to='/campaign'>
+          <HeaderLink to='/campaign/category'>
             캠페인 유형
           </HeaderLink>
         </HeaderItem>
