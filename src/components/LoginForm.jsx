@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function LoginForm({ handleLoginSubmit, }) {
-  const [loginInput, setLoginInput] = useState({
-    email: '',
-    password: '',
-  });
+export default function LoginForm({
+  handleLoginInputChange,
+  handleLoginSubmit,
+  loginInput,
+}) {
 
   const {
     email,
     password,
   } = loginInput;
-
-  function handleLoginInputChange(event) {
-    const {
-      name,
-      value,
-    } = event.target;
-
-    setLoginInput({
-      ...loginInput,
-      [name]: value,
-    });
-  }
 
   return (
     <section>
@@ -53,5 +41,7 @@ export default function LoginForm({ handleLoginSubmit, }) {
 }
 
 LoginForm.propTypes = {
+  handleLoginInputChange: PropTypes.func.isRequired,
   handleLoginSubmit: PropTypes.func.isRequired,
+  loginInput: PropTypes.object.isRequired,
 };
