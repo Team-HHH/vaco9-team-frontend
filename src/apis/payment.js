@@ -1,6 +1,6 @@
-export function fetchNewCampaign(data) {
+export async function fetchNewCampaign(data) {
   const url = 'http://localhost:5000/campaign';
-  const response = fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -11,9 +11,9 @@ export function fetchNewCampaign(data) {
   return response;
 }
 
-export function fetchPaymentResult(data) {
-  const url = 'http://localhost:5000/campaign/verify';
-  const response = fetch(url, {
+export async function fetchPaymentResult(data) {
+  const url = 'http://localhost:5000/payment/verify';
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
 
 const Container = styled.div`
@@ -55,7 +56,9 @@ export default function CampaignForm({ onFormSubmit }) {
     handleSubmit,
   } = useForm();
   const watchDailyBudget = watch('dailyBudget', 100);
-  const watchType = watch('type');
+  const watchType = watch('expiresType', 'expired');
+  const watchExpiresAt = watch('expiresAt');
+  const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
   return (
     <Container>
@@ -72,6 +75,20 @@ export default function CampaignForm({ onFormSubmit }) {
                 {...register('title')}
               />
             </Card>
+            <Card title="캠페인 타입">
+              <SelectWrapper>
+                <div>
+                  <select
+                    name="campaignType"
+                    {...register('campaignType')}
+                  >
+                    <option value={'banner'}>배너</option>
+                    <option value={'text'}>텍스트</option>
+                    <option value={'video'}>비디오</option>
+                  </select>
+                </div>
+              </SelectWrapper>
+            </Card>
             <Card title="배너이미지 추가하기">
               <label htmlFor="content">URL </label>
               <input
@@ -85,11 +102,12 @@ export default function CampaignForm({ onFormSubmit }) {
               <SelectWrapper>
                 <div>
                   <select
-                    name="type"
-                    {...register('type')}
+                    name="expiresType"
+                    defaultValue="expired"
+                    {...register('expiresType')}
                   >
-                    <option value={'keepGoing'}>종료일 없이 계속 게재</option>
                     <option value={'expired'}>종료일 선택</option>
+                    <option value={'continue'}>종료일 없이 계속 게재</option>
                   </select>
                 </div>
                 <div>
@@ -123,6 +141,7 @@ export default function CampaignForm({ onFormSubmit }) {
             <span>광고 미리보기</span>
             <span>일일 추산 결과</span>
             <span>결제 요약</span>
+            <span>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</span>
             <button>시작하기</button>
           </ContentWrapper>
         </Form>
