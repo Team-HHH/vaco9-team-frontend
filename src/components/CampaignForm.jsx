@@ -54,7 +54,7 @@ export default function CampaignForm({ onFormSubmit }) {
     watch,
     handleSubmit,
   } = useForm();
-  const watchDailyBudget = watch('dailyBudget', 5000);
+  const watchDailyBudget = watch('dailyBudget', 100);
   const watchType = watch('type');
 
   return (
@@ -107,7 +107,7 @@ export default function CampaignForm({ onFormSubmit }) {
                 <h2>{watchDailyBudget} 원</h2>
                 <input
                   type="range"
-                  min="5000"
+                  min="100"
                   max="50000"
                   step="1000"
                   name="dailyBudget"
