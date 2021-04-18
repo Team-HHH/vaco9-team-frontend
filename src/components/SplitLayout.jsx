@@ -21,7 +21,7 @@ export default function SplitLayout({ children, }) {
   return (
     <SplitLayoutWrapper>
       <LeftSection>{children}</LeftSection>
-      <RightSection></RightSection>
+      <RightSection />
     </SplitLayoutWrapper>
   );
 }

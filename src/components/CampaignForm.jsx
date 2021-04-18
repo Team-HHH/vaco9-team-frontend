@@ -68,10 +68,10 @@ export default function CampaignForm({ onFormSubmit }) {
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
           <ContentWrapper>
-            <Card title="캠페인 제목">
+            <Card title='캠페인 제목'>
               <input
-                type="text"
-                name="title"
+                type='text'
+                name='title'
                 {...register('title')}
               />
             </Card>
@@ -98,7 +98,7 @@ export default function CampaignForm({ onFormSubmit }) {
                 {...register('content')}
               />
             </Card>
-            <Card title="기간">
+            <Card title='기간'>
               <SelectWrapper>
                 <div>
                   <select
@@ -113,14 +113,14 @@ export default function CampaignForm({ onFormSubmit }) {
                 <div>
                   {watchType === 'expired' && (
                     <input
-                      type="date"
+                      type='date'
                       {...register('expiresAt')}
                     />
                   )}
                 </div>
               </SelectWrapper>
             </Card>
-            <Card title="일일 예산">
+            <Card title='일일 예산'>
               <SliderWrapper>
                 <h2>{watchDailyBudget} 원</h2>
                 <input
@@ -133,11 +133,11 @@ export default function CampaignForm({ onFormSubmit }) {
                 />
               </SliderWrapper>
             </Card>
-            <Card title="결제 수단">
+            <Card title='결제 수단'>
               <p>API</p>
             </Card>
           </ContentWrapper>
-          <ContentWrapper width="360px">
+          <ContentWrapper width='360px'>
             <span>광고 미리보기</span>
             <span>일일 추산 결과</span>
             <span>결제 요약</span>

@@ -16,7 +16,10 @@ const CardItem = styled.div`
   width: 100%;
 `;
 
-export default function Card({ children, title }) {
+export default function Card({
+  children,
+  title,
+}) {
   return (
     <Container>
       <CardItem>
