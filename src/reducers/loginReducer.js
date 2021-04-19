@@ -44,10 +44,11 @@ const failToLogin = (message) => ({
 export const loginToAdminPage = (loginInput) => async (dispatch) => {
   try {
     const response = await requestLoginToServer(loginInput);
+    const body = await response.json();
     const {
       accessToken,
       user,
-    } = response.data;
+    } = body.data;
 
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('user', JSON.stringify(user));

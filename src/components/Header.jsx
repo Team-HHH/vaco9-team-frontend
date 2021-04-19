@@ -46,29 +46,29 @@ export default function Header() {
       <LeftHeader>
         <HeaderItem>Logo</HeaderItem>
         <HeaderItem>
-          <HeaderLink to='/campaign/category'>
+          <HeaderLink to="/campaign/category">
             캠페인 유형
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>
-          <HeaderLink to='/price'>
+          <HeaderLink to="/price">
             비용
           </HeaderLink>
         </HeaderItem>
       </LeftHeader>
       <RightHeader>
         <HeaderItem>
-          <HeaderLink to='/dashboard'>
+          <HeaderLink to="/dashboard">
             대시보드
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>
-          <HeaderLink to='/campaign/new'>
+          <HeaderLink to="/campaign/new">
             캠페인 시작하기
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>
-          <HeaderLink to='/login'>
+          <HeaderLink to="/login">
             로그인
           </HeaderLink>
         </HeaderItem>

@@ -18,15 +18,15 @@ export default function LoginForm({
       <form onSubmit={handleLoginSubmit}>
         <p>Email Address</p>
         <input
-          type='email'
-          name='email'
+          type="email"
+          name="email"
           value={email}
           onChange={handleLoginInputChange}
         />
         <p>Password</p>
         <input
-          type='password'
-          name='password'
+          type="password"
+          name="password"
           value={password}
           onChange={handleLoginInputChange}
         />
@@ -34,7 +34,7 @@ export default function LoginForm({
       </form>
       <div>
         <span>Dont have account?</span>
-        <a href='/register'>Sign up</a>
+        <a href="/register">Sign up</a>
       </div>
     </section>
   );

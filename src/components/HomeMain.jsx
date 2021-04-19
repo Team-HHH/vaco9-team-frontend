@@ -60,7 +60,7 @@ export default function HomeMain() {
         </ContentWrapper>
         <ContentWrapper>
           <ImgContainer>
-            <img src={mainImg} alt='mainImg' />
+            <img src={mainImg} alt="mainImg" />
           </ImgContainer>
         </ContentWrapper>
       </HomeSection>
@@ -81,15 +81,15 @@ export default function HomeMain() {
         </ContentWrapper>
         <ContentWrapper>
           <ImgContainer>
-            <img src={mainImg} alt='mainImg' />
+            <img src={mainImg} alt="mainImg" />
           </ImgContainer>
         </ContentWrapper>
       </HomeSection>
       <HomeSection>
-        <Content height='100%'>
+        <Content height="100%">
           <h2>서비스 이름과 함께 딱 맞는 고객에게 다가가세요.</h2>
           <ImgContainer>
-            <img src={mainImg} alt='mainImg' />
+            <img src={mainImg} alt="mainImg" />
           </ImgContainer>
           <span>서비스 Ads를 사용하면 예산 내에서 관련성 높은 고객에게 더 많이 도달할 수 있습니다.</span>
         </Content>

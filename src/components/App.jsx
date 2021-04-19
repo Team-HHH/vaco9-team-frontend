@@ -9,20 +9,20 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path='/'>
+        <Route exact path="/">
           <Home />
         </Route>
-        <Route path='/campaign/new'>
+        <Route path="/campaign/new">
           <CreateCampaign />
         </Route>
-        <Route path='/login'>
+        <Route path="/login">
           <Login />
         </Route>
-        <Route path='/register'>
+        <Route path="/register">
           <RegisterPage />
         </Route>
-        <Route path='*'>
-          <Redirect to='/' />
+        <Route path="*">
+          <Redirect to="/" />
         </Route>
       </Switch>
     </Router>

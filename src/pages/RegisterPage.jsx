@@ -16,16 +16,16 @@ export default function RegisterPage() {
   const [isUserExists, setIsUserExists] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  function handleRegisterInputsChange(e) {
-    const { name, value, } = e.target;
+  function handleRegisterInputsChange(event) {
+    const { name, value, } = event.target;
     setUserInputs({
       ...userInputs,
       [name]: value,
     });
   }
 
-  function handleRegisterFormSubmit(e) {
-    e.preventDefault();
+  function handleRegisterFormSubmit(event) {
+    event.preventDefault();
 
     try {
       const response = saveRegistrationData(userInputs);
@@ -36,7 +36,7 @@ export default function RegisterPage() {
       } else if (message === 'user exists') {
         setIsUserExists(true);
       }
-    } catch (e) {
+    } catch (error) {
       setIsError(true);
     }
   }

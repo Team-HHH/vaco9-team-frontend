@@ -2,12 +2,12 @@ export async function requestLoginToServer(loginInput) {
   const response = await fetch(
     'http://localhost:5000/auth/login/advertiser', {
       method: 'POST',
-      body: JSON.stringify(loginInput),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
+      body: JSON.stringify(loginInput),
     }
   );
 
-  return await response.json();
+  return response;
 }
