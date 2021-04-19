@@ -36,7 +36,7 @@ export default function RegisterForm(props) {
       <FormWrapper>
         <h1>Create your account</h1>
         <form
-          name='form'
+          name="form"
           onSubmit={
             handleSubmit((data, e) => {
               onRegisterFormSubmit(e);
@@ -45,29 +45,29 @@ export default function RegisterForm(props) {
         >
           <Label>Email</Label>
           <Input
-            type='email'
-            name='email'
+            type="email"
+            name="email"
             onChange={onRegisterInputChange}
             required
           />
           <Label>Name</Label>
           <Input
-            type='text'
-            name='name'
+            type="text"
+            name="name"
             onChange={onRegisterInputChange}
             required
           />
           <Label>Password</Label>
           <Input
-            type='password'
+            type="password"
             {...register('password')}
-            minLength='8'
+            minLength="8"
             onChange={onRegisterInputChange}
             required
           />
           <Label>Confirm Password</Label>
           <Input
-            type='password'
+            type="password"
             {...register('passwordConfirmation', {
               validate: {
                 matchesPreviousPassword: (value) => {
@@ -76,7 +76,7 @@ export default function RegisterForm(props) {
                 },
               },
             })}
-            minLength='8'
+            minLength="8"
             required
           />
           {errors.passwordConfirmation && (
@@ -84,25 +84,25 @@ export default function RegisterForm(props) {
           )}
           <Label>Company Name</Label>
           <Input
-            type='text'
-            name='companyName'
+            type="text"
+            name="companyName"
             onChange={onRegisterInputChange}
           />
           <Label>Company Email</Label>
           <Input
-            type='text'
-            name='companyEmail'
+            type="text"
+            name="companyEmail"
             onChange={onRegisterInputChange}
           />
           <Label>Company Registration Number</Label>
           <Input
-            type='text'
-            name='companyRegistrationNumber'
+            type="text"
+            name="companyRegistrationNumber"
             onChange={onRegisterInputChange}
           />
           <Input
-            type='submit'
-            value='Register'
+            type="submit"
+            value="Register"
           />
         </form>
       </FormWrapper>

@@ -98,7 +98,7 @@ export default function CampaignForm({ onFormSubmit }) {
                 {...register('content')}
               />
             </Card>
-            <Card title="기간">
+            <Card title='기간'>
               <SelectWrapper>
                 <div>
                   <select
@@ -120,7 +120,7 @@ export default function CampaignForm({ onFormSubmit }) {
                 </div>
               </SelectWrapper>
             </Card>
-            <Card title="일일 예산">
+            <Card title='일일 예산'>
               <SliderWrapper>
                 <h2>{watchDailyBudget} 원</h2>
                 <input
