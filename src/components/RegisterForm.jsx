@@ -22,12 +22,9 @@ const Input = styled.input`
   display: block;
 `;
 
-export default function RegisterForm(props) {
-  const { onRegisterInputChange, onRegisterFormSubmit, } = props;
+export default function RegisterForm({ onRegisterFormSubmit }) {
   const {
     register,
-    formState: { errors, },
-    getValues,
     handleSubmit,
   } = useForm();
 
@@ -37,68 +34,55 @@ export default function RegisterForm(props) {
         <h1>Create your account</h1>
         <form
           name="form"
-          onSubmit={
-            handleSubmit((data, e) => {
-              onRegisterFormSubmit(e);
-            })
-          }
+          onSubmit={handleSubmit(onRegisterFormSubmit)}
         >
           <Label>Email</Label>
           <Input
             type="email"
             name="email"
-            onChange={onRegisterInputChange}
+            {...register('email')}
             required
           />
           <Label>Name</Label>
           <Input
             type="text"
             name="name"
-            onChange={onRegisterInputChange}
+            {...register('name')}
             required
           />
           <Label>Password</Label>
           <Input
             type="password"
-            {...register('password')}
+            name="password"
             minLength="8"
-            onChange={onRegisterInputChange}
+            {...register('password')}
             required
           />
           <Label>Confirm Password</Label>
           <Input
             type="password"
-            {...register('passwordConfirmation', {
-              validate: {
-                matchesPreviousPassword: (value) => {
-                  const { password, } = getValues();
-                  return password === value || 'password should match';
-                },
-              },
-            })}
+            name="passwordConfirm"
+            {...register('passwordConfirm')}
             minLength="8"
             required
           />
-          {errors.passwordConfirmation && (
-            <p>{errors.passwordConfirmation.message}</p>
-          )}
           <Label>Company Name</Label>
           <Input
             type="text"
             name="companyName"
-            onChange={onRegisterInputChange}
+            {...register('companyName')}
           />
           <Label>Company Email</Label>
           <Input
             type="text"
             name="companyEmail"
-            onChange={onRegisterInputChange}
+            {...register('companyEmail')}
           />
           <Label>Company Registration Number</Label>
           <Input
             type="text"
             name="companyRegistrationNumber"
-            onChange={onRegisterInputChange}
+            {...register('companyRegistrationNumber')}
           />
           <Input
             type="submit"
@@ -111,6 +95,5 @@ export default function RegisterForm(props) {
 }
 
 RegisterForm.propTypes = {
-  onRegisterInputChange: PropTypes.func.isRequired,
   onRegisterFormSubmit: PropTypes.func.isRequired,
 };
