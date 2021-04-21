@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import CampaignForm from '../components/CampaignForm';
-import { fetchNewCampaign, fetchPaymentResult } from '../apis/payment';
+import { fetchPaymentResult } from '../apis/payment';
+import { fetchNewCampaign } from '../apis/campaigns';
 
 const Container = styled.div`
   display: flex;
