@@ -1,10 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
 
-export default function ModalContent({ title, message }) {
+const ModalContentWrapper = styled.div`
+  background-color: white;
+  width: 500px;
+  height: 300px;
+`;
+
+export default function ModalContent({ message, onHideModalClick }) {
   return (
-    <div>
-      <div>{title}</div>
+    <ModalContentWrapper>
       <div>{message}</div>
-    </div>
+      <button
+        onClick={onHideModalClick}
+      >hide modal</button>
+    </ModalContentWrapper>
   );
 }
