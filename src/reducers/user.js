@@ -36,23 +36,23 @@ export const loginToAdminPage = (loginInput, history) => async (dispatch) => {
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
-  ? { isLoggedIn: true, user, }
-  : { isLoggedIn: false, user: null, };
+  ? { isLoggedIn: true, info: user, }
+  : { isLoggedIn: false, info: null, };
 
-export default function loginReducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
   case LOGIN_SUCCESS:
     return {
       ...state,
       isLoggedIn: true,
-      user: action.payload,
+      info: action.payload,
     };
   case LOGIN_FAILURE:
   case LOGOUT:
     return {
       ...state,
       isLoggedIn: false,
-      user: null,
+      info: null,
       message: action.payload,
     };
   default:

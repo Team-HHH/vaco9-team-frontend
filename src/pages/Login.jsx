@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import SplitLayout from '../components/SplitLayout';
 import LoginForm from '../components/LoginForm';
-import { loginToAdminPage } from '../reducers/loginReducer';
+import { loginToAdminPage } from '../reducers/user';
 
 export default function Login() {
   const [loginInput, setLoginInput] = useState({

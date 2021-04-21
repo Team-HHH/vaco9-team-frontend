@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import loginReducer from './loginReducer';
-import campaigns from './campaignsReducer';
+import user from './user';
+import campaigns from './campaign';
 
 export default combineReducers({
-  loginReducer,
+  user,
   campaigns,
 });
