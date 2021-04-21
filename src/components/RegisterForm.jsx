@@ -1,7 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { ErrorMessage } from '@hookform/error-message';
+import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
+import Joi from 'joi';
+
+const schema = Joi.object({
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required(),
+  name: Joi.string()
+    .required(),
+  password: Joi.string()
+    .min(8)
+    .max(20)
+    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])'))
+    .required(),
+  passwordConfirm: Joi.string()
+    .min(8)
+    .max(20)
+    .valid(Joi.ref('password'))
+    .required(),
+  companyName: Joi.string()
+    .required(),
+  companyEmail: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required(),
+  companyRegistrationNumber: Joi.string()
+    .pattern(new RegExp('([0-9]{3})-([0-9]{2})-([0-9]{5})'))
+    .required(),
+});
 
 const RegisterWrapper = styled.div`
   display: flex;
@@ -26,7 +56,10 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
   const {
     register,
     handleSubmit,
-  } = useForm();
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(schema),
+  });
 
   return (
     <RegisterWrapper>
@@ -43,6 +76,11 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
             {...register('email')}
             required
           />
+          <ErrorMessage
+            errors={errors}
+            name="email"
+            render={() => <p>{commonErrorMessage.INVALID_EMAIL}</p>}
+          />
           <Label>Name</Label>
           <Input
             type="text"
@@ -50,13 +88,23 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
             {...register('name')}
             required
           />
+          <ErrorMessage
+            errors={errors}
+            name="name"
+            render={() => <p>{registerErrorMessage.INVALID_NAME}</p>}
+          />
           <Label>Password</Label>
           <Input
             type="password"
             name="password"
-            minLength="8"
             {...register('password')}
+            minLength="8"
             required
+          />
+          <ErrorMessage
+            errors={errors}
+            name="password"
+            render={() => <p>{commonErrorMessage.INVALID_PASSWORD}</p>}
           />
           <Label>Confirm Password</Label>
           <Input
@@ -66,11 +114,21 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
             minLength="8"
             required
           />
+          <ErrorMessage
+            errors={errors}
+            name="passwordConfirm"
+            render={() => <p>{registerErrorMessage.INVALID_PASSWORDCONFIRM}</p>}
+          />
           <Label>Company Name</Label>
           <Input
             type="text"
             name="companyName"
             {...register('companyName')}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="companyName"
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYNAME}</p>}
           />
           <Label>Company Email</Label>
           <Input
@@ -78,11 +136,21 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
             name="companyEmail"
             {...register('companyEmail')}
           />
+          <ErrorMessage
+            errors={errors}
+            name="companyEmail"
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYEMAIL}</p>}
+          />
           <Label>Company Registration Number</Label>
           <Input
             type="text"
             name="companyRegistrationNumber"
             {...register('companyRegistrationNumber')}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="companyRegistrationNumber"
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYREGISTRATIONNUMBER}</p>}
           />
           <Input
             type="submit"
