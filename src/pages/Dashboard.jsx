@@ -8,15 +8,16 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  box-sizing: border-box;
 `;
 
 const NavContainer = styled.div`
-  width: 30%;
+  width: 20%;
   height: 100%;
 `;
 
 const MainContainer = styled.div`
-  width: 70%;
+  width: 80%;
   height: 100%;
 `;
 

@@ -8,18 +8,22 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 `;
 
 const DateContainer = styled.div`
   width: 100%;
   height: 5%;
+  padding: 30px;
 `;
 
 const OverviewContainer = styled.div`
   width: 100%;
-  height: 10%;
-  display: flex;
-  justify-content: space-evenly;
+  height: 20%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 30px;
+  gap: 20px;
 `;
 
 const ChartContainer = styled.div`
