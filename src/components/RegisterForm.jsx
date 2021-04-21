@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 import Joi from 'joi';
+import { registerErrorMessage } from '../constants/validationErrorMessage';
 
 const schema = Joi.object({
   email: Joi.string()
@@ -56,7 +57,6 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
     register,
     handleSubmit,
     formState: { errors },
-    onError,
   } = useForm({
     resolver: joiResolver(schema),
   });
@@ -79,7 +79,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="email"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_EMAIL}</p>}
           />
           <Label>Name</Label>
           <Input
@@ -91,7 +91,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="name"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_NAME}</p>}
           />
           <Label>Password</Label>
           <Input
@@ -104,7 +104,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="password"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_PASSWORD}</p>}
           />
           <Label>Confirm Password</Label>
           <Input
@@ -117,7 +117,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="passwordConfirm"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_PASSWORDCONFIRM}</p>}
           />
           <Label>Company Name</Label>
           <Input
@@ -128,7 +128,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyName"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYNAME}</p>}
           />
           <Label>Company Email</Label>
           <Input
@@ -139,7 +139,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyEmail"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYEMAIL}</p>}
           />
           <Label>Company Registration Number</Label>
           <Input
@@ -150,7 +150,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyRegistrationNumber"
-            render={() => <p></p>}
+            render={() => <p>{registerErrorMessage.INVALID_COMPANYREGISTRATIONNUMBER}</p>}
           />
           <Input
             type="submit"
