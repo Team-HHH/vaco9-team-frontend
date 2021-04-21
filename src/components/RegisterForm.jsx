@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
+import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
 import Joi from 'joi';
-import { registerErrorMessage } from '../constants/validationErrorMessage';
 
 const schema = Joi.object({
   email: Joi.string()
@@ -79,7 +79,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="email"
-            render={() => <p>{registerErrorMessage.INVALID_EMAIL}</p>}
+            render={() => <p>{commonErrorMessage.INVALID_EMAIL}</p>}
           />
           <Label>Name</Label>
           <Input
@@ -104,7 +104,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="password"
-            render={() => <p>{registerErrorMessage.INVALID_PASSWORD}</p>}
+            render={() => <p>{commonErrorMessage.INVALID_PASSWORD}</p>}
           />
           <Label>Confirm Password</Label>
           <Input
