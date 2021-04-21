@@ -5,6 +5,7 @@ import CreateCampaign from '../pages/CreateCampaign';
 import Login from '../pages/Login';
 import RegisterPage from '../pages/RegisterPage';
 import DashBoard from '../pages/Dashboard';
+import PrivateRoute from '../helpers/PrivateRoute';
 
 export default function App() {
   return (
@@ -13,18 +14,18 @@ export default function App() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/campaign/new">
+        <PrivateRoute path="/campaign/new">
           <CreateCampaign />
-        </Route>
+        </PrivateRoute>
         <Route path="/login">
           <Login />
         </Route>
         <Route path="/register">
           <RegisterPage />
         </Route>
-        <Route path="/dashboard">
+        <PrivateRoute path="/dashboard">
           <DashBoard />
-        </Route>
+        </PrivateRoute>
         <Route path="*">
           <Redirect to="/" />
         </Route>
