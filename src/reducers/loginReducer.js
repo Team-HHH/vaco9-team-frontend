@@ -14,7 +14,7 @@ const failToLogin = (message) => ({
   payload: message,
 });
 
-export const loginToAdminPage = (loginInput) => async (dispatch) => {
+export const loginToAdminPage = (loginInput, history) => async (dispatch) => {
   try {
     const response = await requestLoginToServer(loginInput);
     const body = await response.json();
@@ -27,6 +27,8 @@ export const loginToAdminPage = (loginInput) => async (dispatch) => {
     localStorage.setItem('user', JSON.stringify(user));
 
     dispatch(succeedToLogin(user));
+
+    history.push('/');
   } catch (error) {
     console.error();
   }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import SplitLayout from '../components/SplitLayout';
 import LoginForm from '../components/LoginForm';
 import { loginToAdminPage } from '../reducers/loginReducer';
@@ -10,6 +11,7 @@ export default function Login() {
     password: '',
   });
   const dispatch = useDispatch();
+  const history = useHistory();
 
   function handleLoginInputChange(event) {
     const {
@@ -26,7 +28,7 @@ export default function Login() {
   function handleLoginSubmit(event) {
     event.preventDefault();
 
-    dispatch(loginToAdminPage(loginInput));
+    dispatch(loginToAdminPage(loginInput, history));
   }
 
   return (
