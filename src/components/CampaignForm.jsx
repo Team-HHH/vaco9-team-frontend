@@ -4,6 +4,29 @@ import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
 
+import { joiResolver } from '@hookform/resolvers/joi';
+import { ErrorMessage } from '@hookform/error-message';
+import { createCampaignErrorMessage } from '../constants/validationErrorMessage';
+import Joi from 'joi';
+
+const schema = Joi.object({
+  title: Joi.string()
+    .required(),
+  campaignType: Joi.string()
+    .valid('banner', 'text', 'video')
+    .required(),
+  expiresType: Joi.string()
+    .valid('continue', 'expired')
+    .required(),
+  content: Joi.string()
+    .required(),
+  expiresAt: Joi.date()
+    .greater('now')
+    .required(),
+  dailyBudget: Joi.number()
+    .required(),
+});
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,7 +77,10 @@ export default function CampaignForm({ onFormSubmit }) {
     register,
     watch,
     handleSubmit,
-  } = useForm();
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(schema),
+  });
   const watchDailyBudget = watch('dailyBudget', 100);
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt');
@@ -74,6 +100,11 @@ export default function CampaignForm({ onFormSubmit }) {
                 name="title"
                 {...register('title')}
               />
+              <ErrorMessage
+                errors={errors}
+                name="title"
+                render={() => <p>{createCampaignErrorMessage.INVALID_TITLE}</p>}
+              />
             </Card>
             <Card title="캠페인 타입">
               <SelectWrapper>
@@ -88,6 +119,11 @@ export default function CampaignForm({ onFormSubmit }) {
                   </select>
                 </div>
               </SelectWrapper>
+              <ErrorMessage
+                errors={errors}
+                name="campaignType"
+                render={() => <p>{createCampaignErrorMessage.INVALID_CAMPAIGNTYPE}</p>}
+              />
             </Card>
             <Card title="배너이미지 추가하기">
               <label htmlFor="content">URL </label>
@@ -96,6 +132,11 @@ export default function CampaignForm({ onFormSubmit }) {
                 id="content"
                 name="content"
                 {...register('content')}
+              />
+              <ErrorMessage
+                errors={errors}
+                name="content"
+                render={() => <p>{createCampaignErrorMessage.INVALID_CONTENT}</p>}
               />
             </Card>
             <Card title='기간'>
@@ -119,6 +160,11 @@ export default function CampaignForm({ onFormSubmit }) {
                   )}
                 </div>
               </SelectWrapper>
+              <ErrorMessage
+                errors={errors}
+                name="expiresType"
+                render={() => <p>{createCampaignErrorMessage.INVALID_EXPIRESTYPE}</p>}
+              />
             </Card>
             <Card title='일일 예산'>
               <SliderWrapper>
@@ -132,6 +178,11 @@ export default function CampaignForm({ onFormSubmit }) {
                   {...register('dailyBudget')}
                 />
               </SliderWrapper>
+              <ErrorMessage
+                errors={errors}
+                name="dailyBudget"
+                render={() => <p>{createCampaignErrorMessage.INVALID_DAILYBUDGET}</p>}
+              />
             </Card>
             <Card title="결제 수단">
               <p>API</p>
