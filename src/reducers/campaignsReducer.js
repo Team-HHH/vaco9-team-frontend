@@ -35,7 +35,7 @@ export default function reducer(state = {}, action) {
     };
   case GET_CAMPAIGNS_SUCCESS:
     return {
-      ...action.campaigns,
+      ...action.payload,
     };
   case GET_CAMPAIGNS_ERROR:
     return {

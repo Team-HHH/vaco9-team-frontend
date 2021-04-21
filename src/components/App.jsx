@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import CreateCampaign from '../pages/CreateCampaign';
 import Login from '../pages/Login';
 import RegisterPage from '../pages/RegisterPage';
+import DashBoard from '../pages/Dashboard';
 
 export default function App() {
   return (
@@ -20,6 +21,9 @@ export default function App() {
         </Route>
         <Route path="/register">
           <RegisterPage />
+        </Route>
+        <Route path="/dashboard">
+          <DashBoard />
         </Route>
         <Route path="*">
           <Redirect to="/" />
