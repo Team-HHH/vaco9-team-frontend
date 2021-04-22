@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import mainImg from '../assets/mainImg.png';
 import Footer from './Footer';
+import { color } from '../css/color';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const ContentWrapper = styled.div`
   display: flex;
   width: 50%;
   height: 100%;
+  // justify-content: center;
 `;
 
 const Content = styled.div`
@@ -35,7 +37,24 @@ const ImgContainer = styled.div`
   display: flex;
   width: 50%;
   height: 50%;
+  margin: 20% 0 0 0;
 `;
+
+const Button = styled.button`
+  width: 120px;
+  height: 40px;
+  margin: 20px 0;
+  border: none;
+  background-color: ${color.POINT_COLOR};
+  &:hover {
+    background-color: ${color.SUB_POINT_COLOR};
+    color: black;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
 
 export default function HomeMain() {
   const history = useHistory();
@@ -52,10 +71,12 @@ export default function HomeMain() {
               헬스케어 기업을 위한<br />
               최적의 광고 플랫폼
             </h2>
-            <span>니즈가 명확한 고객을 확보하세요</span>
-            <button onClick={handleCampaignButtonClick}>
+            <article
+            >니즈가 명확한 고객을 확보하세요</article
+            >
+            <Button onClick={handleCampaignButtonClick}>
               캠페인 시작하기
-            </button>
+            </Button>
           </Content>
         </ContentWrapper>
         <ContentWrapper>
@@ -72,11 +93,13 @@ export default function HomeMain() {
               적합한 예산을<br />
               설정하세요
             </h2>
-            <span>
+            <article
+            >
               Google Ads는 광고 예산의 규모에 상관없이 이용할 수 있습니다.<br />
               월예산 한도를 설정하면 그 이상 지출되는 경우가 없습니다. <br />
               또한 언제든지 지출을 일시중지하거나 조정할 수 있습니다.
-            </span>
+            </article
+            >
           </Content>
         </ContentWrapper>
         <ContentWrapper>
@@ -91,7 +114,9 @@ export default function HomeMain() {
           <ImgContainer>
             <img src={mainImg} alt="mainImg" />
           </ImgContainer>
-          <span>서비스 Ads를 사용하면 예산 내에서 관련성 높은 고객에게 더 많이 도달할 수 있습니다.</span>
+          <article
+          >서비스 Ads를 사용하면 예산 내에서 관련성 높은 고객에게 더 많이 도달할 수 있습니다.</article
+          >
         </Content>
       </HomeSection>
       <Footer />

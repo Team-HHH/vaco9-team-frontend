@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { color } from '../css/color';
+import GlobalFonts from '../fonts/fonts';
 
 const Container = styled.div`
   position: fixed;
@@ -9,7 +11,7 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: skyblue;
+  background-color: ${color.MAIN_COLOR};
 `;
 
 const LeftHeader = styled.div`
@@ -30,6 +32,7 @@ const HeaderItem = styled.div`
   display: flex;
   width: fit-content;
   height: 100%;
+  margin: auto 30px;
 `;
 
 const HeaderLink = styled(Link)`
@@ -38,11 +41,18 @@ const HeaderLink = styled(Link)`
   margin: auto;
   justify-content: center;
   align-content: center;
+  text-decoration: none;
+  font-family: 'NanumBarunGothicBold';
+  color: ${color.MAIN_FONT_COLOR};
+  &:hover {
+    color: ${color.BOLD_COLOR};
+  }
 `;
 
 export default function Header() {
   return (
     <Container>
+      <GlobalFonts />
       <LeftHeader>
         <HeaderItem>Logo</HeaderItem>
         <HeaderItem>
