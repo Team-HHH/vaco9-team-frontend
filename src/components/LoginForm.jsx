@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
@@ -18,11 +17,7 @@ const schema = Joi.object({
     .required(),
 });
 
-export default function LoginForm({
-  handleLoginInputChange,
-  handleLoginSubmit,
-  loginInput,
-}) {
+export default function LoginForm({ handleLoginSubmit }) {
   const {
     register,
     handleSubmit,
@@ -30,11 +25,6 @@ export default function LoginForm({
   } = useForm({
     resolver: joiResolver(schema),
   });
-
-  const {
-    email,
-    password,
-  } = loginInput;
 
   return (
     <section>
@@ -44,9 +34,7 @@ export default function LoginForm({
         <input
           type="email"
           name="email"
-          value={email}
           {...register('email')}
-          onChange={handleLoginInputChange}
         />
         <ErrorMessage
           errors={errors}
@@ -57,9 +45,7 @@ export default function LoginForm({
         <input
           type="password"
           name="password"
-          value={password}
           {...register('password')}
-          onChange={handleLoginInputChange}
         />
         <ErrorMessage
           errors={errors}
