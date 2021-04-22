@@ -39,7 +39,7 @@ const Input = styled.input`
   display: block;
 	border: none;
 	padding: 8px 15px;
-	margin: 3px 0;
+	margin: 0 0 20px 0;
 	width: 80%;
   border-radius: 8px;
 `;
@@ -117,7 +117,5 @@ export default function LoginForm({ handleLoginSubmit }) {
 }
 
 LoginForm.propTypes = {
-  handleLoginInputChange: PropTypes.func.isRequired,
   handleLoginSubmit: PropTypes.func.isRequired,
-  loginInput: PropTypes.object.isRequired,
 };
