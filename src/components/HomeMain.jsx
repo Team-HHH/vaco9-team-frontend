@@ -45,9 +45,9 @@ const Button = styled.button`
   height: 40px;
   margin: 20px 0;
   border: none;
-  background-color: ${color.POINT_COLOR};
+  background-color: ${color.SUB_COLOR};
   &:hover {
-    background-color: ${color.SUB_POINT_COLOR};
+    background-color: ${color.MAIN_COLOR};
     color: black;
   }
   &:focus {

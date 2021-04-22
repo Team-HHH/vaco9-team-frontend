@@ -11,7 +11,7 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: ${color.MAIN_COLOR};
+  background-color: ${color.SUB_COLOR};
 `;
 
 const LeftHeader = styled.div`
