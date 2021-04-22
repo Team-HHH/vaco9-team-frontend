@@ -1,15 +1,17 @@
 import React from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import mainImg from '../assets/mainImg.png';
+import { selectCampaign } from '../reducers/selectedCampaign';
 
 const NavWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgb(255, 249, 219, 0.3);
 `;
 
@@ -85,9 +87,13 @@ const NavCampaignItem = styled.div`
 `;
 
 export default function DashboardNav() {
-  const { user } = useSelector((state) => ({
-    user: state.loginReducer.user,
-  }), shallowEqual);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user?.info);
+  const { allIds, byId } = useSelector(state => state.campaigns);
+
+  function handleNavItemOnClick(event) {
+    dispatch(selectCampaign(event.target.id));
+  }
 
   return (
     <NavWrapper>
@@ -109,8 +115,14 @@ export default function DashboardNav() {
       </NavProfileContainer>
       <NavCampaignContainer>
         <NavCampaigns>
-          {adsTitles.map((title, index) => (
-            <NavCampaignItem key={index}>{title}</NavCampaignItem>
+          {allIds && allIds.map((id) => (
+            <NavCampaignItem
+              key={byId[id]._id}
+              id={byId[id]._id}
+              onClick={handleNavItemOnClick}
+            >
+              {byId[id].title}
+            </NavCampaignItem>
           ))}
         </NavCampaigns>
       </NavCampaignContainer>

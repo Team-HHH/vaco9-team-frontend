@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { getCampaigns } from '../reducers/campaign';
+import { getCampaigns } from '../reducers/campaigns';
 import DashboardMain from '../components/DashboardMain';
+import DashboardNav from '../components/DashboardNav';
 
 const Container = styled.div`
   width: 100vw;
@@ -31,7 +32,7 @@ export default function Dashboard() {
   return (
     <Container>
       <NavContainer>
-        nav
+        <DashboardNav />
       </NavContainer>
       <MainContainer>
         <DashboardMain />

@@ -43,10 +43,8 @@ const Overview = styled.div`
 `;
 
 export default function DashboardMain() {
-  // const selectedCampaignId = useSelector(state => state.selectedCampaignId);
-  // const campaign = useSelector(state => state.campaign.byId[selectedCampaignId]);
-  // const selectedCampaignId = '607fb545f9b961f3f18e5271';
-  // const campaign = useSelector(state => state.campaigns.byId?.selectedCampaignId);
+  const selectedCampaign = useSelector(state => state.selectedCampaign);
+  const campaign = useSelector(state => state.campaigns.byId?.[selectedCampaign]);
 
   return (
     <Container>
