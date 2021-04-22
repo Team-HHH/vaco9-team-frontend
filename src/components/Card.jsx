@@ -8,9 +8,8 @@ const Container = styled.div`
   height: fit-content;
   align-items: center;
   justify-content: flex-start;
-  padding: 10px;
+  padding: 5px;
 `;
-
 const CardItem = styled.div`
   display: flex;
   width: 100%;
@@ -23,9 +22,9 @@ export default function Card({
   return (
     <Container>
       <CardItem>
-        <h2>
+        <h3>
           {title}
-        </h2>
+        </h3>
       </CardItem>
       <CardItem>
         {children}

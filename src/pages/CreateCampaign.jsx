@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
+import Header from '../components/Header';
 import CampaignForm from '../components/CampaignForm';
 import { fetchPaymentResult } from '../apis/payment';
 import { fetchNewCampaign } from '../apis/campaigns';

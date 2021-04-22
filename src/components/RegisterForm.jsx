@@ -45,7 +45,8 @@ const FormWrapper = styled.div`
   height: 80vh;
 `;
 
-const Label = styled.div`
+const Label = styled.label`
+  color: ${color.BOLD_COLOR};
   margin: 3px;
 `;
 
@@ -53,7 +54,7 @@ const Input = styled.input`
   display: block;
   border: none;
 	padding: 8px 15px;
-	margin: 3px 0;
+  margin: 0 0 10px 0;
 	width: 80%;
   border-radius: 8px;
   background-color: #eee;

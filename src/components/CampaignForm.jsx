@@ -8,13 +8,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
-  margin: auto;
+  margin-top: 80px;
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 60px;
+  height: 40px;
 `;
 
 const Title = styled.h2`
@@ -33,15 +33,34 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   width: ${props => props.width || '500px'};
   margin: 20px;
+
 `;
 
 const SelectWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 70%;
 `;
 
 const Form = styled.form`
   display: flex;
+`;
+
+const Select = styled.select`
+  background-color: #f9f9f9;
+  width: 70%;
+  padding: 10px;
+`;
+
+const DateInput = styled.input`
+  padding: 10px;
+  margin: 10px 0;
+`;
+
+const Input = styled.input`
+	border: 1px solid black;
+	padding: 10px 15px;
+	width: 70%;
 `;
 
 const SliderWrapper = styled.div`
@@ -84,24 +103,33 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               />
             </Card>
             <Card title="캠페인 제목">
-              <input
+              <Input
                 type="text"
                 name="title"
                 accept=".jpg,.png,.jpeg"
                 {...register('title')}
               />
             </Card>
+            <Card title="배너이미지 추가하기">
+              <Input
+                type="text"
+                id="content"
+                name="content"
+                placeholder="URL"
+                {...register('content')}
+              />
+            </Card>
             <Card title="캠페인 타입">
               <SelectWrapper>
                 <div>
-                  <select
+                  <Select
                     name="campaignType"
                     {...register('campaignType')}
                   >
                     <option value={'banner'}>배너</option>
                     <option value={'text'}>텍스트</option>
                     <option value={'video'}>비디오</option>
-                  </select>
+                  </Select>
                 </div>
               </SelectWrapper>
             </Card>
@@ -110,18 +138,18 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             <Card title='기간'>
               <SelectWrapper>
                 <div>
-                  <select
+                  <Select
                     name="expiresType"
                     defaultValue="expired"
                     {...register('expiresType')}
                   >
                     <option value={'expired'}>종료일 선택</option>
                     <option value={'continue'}>종료일 없이 계속 게재</option>
-                  </select>
+                  </Select>
                 </div>
                 <div>
                   {watchType === 'expired' && (
-                    <input
+                    <DateInput
                       type="date"
                       {...register('expiresAt')}
                     />
@@ -132,7 +160,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             <Card title='일일 예산'>
               <SliderWrapper>
                 <h2>{watchDailyBudget} 원</h2>
-                <input
+                <Input
                   type="range"
                   min="100"
                   max="50000"
