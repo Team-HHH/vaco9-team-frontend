@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
-import UploadFile from '../pages/FileUploadPage';
 import Card from './Card';
 
 const Container = styled.div`
@@ -71,12 +70,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
           <input type="file" name="image" accept='image/jpg,impge/png,image/jpeg,image/gif' />
           <input type="submit" />
         </form>
-        {imageUrl &&
-          <div>
-            <p>{imageUrl}</p>
-            <img src={imageUrl} />
-          </div>
-        }
+        {imageUrl && <img src={imageUrl} height="120" width="280" />}
       </section>
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
@@ -85,6 +79,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               <input
                 type="text"
                 name="title"
+                accept=".jpg,.png,.jpeg"
                 {...register('title')}
               />
             </Card>
