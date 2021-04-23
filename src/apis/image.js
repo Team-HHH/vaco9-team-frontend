@@ -1,12 +1,11 @@
-export async function fetchImageUrl(file) {
+export async function fetchImageFile(data) {
   const url = 'http://localhost:5000/uploads';
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('accessToken'),
     },
-    body: file,
+    body: data,
   });
 
   return response;

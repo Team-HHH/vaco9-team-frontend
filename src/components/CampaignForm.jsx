@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
+import UploadFile from '../pages/FileUploadPage';
 import Card from './Card';
 
 const Container = styled.div`
@@ -49,7 +50,7 @@ const SliderWrapper = styled.div`
   flex-direction: column;
 `;
 
-export default function CampaignForm({ onFormSubmit }) {
+export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
   const {
     register,
     watch,
@@ -65,6 +66,18 @@ export default function CampaignForm({ onFormSubmit }) {
       <TitleWrapper>
         <Title>캠페인 시작하기</Title>
       </TitleWrapper>
+      <section>
+        <form onSubmit={onImageUpload} encType="multipart/form-data">
+          <input type="file" name="image" accept='image/jpg,impge/png,image/jpeg,image/gif' />
+          <input type="submit" />
+        </form>
+        {imageUrl &&
+          <div>
+            <p>{imageUrl}</p>
+            <img src={imageUrl} />
+          </div>
+        }
+      </section>
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
           <ContentWrapper>
@@ -90,13 +103,6 @@ export default function CampaignForm({ onFormSubmit }) {
               </SelectWrapper>
             </Card>
             <Card title="배너이미지 추가하기">
-              <label htmlFor="content">URL </label>
-              <input
-                type="text"
-                id="content"
-                name="content"
-                {...register('content')}
-              />
             </Card>
             <Card title='기간'>
               <SelectWrapper>
