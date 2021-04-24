@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
+import { color } from '../css/color';
 
 const Container = styled.div`
   display: flex;
@@ -32,14 +33,37 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: ${props => props.width || '500px'};
-  margin: 20px;
+  margin: 0 40px;
+`;
 
+const InputWrapper = styled.div`
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 10px 0;
 `;
 
 const SelectWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+`;
+
+const UploaderPadding = styled.div`
+  height: 40px;
+`;
+
+const UploaderWrapper = styled.div`
+  display: flex;
+  width: 500px;
+  z-index : 1;
+`;
+
+const Uploader = styled.form`
+  position: relative;
+  top: 310px;
+  left: 80px;
+  width: 500px;
+  height: fit-content;
+  z-index: 1;
 `;
 
 const Form = styled.form`
@@ -58,14 +82,26 @@ const DateInput = styled.input`
 `;
 
 const Input = styled.input`
-	border: 1px solid black;
+	border: 1px solid ${color.BOLD_COLOR};
 	padding: 10px 15px;
 	width: 70%;
+  border-radius: 0.4rem;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const SliderWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
+
+const SubmitButton = styled.button`
+  width: 300px;
 `;
 
 export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
@@ -84,44 +120,32 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
       <TitleWrapper>
         <Title>캠페인 시작하기</Title>
       </TitleWrapper>
-      <section>
-        <form onSubmit={onImageUpload} encType="multipart/form-data">
+      <UploaderWrapper>
+        <Uploader onSubmit={onImageUpload} encType="multipart/form-data">
           <input type="file" name="image" accept='image/jpg,impge/png,image/jpeg,image/gif' />
           <input type="submit" />
-        </form>
-        {imageUrl && <img src={imageUrl} height="120" width="280" />}
-      </section>
+        </Uploader>
+      </UploaderWrapper>
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
           <ContentWrapper>
-            <Card title="배너 이미지">
-              <input
+            <InputWrapper>
+              <HiddenInput
                 type="text"
                 name="content"
                 value={imageUrl}
                 {...register('content')}
               />
-            </Card>
-            <Card title="캠페인 제목">
-              <Input
-                type="text"
-                name="title"
-                accept=".jpg,.png,.jpeg"
-                {...register('title')}
-              />
-            </Card>
-            <Card title="배너이미지 추가하기">
-              <Input
-                type="text"
-                id="content"
-                name="content"
-                placeholder="URL"
-                {...register('content')}
-              />
-            </Card>
-            <Card title="캠페인 타입">
-              <SelectWrapper>
-                <div>
+              <Card title="캠페인 제목">
+                <Input
+                  type="text"
+                  name="title"
+                  accept=".jpg,.png,.jpeg"
+                  {...register('title')}
+                />
+              </Card>
+              <Card title="캠페인 타입">
+                <SelectWrapper>
                   <Select
                     name="campaignType"
                     {...register('campaignType')}
@@ -130,59 +154,61 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                     <option value={'text'}>텍스트</option>
                     <option value={'video'}>비디오</option>
                   </Select>
-                </div>
-              </SelectWrapper>
-            </Card>
-            <Card title="배너이미지 추가하기">
-            </Card>
-            <Card title='기간'>
-              <SelectWrapper>
-                <div>
-                  <Select
-                    name="expiresType"
-                    defaultValue="expired"
-                    {...register('expiresType')}
-                  >
-                    <option value={'expired'}>종료일 선택</option>
-                    <option value={'continue'}>종료일 없이 계속 게재</option>
-                  </Select>
-                </div>
-                <div>
-                  {watchType === 'expired' && (
-                    <DateInput
-                      type="date"
-                      {...register('expiresAt')}
-                    />
-                  )}
-                </div>
-              </SelectWrapper>
-            </Card>
-            <Card title='일일 예산'>
-              <SliderWrapper>
-                <h2>{watchDailyBudget} 원</h2>
-                <Input
-                  type="range"
-                  min="100"
-                  max="50000"
-                  step="1000"
-                  name="dailyBudget"
-                  {...register('dailyBudget')}
-                />
-              </SliderWrapper>
-            </Card>
-            <Card title="결제 수단">
-              <p>API</p>
-            </Card>
+                </SelectWrapper>
+              </Card>
+              <Card title="배너이미지 추가하기">
+                <UploaderPadding />
+              </Card>
+            </InputWrapper>
+            <InputWrapper>
+              <Card title='기간'>
+                <SelectWrapper>
+                  <div>
+                    <Select
+                      name="expiresType"
+                      defaultValue="expired"
+                      {...register('expiresType')}
+                    >
+                      <option value={'expired'}>종료일 선택</option>
+                      <option value={'continue'}>종료일 없이 계속 게재</option>
+                    </Select>
+                  </div>
+                  <div>
+                    {watchType === 'expired' && (
+                      <DateInput
+                        type="date"
+                        {...register('expiresAt')}
+                      />
+                    )}
+                  </div>
+                </SelectWrapper>
+              </Card>
+              <Card title='일일 예산'>
+                <SliderWrapper>
+                  <h2>{watchDailyBudget} 원</h2>
+                  <Input
+                    type="range"
+                    min="100"
+                    max="50000"
+                    step="1000"
+                    name="dailyBudget"
+                    {...register('dailyBudget')}
+                  />
+                </SliderWrapper>
+              </Card>
+            </InputWrapper>
+
           </ContentWrapper>
           <ContentWrapper width="360px">
             <span>광고 미리보기</span>
+            {imageUrl && <img src={imageUrl} height="120" width="280" />}
             <span>일일 추산 결과</span>
             <span>결제 요약</span>
             <span>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</span>
-            <button type="submit">시작하기</button>
+            <SubmitButton type="submit">시작하기</SubmitButton>
           </ContentWrapper>
         </Form>
       </FormWrapper>
-    </Container>
+    </Container >
   );
 }

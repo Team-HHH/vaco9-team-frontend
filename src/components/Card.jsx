@@ -4,11 +4,11 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: ${props => props.width || '400px'}
   height: fit-content;
   align-items: center;
   justify-content: flex-start;
-  padding: 5px;
+  padding: 5px 5px;
 `;
 const CardItem = styled.div`
   display: flex;
