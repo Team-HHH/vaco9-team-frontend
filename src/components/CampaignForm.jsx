@@ -37,14 +37,10 @@ const ContentWrapper = styled.div`
 `;
 
 const InputWrapper = styled.div`
-  border: 1px solid black;
+  border: 1px solid ${color.OUTLINE};
   border-radius: 10px;
   margin: 10px 0;
-`;
-
-const SelectWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  padding: 10px;s
 `;
 
 const UploaderPadding = styled.div`
@@ -59,32 +55,50 @@ const UploaderWrapper = styled.div`
 
 const Uploader = styled.form`
   position: relative;
-  top: 310px;
+  top: 250px;
   left: 80px;
   width: 500px;
   height: fit-content;
   z-index: 1;
 `;
 
+const UploadButton = styled.button`
+  width: 80px;
+  height: 36px;
+`;
+
 const Form = styled.form`
   display: flex;
 `;
 
+const SelectWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const Select = styled.select`
+  border: 1px solid ${color.OUTLINE};
+  border-radius: 0.4rem;
   background-color: #f9f9f9;
-  width: 70%;
   padding: 10px;
 `;
 
 const DateInput = styled.input`
-  padding: 10px;
   margin: 10px 0;
+  border: 1px solid ${color.OUTLINE};
+	padding: 10px 15px;
+	width: 93%;
+  border-radius: 0.4rem;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const Input = styled.input`
-	border: 1px solid ${color.BOLD_COLOR};
+	border: 1px solid ${color.OUTLINE};
 	padding: 10px 15px;
-	width: 70%;
+	width: 100%;
   border-radius: 0.4rem;
   &:focus {
     outline: none;
@@ -100,8 +114,24 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
+const Estimate = styled.div`
+  display: flex;
+  flex-direction: column;
+  // border: 1px solid ${color.OUTLINE}
+`;
+
+const Message = styled.span`
+  margin: 20px;
+`;
+
 const SubmitButton = styled.button`
   width: 300px;
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  margin: 10px 0;
+  background-color: ${color.OUTLINE}
 `;
 
 export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
@@ -122,7 +152,11 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
       </TitleWrapper>
       <UploaderWrapper>
         <Uploader onSubmit={onImageUpload} encType="multipart/form-data">
-          <input type="file" name="image" accept='image/jpg,impge/png,image/jpeg,image/gif' />
+          <UploadButton
+            type="file"
+            name="image"
+            accept='image/jpg,impge/png,image/jpeg,image/gif'
+          >파일 업로드</UploadButton>
           <input type="submit" />
         </Uploader>
       </UploaderWrapper>
@@ -163,7 +197,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             <InputWrapper>
               <Card title='기간'>
                 <SelectWrapper>
-                  <div>
+                  <SelectWrapper>
                     <Select
                       name="expiresType"
                       defaultValue="expired"
@@ -172,15 +206,15 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                       <option value={'expired'}>종료일 선택</option>
                       <option value={'continue'}>종료일 없이 계속 게재</option>
                     </Select>
-                  </div>
-                  <div>
+                  </SelectWrapper>
+                  <SelectWrapper>
                     {watchType === 'expired' && (
                       <DateInput
                         type="date"
                         {...register('expiresAt')}
                       />
                     )}
-                  </div>
+                  </SelectWrapper>
                 </SelectWrapper>
               </Card>
               <Card title='일일 예산'>
@@ -197,14 +231,17 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                 </SliderWrapper>
               </Card>
             </InputWrapper>
-
           </ContentWrapper>
           <ContentWrapper width="360px">
-            <span>광고 미리보기</span>
-            {imageUrl && <img src={imageUrl} height="120" width="280" />}
-            <span>일일 추산 결과</span>
-            <span>결제 요약</span>
-            <span>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</span>
+            <Estimate>
+              <Message>광고 미리보기</Message>
+              {imageUrl && <img src={imageUrl} height="120" width="280" />}
+              <Divider />
+              <Message>일일 추산 결과</Message>
+              <Divider />
+              <Message>결제 요약</Message>
+              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
+            </Estimate>
             <SubmitButton type="submit">시작하기</SubmitButton>
           </ContentWrapper>
         </Form>
