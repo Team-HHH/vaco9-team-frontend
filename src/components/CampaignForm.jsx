@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
@@ -47,24 +47,36 @@ const UploaderPadding = styled.div`
   height: 40px;
 `;
 
-const UploaderWrapper = styled.div`
+const UploaderWrapper = styled.section`
   display: flex;
+  justify-content: flex-start;
   width: 500px;
   z-index : 1;
 `;
 
 const Uploader = styled.form`
+  display: flex;
+  justify-content: space-evenly;
   position: relative;
-  top: 250px;
-  left: 80px;
+  top: 260px;
+  left: 30px;
   width: 500px;
   height: fit-content;
   z-index: 1;
 `;
 
-const UploadButton = styled.button`
-  width: 80px;
-  height: 36px;
+const UploadLabel = styled.label`
+  padding: 10px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #efefef;
+  font-size: 14px;
+`;
+
+const UploadInput = styled.input`
+  padding: 10px 30px;
+  border-radius: 5px;
+  border: none;
 `;
 
 const Form = styled.form`
@@ -117,15 +129,31 @@ const HiddenInput = styled.input`
 const Estimate = styled.div`
   display: flex;
   flex-direction: column;
-  // border: 1px solid ${color.OUTLINE}
 `;
 
 const Message = styled.span`
   margin: 20px;
 `;
 
-const SubmitButton = styled.button`
-  width: 300px;
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Button = styled.button`
+  margin: 20px 0;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 15px;
+  width: 40%;
+  background-color: ${color.SUB};
+  &:hover {
+    background-color: ${color.MAIN};
+    color: black;
+  }
+  &:focus {
+    outline: none;
+  }
 `;
 
 const Divider = styled.div`
@@ -151,13 +179,19 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
         <Title>캠페인 시작하기</Title>
       </TitleWrapper>
       <UploaderWrapper>
-        <Uploader onSubmit={onImageUpload} encType="multipart/form-data">
-          <UploadButton
+        <Uploader
+          onSubmit={onImageUpload}
+          encType="multipart/form-data"
+        >
+          <UploadLabel htmlFor="file">배너 이미지 선택</UploadLabel>
+          <input
             type="file"
+            id="file"
             name="image"
+            style={{ display: "none" }}
             accept='image/jpg,impge/png,image/jpeg,image/gif'
-          >파일 업로드</UploadButton>
-          <input type="submit" />
+          />
+          <UploadInput type="submit" value="업로드" />
         </Uploader>
       </UploaderWrapper>
       <FormWrapper>
@@ -242,7 +276,9 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               <Message>결제 요약</Message>
               <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
             </Estimate>
-            <SubmitButton type="submit">시작하기</SubmitButton>
+            <ButtonWrapper>
+              <Button type="submit">시작하기</Button>
+            </ButtonWrapper>
           </ContentWrapper>
         </Form>
       </FormWrapper>
