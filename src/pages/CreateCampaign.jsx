@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import CampaignForm from '../components/CampaignForm';
 import { fetchPaymentResult } from '../apis/payment';
 import { fetchNewCampaign } from '../apis/campaigns';
-
+import { fetchImageFile } from '../apis/image';
 const Container = styled.div`
   display: flex;
 `;
 
 export default function CreateCampaign() {
+  const [url, setUrl] = useState('');
+
   const IMP = window.IMP;
   IMP.init(process.env.REACT_APP_IMPORT_ID);
 
@@ -52,9 +54,29 @@ export default function CreateCampaign() {
     }
   }
 
+  async function handleImageUpload(e) {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append('image', e.target.image.files[0]);
+
+    try {
+      const response = await fetchImageFile(data);
+      const responseBody = await response.json();
+      const url = responseBody.data.url;
+
+      setUrl(url);
+    } catch (error) {
+    }
+  }
+
   return (
     <Container>
-      <CampaignForm onFormSubmit={handleNewCampaignFormSubmit}/>
+      <CampaignForm
+        imageUrl={url}
+        onImageUpload={handleImageUpload}
+        onFormSubmit={handleNewCampaignFormSubmit}
+      />
     </Container>
   );
 }
