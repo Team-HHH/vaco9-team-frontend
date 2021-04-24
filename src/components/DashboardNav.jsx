@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
+import { color } from '../css/color';
 import { useDispatch } from 'react-redux';
 import mainImg from '../assets/mainImg.png';
 import { selectCampaign } from '../reducers/selectedCampaign';
@@ -12,7 +13,7 @@ const NavWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgb(255, 249, 219, 0.3);
+  background-color: #EFEFEF;
 `;
 
 const NavLogoContainer = styled.div`
@@ -34,14 +35,15 @@ const NavProfile = styled.div`
   justify-content: center;
   align-items: center;
   width: 80%;
-  height: 80%;
-  border: 1px solid black;
+  height: 40%;
+  background-color: white;
+  border-radius: 5px;
 `;
 
 const NavIconContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 30px;
+  margin-right: 10px;
 `;
 
 const NavUserInfos = styled.div`
@@ -50,8 +52,7 @@ const NavUserInfos = styled.div`
 `;
 
 const NavUserInfoItem = styled.span`
-  font-size: 17px;
-  margin: 5px;
+  font-size: 15px;
 `;
 
 const NavLogo = styled.img`
@@ -73,17 +74,19 @@ const NavCampaigns = styled.div`
   align-items: center;
   width: 80%;
   height: auto;
-  margin-top: 30px;
-  border: 1px solid black;
 `;
 
-const NavCampaignItem = styled.div`
+const NavCampaignItem = styled.button`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
-  margin: 5px;
-  padding: 10px;
-  font-size: 17px;
+  padding: 15px;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  &:focus {
+    background-color: ${color.OUTLINE}
+  }
 `;
 
 export default function DashboardNav() {
@@ -105,7 +108,7 @@ export default function DashboardNav() {
       <NavProfileContainer>
         <NavProfile>
           <NavIconContainer>
-            <FaRegUserCircle size={70} />
+            <FaRegUserCircle size={50} />
           </NavIconContainer>
           <NavUserInfos>
             <NavUserInfoItem>{user.name}</NavUserInfoItem>
