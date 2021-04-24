@@ -75,6 +75,14 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
           <ContentWrapper>
+            <Card title="배너 이미지">
+              <input
+                type="text"
+                name="content"
+                value={imageUrl}
+                {...register('content')}
+              />
+            </Card>
             <Card title="캠페인 제목">
               <input
                 type="text"

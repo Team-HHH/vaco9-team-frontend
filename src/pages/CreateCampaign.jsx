@@ -10,6 +10,8 @@ const Container = styled.div`
 `;
 
 export default function CreateCampaign() {
+  const [url, setUrl] = useState('');
+
   const IMP = window.IMP;
   IMP.init(process.env.REACT_APP_IMPORT_ID);
 
@@ -52,8 +54,6 @@ export default function CreateCampaign() {
     }
   }
 
-  const [url, setUrl] = useState('');
-
   async function handleImageUpload(e) {
     e.preventDefault();
 
@@ -63,8 +63,8 @@ export default function CreateCampaign() {
     try {
       const response = await fetchImageFile(data);
       const responseBody = await response.json();
-
       const url = responseBody.data.url;
+
       setUrl(url);
     } catch (error) {
     }
