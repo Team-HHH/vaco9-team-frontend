@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { getCampaigns } from '../reducers/campaigns';
+import Header from '../components/Header';
 import DashboardMain from '../components/DashboardMain';
 import DashboardNav from '../components/DashboardNav';
 
@@ -10,6 +11,7 @@ const Container = styled.div`
   height: 100vh;
   display: flex;
   box-sizing: border-box;
+  margin-top: 80px;
 `;
 
 const NavContainer = styled.div`
@@ -30,13 +32,16 @@ export default function Dashboard() {
   }, [dispatch]);
 
   return (
-    <Container>
-      <NavContainer>
-        <DashboardNav />
-      </NavContainer>
-      <MainContainer>
-        <DashboardMain />
-      </MainContainer>
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <NavContainer>
+          <DashboardNav />
+        </NavContainer>
+        <MainContainer>
+          <DashboardMain />
+        </MainContainer>
+      </Container>
+    </>
   );
 }
