@@ -1,8 +1,9 @@
 export const color = Object.freeze({
-  MAIN_COLOR: '#ffc93c',
-  SUB_COLOR: '#ffde89 ',
-  MAIN_FONT_COLOR: '#000000',
-  POINT_COLOR: '#dbf6e9',
-  SUB_POINT_COLOR: '#9ddfd3',
-  BOLD_COLOR: '#594730',
+  MAIN: '#fff3d6',
+  SUB: '#ffde89',
+  MAIN_FONT: '#000000',
+  POINT: '#dbf6e9',
+  SUB_POINT: '#9ddfd3',
+  BOLD: '#594730',
+  OUTLINE: '#ACACAC',
 });

@@ -11,7 +11,7 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: ${color.SUB_COLOR};
+  background-color: ${color.SUB};
 `;
 
 const LeftHeader = styled.div`
@@ -43,9 +43,9 @@ const HeaderLink = styled(Link)`
   align-content: center;
   text-decoration: none;
   font-family: 'NanumBarunGothicBold';
-  color: ${color.MAIN_FONT_COLOR};
+  color: ${color.MAIN_FONT};
   &:hover {
-    color: ${color.BOLD_COLOR};
+    color: ${color.BOLD};
   }
 `;
 

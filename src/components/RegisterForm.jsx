@@ -46,7 +46,7 @@ const FormWrapper = styled.div`
 `;
 
 const Label = styled.label`
-  color: ${color.BOLD_COLOR};
+  color: ${color.BOLD};
   margin: 3px;
 `;
 
@@ -66,9 +66,9 @@ const Button = styled.input`
   border-radius: 18px;
   padding: 10px 15px;
   width: 40%;
-  background-color: ${color.SUB_COLOR};
+  background-color: ${color.SUB};
   &:hover {
-    background-color: ${color.MAIN_COLOR};
+    background-color: ${color.MAIN};
     color: black;
   }
   &:focus {

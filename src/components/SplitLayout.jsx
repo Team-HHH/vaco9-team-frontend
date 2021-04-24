@@ -15,7 +15,7 @@ const LeftSection = styled.div`
 
 const RightSection = styled.div`
   width: 70%;
-  background-color: ${color.SUB_COLOR};
+  background-color: ${color.SUB};
 `;
 
 export default function SplitLayout({ children, }) {
