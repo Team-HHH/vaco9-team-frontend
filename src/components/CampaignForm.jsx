@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
+import Modal from './Modal';
+import ADPreviewModal from './ADPreviewModal';
 import { color } from '../css/color';
 
 const Container = styled.div`
@@ -163,13 +165,38 @@ const Divider = styled.div`
   background-color: ${color.OUTLINE}
 `;
 
+const ADPreviewButton = styled.button`
+  padding: 10px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #efefef;
+  font-size: 14px;
+  border: none;
+`;
+
+const DailyEstimateResultsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+`;
+
+const DailyEstimateResultsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DailyEstimateResults = styled.span`
+  font-size: 20px;
+`;
+
 export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+  const [isPreviewModal, setIsPreviewModal] = useState(false);
   const {
     register,
     watch,
     handleSubmit,
   } = useForm();
-  const watchDailyBudget = watch('dailyBudget', 100);
+  const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt');
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
@@ -257,8 +284,8 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                   <h2>{watchDailyBudget} 원</h2>
                   <Input
                     type="range"
-                    min="100"
-                    max="50000"
+                    min="2000"
+                    max="200000"
                     step="1000"
                     name="dailyBudget"
                     {...register('dailyBudget')}
@@ -269,10 +296,36 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
           </ContentWrapper>
           <ContentWrapper width="360px">
             <Estimate>
-              <Message>광고 미리보기</Message>
+              <Modal>
+                {
+                  isPreviewModal &&
+                  <ADPreviewModal
+                    imageUrl={imageUrl}
+                    setIsPreviewModal={setIsPreviewModal}
+                  />
+                }
+              </Modal>
+              <ADPreviewButton
+                type="button"
+                onClick={() => setIsPreviewModal(true)}
+              >광고 미리보기</ADPreviewButton>
               {imageUrl && <img src={imageUrl} height="120" width="280" />}
               <Divider />
-              <Message>일일 추산 결과</Message>
+              <DailyEstimateResultsWrapper>
+                <span>일일 추산 결과</span>
+                <DailyEstimateResultsContainer>
+                  <span>도달</span>
+                  <DailyEstimateResults>
+                    {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
+                  </DailyEstimateResults>
+                </DailyEstimateResultsContainer>
+                <DailyEstimateResultsContainer>
+                  <span>링크 클릭</span>
+                  <DailyEstimateResults>
+                    {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
+                  </DailyEstimateResults>
+                </DailyEstimateResultsContainer>
+              </DailyEstimateResultsWrapper>
               <Divider />
               <Message>결제 요약</Message>
               <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
