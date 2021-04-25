@@ -162,7 +162,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE}
+  background-color: ${color.OUTLINE};
 `;
 
 const ADPreviewButton = styled.button`
@@ -206,7 +206,6 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
       <TitleWrapper>
         <Title>캠페인 시작하기</Title>
       </TitleWrapper>
-<<<<<<< HEAD
       <UploaderWrapper>
         <Uploader
           onSubmit={onImageUpload}
@@ -217,21 +216,12 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             type="file"
             id="file"
             name="image"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             accept='image/jpg,impge/png,image/jpeg,image/gif'
           />
           <UploadInput type="submit" value="업로드" />
         </Uploader>
       </UploaderWrapper>
-=======
-      <section>
-        <form onSubmit={onImageUpload} encType="multipart/form-data">
-          <input type="file" name="image" accept="image/jpg,impge/png,image/jpeg,image/gif" />
-          <input type="submit" />
-        </form>
-        {imageUrl && <img src={imageUrl} height="120" width="280" />}
-      </section>
->>>>>>> 7252b32... Fix part where NaN was whown in payment summary of CampaignForm component
       <FormWrapper>
         <Form onSubmit={handleSubmit(onFormSubmit)}>
           <ContentWrapper>
@@ -259,7 +249,6 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                     <option value={'banner'}>배너</option>
                     <option value={'text'}>텍스트</option>
                     <option value={'video'}>비디오</option>
-<<<<<<< HEAD
                   </Select>
                 </SelectWrapper>
               </Card>
@@ -268,7 +257,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </Card>
             </InputWrapper>
             <InputWrapper>
-              <Card title='기간'>
+              <Card title="기간">
                 <SelectWrapper>
                   <SelectWrapper>
                     <Select
@@ -284,6 +273,8 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                     {watchType === 'expired' && (
                       <DateInput
                         type="date"
+                        min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
+                        value={watchExpiresAt}
                         {...register('expiresAt')}
                       />
                     )}
@@ -304,54 +295,6 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                 </SliderWrapper>
               </Card>
             </InputWrapper>
-=======
-                  </select>
-                </div>
-              </SelectWrapper>
-            </Card>
-            <Card title="배너이미지 추가하기">
-            </Card>
-            <Card title="기간">
-              <SelectWrapper>
-                <div>
-                  <select
-                    name="expiresType"
-                    defaultValue="expired"
-                    {...register('expiresType')}
-                  >
-                    <option value={'expired'}>종료일 선택</option>
-                    <option value={'continue'}>종료일 없이 계속 게재</option>
-                  </select>
-                </div>
-                <div>
-                  {watchType === 'expired' && (
-                    <input
-                      type="date"
-                      min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
-                      value={watchExpiresAt}
-                      {...register('expiresAt')}
-                    />
-                  )}
-                </div>
-              </SelectWrapper>
-            </Card>
-            <Card title='일일 예산'>
-              <SliderWrapper>
-                <h2>{watchDailyBudget} 원</h2>
-                <input
-                  type="range"
-                  min="2000"
-                  max="200000"
-                  step="1000"
-                  name="dailyBudget"
-                  {...register('dailyBudget')}
-                />
-              </SliderWrapper>
-            </Card>
-            <Card title="결제 수단">
-              <p>API</p>
-            </Card>
->>>>>>> 7252b32... Fix part where NaN was whown in payment summary of CampaignForm component
           </ContentWrapper>
           <ContentWrapper width="360px">
             <Estimate>
@@ -387,7 +330,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </DailyEstimateResultsWrapper>
               <Divider />
               <Message>결제 요약</Message>
-              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
+              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
             </Estimate>
             <ButtonWrapper>
               <Button type="submit">시작하기</Button>
