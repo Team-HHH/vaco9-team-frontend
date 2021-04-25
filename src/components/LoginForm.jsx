@@ -34,14 +34,14 @@ const FormWrapper = styled.div`
 
 const Label = styled.label`
   color: ${color.BOLD};
-  margin: 3px;
+  padding: 3px;
 `;
 
 const Input = styled.input`
   display: block;
 	border: none;
 	padding: 8px 15px;
-	margin: 0 0 20px 0;
+	margin: 10px 0 20px 0;
 	width: 100%;
   border-radius: 5px;
 `;

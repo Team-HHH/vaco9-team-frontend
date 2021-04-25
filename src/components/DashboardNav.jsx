@@ -20,15 +20,13 @@ const NavProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20%;
+  height: 14%;
 `;
 
 const NavProfile = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 80%;
-  height: 40%;
+  justify-content: space-around;
   background-color: ${color.WHITE};
   border-radius: 5px;
 `;
@@ -41,6 +39,7 @@ const NavIconContainer = styled.div`
 
 const NavUserInfos = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
 `;
 
