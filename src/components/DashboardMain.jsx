@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { color } from '../css/color';
 import { useSelector } from 'react-redux';
 import { format, parseISO, startOfDay, isEqual } from 'date-fns';
 import {
@@ -26,42 +25,44 @@ const Container = styled.div`
 
 const OverviewContainer = styled.div`
   width: 100%;
-  height: 20%;
+  height: fit-content;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  padding: 30px;
+  margin: 20px 0;
   gap: 20px;
 `;
 
 const Overview = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  height: 100%;
+  justify-content: center;
+  height: 140px;
   width: 100%;
   background-color: white;
   border-radius: 10px;
-  padding: 15px;
+  padding: 20px;
 `;
 
-const Entry = styled.div`
-  align: center;
-`;
-
-const Key = styled.div`
+const Key = styled.p`
   font-size: 12px;
   text-align: ${props => props.textAlign || 'left'}
+  padding: 0;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 10px;
 `;
 
-const Value = styled.div`
+const Value = styled.p`
   font-size: 20px;
   text-align: center;
+  padding: 0;
+  margin: 0;
 `;
 
 const ChartContainer = styled.div`
   display: flex;
   padding: 30px;
-  width: 95%;
+  width: 100%;
   height: 70%;
   background-color: white;
   border-radius: 10px;
@@ -88,7 +89,7 @@ export default function DashboardMain() {
   }, [campaign]);
 
   const handleOverviewClick = (event) => {
-    setType(event.target.id);
+    setType(event.target.closest('div').id);
   };
 
   const typeConfigs = {
@@ -129,68 +130,50 @@ export default function DashboardMain() {
           id="reach"
           onClick={handleOverviewClick}
         >
-          <Entry>
-            <Key>도달수</Key>
-            <Value>{overviewData?.reach}</Value>
-          </Entry>
-          <Entry>
-            <Key>전일대비</Key>
-            <Value>{overviewData?.reachNetChange}</Value>
-          </Entry>
+          <Key>도달수</Key>
+          <Value>{overviewData?.reach}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.reachNetChange}</Value>
         </Overview>
         <Overview
           id="click"
           onClick={handleOverviewClick}
         >
-          <Entry>
-            <Key>클릭수</Key>
-            <Value>{overviewData?.click}</Value>
-          </Entry>
-          <Entry>
-            <Key>전일대비</Key>
-            <Value>{overviewData?.clickNetChange}</Value>
-          </Entry>
+          <Key>클릭수</Key>
+          <Value>{overviewData?.click}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.clickNetChange}</Value>
         </Overview>
         <Overview
           id="ctr"
           onClick={handleOverviewClick}
         >
-          <Entry>
-            <Key>CTR</Key>
-            <Value>{overviewData?.ctr}</Value>
-          </Entry>
-          <Entry>
-            <Key>전일대비</Key>
-            <Value>{overviewData?.ctrNetChange}</Value>
-          </Entry>
+          <Key>CTR</Key>
+          <Value>{overviewData?.ctr}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.ctrNetChange}</Value>
         </Overview>
         <Overview
           id="all"
           onClick={handleOverviewClick}
         >
-          <Entry>
-            <Key textAlign="center">예산 잔액</Key>
-            <Value>{campaign?.remainingBudget}원</Value>
-          </Entry>
+          <Key textAlign="center">예산 잔액</Key>
+          <Value>{campaign?.remainingBudget}원</Value>
         </Overview>
         <Overview
           id="all"
           onClick={handleOverviewClick}
         >
-          <Entry>
-            <Key>CPC</Key>
-            <Value>{overviewData?.cpc}원</Value>
-          </Entry>
-          <Entry>
-            <Key>전일대비</Key>
-            <Value>{overviewData?.cpcNetChange}</Value>
-          </Entry>
+          <Key>CPC</Key>
+          <Value>{overviewData?.cpc}원</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.cpcNetChange}</Value>
         </Overview>
         <Overview>
-          <Entry>
+          <div>
             <Key textAlign="center">일일 지출 한도</Key>
             <Value>{campaign?.dailyBudget}</Value>
-          </Entry>
+          </div>
         </Overview>
       </OverviewContainer>
       <ChartContainer>
