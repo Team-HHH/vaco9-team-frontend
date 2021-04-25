@@ -72,14 +72,21 @@ const UploadLabel = styled.label`
   padding: 10px 30px;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #efefef;
   font-size: 14px;
+  background-color: ${color.LIGHT};
+  &:hover {
+    background-color: ${color.DARK}
+  }
 `;
 
 const UploadInput = styled.input`
   padding: 10px 30px;
   border-radius: 5px;
   border: none;
+  background-color: ${color.LIGHT};
+  &:hover {
+    background-color: ${color.DARK}
+  }
 `;
 
 const Form = styled.form`
@@ -169,9 +176,12 @@ const ADPreviewButton = styled.button`
   padding: 10px 30px;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #efefef;
   font-size: 14px;
   border: none;
+  background-color: ${color.LIGHT};
+  &:hover {
+    background-color: ${color.DARK}
+  }
 `;
 
 const DailyEstimateResultsWrapper = styled.div`

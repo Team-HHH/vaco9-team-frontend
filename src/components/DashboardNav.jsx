@@ -71,6 +71,10 @@ const NavCampaignItem = styled.button`
   font-size: 15px;
   border: none;
   border-radius: 5px;
+  background-color: white;
+  &:hover {
+    background-color: ${color.MAIN}
+  }
   &:focus {
     background-color: ${color.SUB}
   }

@@ -8,5 +8,7 @@ export const color = Object.freeze({
   SUB_POINT: '#9ddfd3',
   BOLD: '#594730',
   OUTLINE: '#ACACAC',
+  LIGHT: '#efefef',
+  DARK: '#e2e2e2',
   WHITE: 'white',
 });

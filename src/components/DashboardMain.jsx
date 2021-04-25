@@ -30,12 +30,14 @@ const OverviewContainer = styled.div`
   grid-template-columns: repeat(6, 1fr);
   margin: 20px 0;
   gap: 20px;
+
+  box-sizing: border-box;
 `;
 
-const Overview = styled.div`
+const StaticOverview = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   height: 140px;
   width: 100%;
   background-color: white;
@@ -43,20 +45,30 @@ const Overview = styled.div`
   padding: 20px;
 `;
 
+const Overview = styled(StaticOverview)`
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
 const Key = styled.p`
-  font-size: 12px;
+  font-size: 21px;
   text-align: ${props => props.textAlign || 'left'}
   padding: 0;
   text-align: center;
   margin: 0;
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
 `;
 
 const Value = styled.p`
-  font-size: 20px;
+  font-size: 14px;
   text-align: center;
   padding: 0;
   margin: 0;
+`;
+
+const CompareValue = styled(Value)`
+  font-size: 17px;
 `;
 
 const ChartContainer = styled.div`
@@ -132,17 +144,16 @@ export default function DashboardMain() {
         >
           <Key>도달수</Key>
           <Value>{overviewData?.reach}</Value>
-          <Key>전일대비</Key>
-          <Value>{overviewData?.reachNetChange}</Value>
+          <CompareValue>{overviewData?.reachNetChange}</CompareValue>
         </Overview>
         <Overview
           id="click"
           onClick={handleOverviewClick}
+          onHover={() => console.log('hover')}
         >
           <Key>클릭수</Key>
           <Value>{overviewData?.click}</Value>
-          <Key>전일대비</Key>
-          <Value>{overviewData?.clickNetChange}</Value>
+          <CompareValue>{overviewData?.clickNetChange}</CompareValue>
         </Overview>
         <Overview
           id="ctr"
@@ -150,8 +161,15 @@ export default function DashboardMain() {
         >
           <Key>CTR</Key>
           <Value>{overviewData?.ctr}</Value>
-          <Key>전일대비</Key>
-          <Value>{overviewData?.ctrNetChange}</Value>
+          <CompareValue>{overviewData?.ctrNetChange}</CompareValue>
+        </Overview>
+        <Overview
+          id="all"
+          onClick={handleOverviewClick}
+        >
+          <Key>CPC</Key>
+          <Value>{overviewData?.cpc}원</Value>
+          <CompareValue>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
           id="all"
@@ -160,21 +178,12 @@ export default function DashboardMain() {
           <Key textAlign="center">예산 잔액</Key>
           <Value>{campaign?.remainingBudget}원</Value>
         </Overview>
-        <Overview
-          id="all"
-          onClick={handleOverviewClick}
-        >
-          <Key>CPC</Key>
-          <Value>{overviewData?.cpc}원</Value>
-          <Key>전일대비</Key>
-          <Value>{overviewData?.cpcNetChange}</Value>
-        </Overview>
-        <Overview>
+        <StaticOverview>
           <div>
             <Key textAlign="center">일일 지출 한도</Key>
             <Value>{campaign?.dailyBudget}</Value>
           </div>
-        </Overview>
+        </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
         {chartDate?.length > 0 && type === 'all' ? (
