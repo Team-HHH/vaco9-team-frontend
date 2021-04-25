@@ -56,6 +56,21 @@ const ADPreviewButton = styled.button`
   cursor: pointer;
 `;
 
+const DailyEstimateResultsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+`;
+
+const DailyEstimateResultsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DailyEstimateResults = styled.span`
+  font-size: 20px;
+`;
+
 export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
   const [isPreviewModal, setIsPreviewModal] = useState(false);
   const {
@@ -63,7 +78,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
     watch,
     handleSubmit,
   } = useForm();
-  const watchDailyBudget = watch('dailyBudget', 100);
+  const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt');
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
@@ -142,8 +157,8 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                 <h2>{watchDailyBudget} 원</h2>
                 <input
                   type="range"
-                  min="100"
-                  max="50000"
+                  min="2000"
+                  max="200000"
                   step="1000"
                   name="dailyBudget"
                   {...register('dailyBudget')}
@@ -168,7 +183,21 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               type="button"
               onClick={() => setIsPreviewModal(true)}
             >광고 미리보기</ADPreviewButton>
-            <span>일일 추산 결과</span>
+            <DailyEstimateResultsWrapper>
+              <span>일일 추산 결과</span>
+              <DailyEstimateResultsContainer>
+                <span>도달</span>
+                <DailyEstimateResults>
+                  {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
+                </DailyEstimateResults>
+              </DailyEstimateResultsContainer>
+              <DailyEstimateResultsContainer>
+                <span>링크 클릭</span>
+                <DailyEstimateResults>
+                  {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
+                </DailyEstimateResults>
+              </DailyEstimateResultsContainer>
+            </DailyEstimateResultsWrapper>
             <span>결제 요약</span>
             <span>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</span>
             <button type="submit">시작하기</button>
