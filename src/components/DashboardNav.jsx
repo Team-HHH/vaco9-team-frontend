@@ -29,7 +29,7 @@ const NavProfile = styled.div`
   align-items: center;
   width: 80%;
   height: 40%;
-  background-color: white;
+  background-color: ${color.WHITE};
   border-radius: 5px;
 `;
 
@@ -46,11 +46,6 @@ const NavUserInfos = styled.div`
 
 const NavUserInfoItem = styled.span`
   font-size: 15px;
-`;
-
-const NavLogo = styled.img`
-  width: 100px;
-  height: 100px;
 `;
 
 const NavCampaignContainer = styled.div`
@@ -78,7 +73,7 @@ const NavCampaignItem = styled.button`
   border: none;
   border-radius: 5px;
   &:focus {
-    background-color: ${color.OUTLINE}
+    background-color: ${color.SUB}
   }
 `;
 
