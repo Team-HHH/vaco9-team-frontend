@@ -18,7 +18,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 40px;
   background-color: #FAF8EF;
   font-family: 'Nanum Barun Gothic';
 `;

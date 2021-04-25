@@ -29,6 +29,7 @@ const LoginWrapper = styled.div`
 
 const FormWrapper = styled.div`
   height: 60vh;
+  width: 300px;
 `;
 
 const Label = styled.label`
@@ -41,7 +42,7 @@ const Input = styled.input`
 	border: none;
 	padding: 8px 15px;
 	margin: 0 0 20px 0;
-	width: 80%;
+	width: 100%;
   border-radius: 5px;
 `;
 
@@ -79,9 +80,9 @@ export default function LoginForm({ handleLoginSubmit }) {
   return (
     <LoginWrapper>
       <FormWrapper>
-        <h1>Log in to your account</h1>
+        <h1>로그인</h1>
         <form onSubmit={handleSubmit(handleLoginSubmit)}>
-          <Label>Email Address</Label>
+          <Label>이메일 주소</Label>
           <Input
             type="email"
             name="email"
@@ -92,7 +93,7 @@ export default function LoginForm({ handleLoginSubmit }) {
             name="email"
             render={() => <Message>{commonErrorMessage.INVALID_EMAIL}</Message>}
           />
-          <Label>Password</Label>
+          <Label>패스워드</Label>
           <Input
             type="password"
             name="password"
@@ -105,12 +106,12 @@ export default function LoginForm({ handleLoginSubmit }) {
           />
           <Button
             type="submit"
-            value="Login"
+            value="로그인"
           />
         </form>
         <div>
-          <span>Dont have account?</span>
-          <a href="/register">Sign up</a>
+          <span>아직 계정이 없으신가요?</span>
+          <a href="/register">회원가입</a>
         </div>
       </FormWrapper>
     </LoginWrapper>
