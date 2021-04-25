@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { color } from '../css/color';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
@@ -38,18 +39,49 @@ const RegisterWrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const FormWrapper = styled.div`
-  height: 60vh;
+  height: 80vh;
+  width: 300px;
 `;
 
-const Label = styled.div`
-  margin: 5px;
+const Label = styled.label`
+  color: ${color.BOLD};
+  margin: 3px;
 `;
 
 const Input = styled.input`
   display: block;
+  border: none;
+	padding: 8px 15px;
+  margin: 5px 0 20px 0;
+	width: 100%;
+  border-radius: 5px;
+  background-color: #eee;
+`;
+
+const Button = styled.input`
+  margin: 20px 0;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 15px;
+  width: 40%;
+  background-color: ${color.SUB};
+  &:hover {
+    background-color: ${color.MAIN};
+    color: black;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const Message = styled.p`
+  margin: 0;
+  font-size: 10px;
+  color: red;
 `;
 
 export default function RegisterForm({ onRegisterFormSubmit }) {
@@ -64,12 +96,12 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
   return (
     <RegisterWrapper>
       <FormWrapper>
-        <h1>Create your account</h1>
+        <h1>회원가입</h1>
         <form
           name="form"
           onSubmit={handleSubmit(onRegisterFormSubmit)}
         >
-          <Label>Email</Label>
+          <Label>이메일 주소</Label>
           <Input
             type="email"
             name="email"
@@ -79,9 +111,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="email"
-            render={() => <p>{commonErrorMessage.INVALID_EMAIL}</p>}
+            render={() => <Message>{commonErrorMessage.INVALID_EMAIL}</Message>}
           />
-          <Label>Name</Label>
+          <Label>이름</Label>
           <Input
             type="text"
             name="name"
@@ -91,9 +123,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="name"
-            render={() => <p>{registerErrorMessage.INVALID_NAME}</p>}
+            render={() => <Message>{registerErrorMessage.INVALID_NAME}</Message>}
           />
-          <Label>Password</Label>
+          <Label>비밀번호</Label>
           <Input
             type="password"
             name="password"
@@ -104,9 +136,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="password"
-            render={() => <p>{commonErrorMessage.INVALID_PASSWORD}</p>}
+            render={() => <Message>{commonErrorMessage.INVALID_ErrorMessageASSWORD}</Message>}
           />
-          <Label>Confirm Password</Label>
+          <Label>비밀번호 확인</Label>
           <Input
             type="password"
             name="passwordConfirm"
@@ -117,9 +149,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="passwordConfirm"
-            render={() => <p>{registerErrorMessage.INVALID_PASSWORDCONFIRM}</p>}
+            render={() => <Message>{registerErrorMessage.INVALID_PASSWORDCONFIRM}</Message>}
           />
-          <Label>Company Name</Label>
+          <Label>회사이름</Label>
           <Input
             type="text"
             name="companyName"
@@ -128,9 +160,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyName"
-            render={() => <p>{registerErrorMessage.INVALID_COMPANYNAME}</p>}
+            render={() => <Message>{registerErrorMessage.INVALID_COMPANYNAME}</Message>}
           />
-          <Label>Company Email</Label>
+          <Label>회사 이메일 주소</Label>
           <Input
             type="text"
             name="companyEmail"
@@ -139,9 +171,9 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyEmail"
-            render={() => <p>{registerErrorMessage.INVALID_COMPANYEMAIL}</p>}
+            render={() => <Message>{registerErrorMessage.INVALID_COMPANYEMAIL}</Message>}
           />
-          <Label>Company Registration Number</Label>
+          <Label>회사 사업자 등록번호</Label>
           <Input
             type="text"
             name="companyRegistrationNumber"
@@ -150,13 +182,17 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="companyRegistrationNumber"
-            render={() => <p>{registerErrorMessage.INVALID_COMPANYREGISTRATIONNUMBER}</p>}
+            render={() => <Message>{registerErrorMessage.INVALID_COMPANYREGISTRATIONNUMBER}</Message>}
           />
-          <Input
+          <Button
             type="submit"
-            value="Register"
+            value="회원가입"
           />
         </form>
+        <div>
+          <span>계정이 있으신가요??</span>
+          <a href="/login">로그인</a>
+        </div>
       </FormWrapper>
     </RegisterWrapper>
   );

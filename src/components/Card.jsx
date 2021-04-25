@@ -4,11 +4,15 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: ${props => props.width || '400px'}
   height: fit-content;
   align-items: center;
   justify-content: flex-start;
-  padding: 10px;
+  padding: 5px 5px;
+`;
+
+const CardTitle = styled.h3`
+  margin: 0 0 10px 0;
 `;
 
 const CardItem = styled.div`
@@ -23,9 +27,9 @@ export default function Card({
   return (
     <Container>
       <CardItem>
-        <h2>
+        <CardTitle>
           {title}
-        </h2>
+        </CardTitle>
       </CardItem>
       <CardItem>
         {children}

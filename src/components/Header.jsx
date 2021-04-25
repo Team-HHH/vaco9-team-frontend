@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { color } from '../css/color';
+import logo from '../assets/logo.png';
 
 const Container = styled.div`
   position: fixed;
@@ -9,7 +11,9 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: skyblue;
+  background-color: ${color.SUB};
+  font-family: 'Nanum Barun Gothic';
+  font-size: 18px;
 `;
 
 const LeftHeader = styled.div`
@@ -30,6 +34,7 @@ const HeaderItem = styled.div`
   display: flex;
   width: fit-content;
   height: 100%;
+  margin: auto 30px;
 `;
 
 const HeaderLink = styled(Link)`
@@ -38,13 +43,25 @@ const HeaderLink = styled(Link)`
   margin: auto;
   justify-content: center;
   align-content: center;
+  text-decoration: none;
+  color: ${color.MAIN_FONT};
+  &:hover {
+    color: ${color.BOLD};
+  }
+`;
+
+const Logo = styled.img`
+  width: 80px;
+  padding: 3px;
 `;
 
 export default function Header() {
   return (
     <Container>
       <LeftHeader>
-        <HeaderItem>Logo</HeaderItem>
+        <HeaderItem>
+          <Logo src={logo} />
+        </HeaderItem>
         <HeaderItem>
           <HeaderLink to="/campaign/category">
             캠페인 유형

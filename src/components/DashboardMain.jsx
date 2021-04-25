@@ -18,35 +18,55 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-`;
-
-const DateContainer = styled.div`
-  width: 100%;
-  height: 5%;
-  padding: 30px;
+  padding: 40px;
+  background-color: #FAF8EF;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const OverviewContainer = styled.div`
   width: 100%;
-  height: 20%;
+  height: fit-content;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  padding: 30px;
+  margin: 20px 0;
   gap: 20px;
 `;
 
 const Overview = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 140px;
   width: 100%;
-  border: 1px solid black;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+`;
+
+const Key = styled.p`
+  font-size: 12px;
+  text-align: ${props => props.textAlign || 'left'}
+  padding: 0;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 10px;
+`;
+
+const Value = styled.p`
+  font-size: 20px;
+  text-align: center;
+  padding: 0;
+  margin: 0;
 `;
 
 const ChartContainer = styled.div`
   display: flex;
   padding: 30px;
   width: 100%;
-  height: 75%;
+  height: 70%;
+  background-color: white;
+  border-radius: 10px;
+  align-self: center;
 `;
 
 export default function DashboardMain() {
@@ -69,7 +89,7 @@ export default function DashboardMain() {
   }, [campaign]);
 
   const handleOverviewClick = (event) => {
-    setType(event.target.id);
+    setType(event.target.closest('div').id);
   };
 
   const typeConfigs = {
@@ -102,71 +122,85 @@ export default function DashboardMain() {
 
   return (
     <Container>
-      <DateContainer>
+      <div>
         {format(today, 'yyyy년 M월 d일 (eee)')}
-      </DateContainer>
+      </div>
       <OverviewContainer>
         <Overview
           id="reach"
           onClick={handleOverviewClick}
         >
-          도달수 : {overviewData?.reach} <br />
-          전일대비 : {overviewData?.reachNetChange}
+          <Key>도달수</Key>
+          <Value>{overviewData?.reach}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.reachNetChange}</Value>
         </Overview>
         <Overview
           id="click"
           onClick={handleOverviewClick}
         >
-          클릭수 : {overviewData?.click} <br />
-          전일대비 : {overviewData?.clickNetChange}
+          <Key>클릭수</Key>
+          <Value>{overviewData?.click}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.clickNetChange}</Value>
         </Overview>
         <Overview
           id="ctr"
           onClick={handleOverviewClick}
         >
-          CTR : {overviewData?.ctr} <br />
-          전일대비 : {overviewData?.ctrNetChange}
+          <Key>CTR</Key>
+          <Value>{overviewData?.ctr}</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.ctrNetChange}</Value>
         </Overview>
         <Overview
           id="all"
           onClick={handleOverviewClick}
         >
-          예산 잔액 : {campaign?.remainingBudget}원
+          <Key textAlign="center">예산 잔액</Key>
+          <Value>{campaign?.remainingBudget}원</Value>
         </Overview>
         <Overview
           id="all"
           onClick={handleOverviewClick}
         >
-          CPC : {overviewData?.cpc}원<br />
-          전일대비 : {overviewData?.cpcNetChange}
+          <Key>CPC</Key>
+          <Value>{overviewData?.cpc}원</Value>
+          <Key>전일대비</Key>
+          <Value>{overviewData?.cpcNetChange}</Value>
         </Overview>
-        <Overview>일일 지출 한도 : {campaign?.dailyBudget}</Overview>
+        <Overview>
+          <div>
+            <Key textAlign="center">일일 지출 한도</Key>
+            <Value>{campaign?.dailyBudget}</Value>
+          </div>
+        </Overview>
       </OverviewContainer>
       <ChartContainer>
         {chartDate?.length > 0 && type === 'all' ? (
           <ResponsiveContainer>
             <AreaChart data={chartDate}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-              <YAxis yAxisId={1} domain={['dataMin', 'dataMax']}/>
+              <YAxis yAxisId={1} domain={['dataMin', 'dataMax']} />
               <Tooltip />
-              <Area type='natural' dataKey='reach' stackId="1" stroke={typeConfigs['reach'].color} fill={typeConfigs['reach'].color} yAxisId={1}/>
-              <Area type='natural' dataKey='click' stackId="2" stroke={typeConfigs['click'].color} fill={typeConfigs['click'].color} yAxisId={1}/>
+              <Area type='natural' dataKey='reach' stackId="1" stroke={typeConfigs['reach'].color} fill={typeConfigs['reach'].color} yAxisId={1} />
+              <Area type='natural' dataKey='click' stackId="2" stroke={typeConfigs['click'].color} fill={typeConfigs['click'].color} yAxisId={1} />
               <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <ResponsiveContainer>
-            <AreaChart data={chartDate}>
-              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-              <YAxis yAxisId={1} type="number" domain={type==='ctr' ? [0, 1] :['dataMin', 'dataMax']}/>
-              <Tooltip />
-              <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1}/>
-              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
-              <Legend />
-            </AreaChart>
-          </ResponsiveContainer>
-        )}
+            <ResponsiveContainer>
+              <AreaChart data={chartDate}>
+                <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+                <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
+                <Tooltip />
+                <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
+                <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+                <Legend />
+              </AreaChart>
+            </ResponsiveContainer>
+          )}
       </ChartContainer>
     </Container>
   );
@@ -177,12 +211,12 @@ function getOverviewData(campaign, todayIndex) {
 
   return {
     reach: campaign?.stats[todayIndex].reach,
-    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2)+'%',
+    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
     click: campaign?.stats[todayIndex].click,
-    clickNetChange:((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2)+'%',
-    ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2)+'%',
-    ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2)+'%',
+    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2) + '%',
+    ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2) + '%',
+    ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
     cpc: ((campaign?.dailyBudget - campaign?.remainingBudget) / campaign?.stats[todayIndex].click).toFixed(1),
-    cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2)+'%',
+    cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
   };
 }
