@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
+import Modal from './Modal';
+import ADPreviewModal from './ADPreviewModal';
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +51,13 @@ const SliderWrapper = styled.div`
   flex-direction: column;
 `;
 
+const ADPreviewButton = styled.button`
+  background-color: yellow;
+  cursor: pointer;
+`;
+
 export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+  const [isPreviewModal, setIsPreviewModal] = useState(false);
   const {
     register,
     watch,
@@ -147,7 +155,19 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             </Card>
           </ContentWrapper>
           <ContentWrapper width="360px">
-            <span>광고 미리보기</span>
+            <Modal>
+              {
+                isPreviewModal &&
+                <ADPreviewModal
+                  imageUrl={imageUrl}
+                  setIsPreviewModal={setIsPreviewModal}
+                />
+              }
+            </Modal>
+            <ADPreviewButton
+              type="button"
+              onClick={() => setIsPreviewModal(true)}
+            >광고 미리보기</ADPreviewButton>
             <span>일일 추산 결과</span>
             <span>결제 요약</span>
             <span>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</span>
