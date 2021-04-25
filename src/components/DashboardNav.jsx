@@ -5,7 +5,6 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { color } from '../css/color';
 import { useDispatch } from 'react-redux';
-import mainImg from '../assets/mainImg.png';
 import { selectCampaign } from '../reducers/selectedCampaign';
 
 const NavWrapper = styled.div`
@@ -15,13 +14,6 @@ const NavWrapper = styled.div`
   height: 100%;
   background-color: ${color.WHITE};
   font-family: 'Nanum Barun Gothic';
-`;
-
-const NavLogoContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 15%;
 `;
 
 const NavProfileContainer = styled.div`
@@ -101,11 +93,6 @@ export default function DashboardNav() {
 
   return (
     <NavWrapper>
-      <NavLogoContainer>
-        <Link to="/">
-          <NavLogo src={mainImg} />
-        </Link>
-      </NavLogoContainer>
       <NavProfileContainer>
         <NavProfile>
           <NavIconContainer>

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { color } from '../css/color';
+import logo from '../assets/logo.png';
 
 const Container = styled.div`
   position: fixed;
@@ -49,11 +50,18 @@ const HeaderLink = styled(Link)`
   }
 `;
 
+const Logo = styled.img`
+  width: 80px;
+  padding: 3px;
+`;
+
 export default function Header() {
   return (
     <Container>
       <LeftHeader>
-        <HeaderItem>Logo</HeaderItem>
+        <HeaderItem>
+          <Logo src={logo} />
+        </HeaderItem>
         <HeaderItem>
           <HeaderLink to="/campaign/category">
             캠페인 유형
