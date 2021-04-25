@@ -24,6 +24,7 @@ const LoginWrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const FormWrapper = styled.div`
@@ -41,7 +42,7 @@ const Input = styled.input`
 	padding: 8px 15px;
 	margin: 0 0 20px 0;
 	width: 80%;
-  border-radius: 8px;
+  border-radius: 5px;
 `;
 
 const Button = styled.input`

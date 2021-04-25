@@ -13,7 +13,8 @@ const NavWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #EFEFEF;
+  background-color: ${color.WHITE};
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const NavLogoContainer = styled.div`

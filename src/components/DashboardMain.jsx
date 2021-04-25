@@ -21,6 +21,7 @@ const Container = styled.div`
   flex-direction: column;
   padding: 20px;
   background-color: #FAF8EF;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const OverviewContainer = styled.div`
@@ -55,12 +56,11 @@ const Key = styled.div`
 const Value = styled.div`
   font-size: 20px;
   text-align: center;
-  margin: 5px;
 `;
 
 const ChartContainer = styled.div`
   display: flex;
-  padding: 40px;
+  padding: 30px;
   width: 95%;
   height: 70%;
   background-color: white;

@@ -11,6 +11,7 @@ const HomeWrapper = styled.div`
   margin-top: 80px;
   height: calc(100vh - 80px);
   width: 100%;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const HomeSection = styled.div`
@@ -33,6 +34,10 @@ const Content = styled.div`
   margin: auto;
 `;
 
+const Title = styled.h2`
+  font-family: 'Nanum Barun Gothic Bold';
+`;
+
 const ImgContainer = styled.div`
   display: flex;
   width: 50%;
@@ -45,9 +50,10 @@ const Button = styled.button`
   height: 40px;
   margin: 20px 0;
   border: none;
-  background-color: ${color.SUB_COLOR};
+  border-radius: 5px;
+  background-color: ${color.SUB};
   &:hover {
-    background-color: ${color.MAIN_COLOR};
+    background-color: ${color.HOVER};
     color: black;
   }
   &:focus {
@@ -67,10 +73,10 @@ export default function HomeMain() {
       <HomeSection>
         <ContentWrapper>
           <Content>
-            <h2>
+            <Title>
               헬스케어 기업을 위한<br />
               최적의 광고 플랫폼
-            </h2>
+            </Title>
             <article
             >니즈가 명확한 고객을 확보하세요</article
             >
@@ -88,18 +94,16 @@ export default function HomeMain() {
       <HomeSection>
         <ContentWrapper>
           <Content>
-            <h2>
+            <Title>
               내 비지니스에<br />
               적합한 예산을<br />
               설정하세요
-            </h2>
-            <article
-            >
+            </Title>
+            <div>
               Google Ads는 광고 예산의 규모에 상관없이 이용할 수 있습니다.<br />
               월예산 한도를 설정하면 그 이상 지출되는 경우가 없습니다. <br />
               또한 언제든지 지출을 일시중지하거나 조정할 수 있습니다.
-            </article
-            >
+            </div>
           </Content>
         </ContentWrapper>
         <ContentWrapper>
@@ -110,7 +114,7 @@ export default function HomeMain() {
       </HomeSection>
       <HomeSection>
         <Content height="100%">
-          <h2>서비스 이름과 함께 딱 맞는 고객에게 다가가세요.</h2>
+          <Title>서비스 이름과 함께 딱 맞는 고객에게 다가가세요.</Title>
           <ImgContainer>
             <img src={mainImg} alt="mainImg" />
           </ImgContainer>

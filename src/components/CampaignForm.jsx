@@ -10,6 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   width: fit-content;
   margin-top: 80px;
+  font-family: 'Nanum Barun Gothic';
 `;
 
 const TitleWrapper = styled.div`
@@ -148,7 +149,7 @@ const Button = styled.button`
   width: 40%;
   background-color: ${color.SUB};
   &:hover {
-    background-color: ${color.MAIN};
+    background-color: ${color.HOVER};
     color: black;
   }
   &:focus {

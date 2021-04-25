@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { color } from '../css/color';
-import GlobalFonts from '../fonts/fonts';
 
 const Container = styled.div`
   position: fixed;
@@ -12,6 +11,8 @@ const Container = styled.div`
   height: 80px;
   width: 100%;
   background-color: ${color.SUB};
+  font-family: 'Nanum Barun Gothic';
+  font-size: 18px;
 `;
 
 const LeftHeader = styled.div`
@@ -42,7 +43,6 @@ const HeaderLink = styled(Link)`
   justify-content: center;
   align-content: center;
   text-decoration: none;
-  font-family: 'NanumBarunGothicBold';
   color: ${color.MAIN_FONT};
   &:hover {
     color: ${color.BOLD};
@@ -52,7 +52,6 @@ const HeaderLink = styled(Link)`
 export default function Header() {
   return (
     <Container>
-      <GlobalFonts />
       <LeftHeader>
         <HeaderItem>Logo</HeaderItem>
         <HeaderItem>
