@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { color } from '../css/color';
 
 const ModalContainer = styled.div`
@@ -52,3 +53,8 @@ export default function ModalContent({ errorType, onHideModalClick }) {
     </ModalContainer>
   );
 }
+
+ModalContent.propTypes = {
+  errorType: PropTypes.string.isRequired,
+  onHideModalClick: PropTypes.func.isRequired,
+};

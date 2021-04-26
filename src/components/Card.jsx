@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => props.width || '400px'}
+  width: ${props => props.width || '400px'};
   height: fit-content;
   align-items: center;
   justify-content: flex-start;
@@ -37,3 +38,8 @@ export default function Card({
     </Container>
   );
 }
+
+Card.propTypes = {
+  children: PropTypes.elementType.isRequired,
+  title: PropTypes.string.isRequired,
+};

@@ -28,6 +28,6 @@ module.exports = {
       'exports': 'never',
       'functions': 'never',
     }],
-    'no-trailing-spaces': ['error', { 'skipBlankLines': false, }],
+    'no-trailing-spaces': ['error', { 'skipBlankLines': false }],
   },
 };

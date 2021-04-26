@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
+import PropTypes from 'prop-types';
 import Card from './Card';
 import Modal from './Modal';
 import ModalContent from './ModalContent';
@@ -351,3 +352,12 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
     </>
   );
 }
+
+CampaignForm.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  isError: PropTypes.bool.isRequired,
+  errorType: PropTypes.string.isRequired,
+  setIsError: PropTypes.func.isRequired,
+  onImageUpload: PropTypes.func.isRequired,
+  onFormSubmit: PropTypes.func.isRequired,
+};
