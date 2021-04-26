@@ -1,5 +1,5 @@
 export async function fetchImageFile(data) {
-  const url = 'http://localhost:5000/uploads';
+  const url = `${process.env.REACT_APP_SERVER_URL}/uploads`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {

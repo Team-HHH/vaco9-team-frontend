@@ -1,5 +1,5 @@
 export async function saveRegistrationData(data) {
-  const url = 'http://localhost:5000/auth/register/advertiser';
+  const url = `${process.env.REACT_APP_SERVER_URL}/auth/register/advertiser`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {
