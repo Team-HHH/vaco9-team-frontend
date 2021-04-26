@@ -6,6 +6,7 @@ import CampaignForm from '../components/CampaignForm';
 import { fetchPaymentResult } from '../apis/payment';
 import { fetchNewCampaign } from '../apis/campaigns';
 import { fetchImageFile } from '../apis/image';
+import { checkFileSize } from '../utils/index';
 
 const Container = styled.div`
   display: flex;
@@ -14,15 +15,16 @@ const Container = styled.div`
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
-
-  const IMP = window.IMP;
-  IMP.init(process.env.REACT_APP_IMPORT_ID);
+  const [isError, setIsError] = useState(false);
+  const [errorType, setErrorType] = useState('');
 
   async function handleNewCampaignFormSubmit(data) {
+    const IMP = window.IMP;
+    IMP.init(process.env.REACT_APP_IMPORT_ID);
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
-      const response = await fetchNewCampaign(data);
+      const response = await fetchNewCampaign({ ...data, content: url });
       const responseBody = await response.json();
 
       if (!response.ok) {
@@ -61,7 +63,21 @@ export default function CreateCampaign() {
     e.preventDefault();
 
     const data = new FormData();
-    data.append('image', e.target.image.files[0]);
+    const file = e.target.image.files[0];
+
+    if (!file) {
+      setIsError(true);
+      setErrorType('FILE_NOT_EXIST');
+      return;
+    }
+
+    if (!checkFileSize(file)) {
+      setIsError(true);
+      setErrorType('SIZE_EXCEEDED');
+      return;
+    }
+
+    data.append('image', file);
 
     try {
       const response = await fetchImageFile(data);
@@ -70,6 +86,8 @@ export default function CreateCampaign() {
 
       setUrl(url);
     } catch (error) {
+      setIsError(true);
+      setErrorType('UPLOAD_FAIL');
     }
   }
 
@@ -79,6 +97,9 @@ export default function CreateCampaign() {
       <Container>
         <CampaignForm
           imageUrl={url}
+          isError={isError}
+          errorType={errorType}
+          setIsError={setIsError}
           onImageUpload={handleImageUpload}
           onFormSubmit={handleNewCampaignFormSubmit}
         />
