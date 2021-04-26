@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
+import { parseISO, differenceInCalendarDays } from 'date-fns';
 import Card from './Card';
 import Modal from './Modal';
+import ModalContent from './ModalContent';
 import ADPreviewModal from './ADPreviewModal';
 import { color } from '../css/color';
 
@@ -50,18 +51,11 @@ const UploaderPadding = styled.div`
   height: 40px;
 `;
 
-const UploaderWrapper = styled.section`
-  display: flex;
-  justify-content: flex-start;
-  width: 500px;
-  z-index : 1;
-`;
-
 const Uploader = styled.form`
   display: flex;
   justify-content: space-evenly;
   position: relative;
-  top: 260px;
+  top: 330px;
   left: 30px;
   width: 500px;
   height: fit-content;
@@ -169,7 +163,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE};
+  background-color: ${color.OUTLINE}
 `;
 
 const ADPreviewButton = styled.button`
@@ -199,7 +193,7 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+export default function CampaignForm({ imageUrl, isError, errorType, setIsError, onImageUpload, onFormSubmit }) {
   const [isPreviewModal, setIsPreviewModal] = useState(false);
   const {
     register,
@@ -208,146 +202,160 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
   } = useForm();
   const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
-  const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
+  const watchExpiresAt = watch('expiresAt');
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
   return (
-    <Container>
-      <TitleWrapper>
-        <Title>캠페인 시작하기</Title>
-      </TitleWrapper>
-      <UploaderWrapper>
-        <Uploader
-          onSubmit={onImageUpload}
-          encType="multipart/form-data"
-        >
-          <UploadLabel htmlFor="file">배너 이미지 선택</UploadLabel>
-          <input
-            type="file"
-            id="file"
-            name="image"
-            style={{ display: 'none' }}
-            accept='image/jpg,impge/png,image/jpeg,image/gif'
-          />
-          <UploadInput type="submit" value="업로드" />
-        </Uploader>
-      </UploaderWrapper>
-      <FormWrapper>
-        <Form onSubmit={handleSubmit(onFormSubmit)}>
-          <ContentWrapper>
-            <InputWrapper>
-              <HiddenInput
-                type="text"
-                name="content"
-                value={imageUrl}
-                {...register('content')}
-              />
-              <Card title="캠페인 제목">
-                <Input
+    <>
+      <Container>
+        <TitleWrapper>
+          <Title>캠페인 시작하기</Title>
+        </TitleWrapper>
+        <section>
+          <Uploader
+            onSubmit={onImageUpload}
+            encType="multipart/form-data"
+          >
+            <UploadLabel htmlFor="file">배너 이미지 선택</UploadLabel>
+            <input
+              type="file"
+              id="file"
+              name="image"
+              style={{ display: "none" }}
+              accept='image/jpg,impge/png,image/jpeg,image/gif'
+            />
+            <UploadInput type="submit" value="업로드" />
+          </Uploader>
+        </section>
+        <FormWrapper>
+          <Form onSubmit={handleSubmit(onFormSubmit)}>
+            <ContentWrapper>
+              <InputWrapper>
+                <HiddenInput
                   type="text"
-                  name="title"
-                  accept=".jpg,.png,.jpeg"
-                  {...register('title')}
+                  name="content"
+                  value={imageUrl}
+                  {...register('content')}
                 />
-              </Card>
-              <Card title="캠페인 타입">
-                <SelectWrapper>
-                  <Select
-                    name="campaignType"
-                    {...register('campaignType')}
-                  >
-                    <option value={'banner'}>배너</option>
-                    <option value={'text'}>텍스트</option>
-                    <option value={'video'}>비디오</option>
-                  </Select>
-                </SelectWrapper>
-              </Card>
-              <Card title="배너이미지 추가하기">
-                <UploaderPadding />
-              </Card>
-            </InputWrapper>
-            <InputWrapper>
-              <Card title="기간">
-                <SelectWrapper>
+                <Card title="캠페인 제목">
+                  <Input
+                    type="text"
+                    name="title"
+                    accept=".jpg,.png,.jpeg"
+                    {...register('title')}
+                  />
+                </Card>
+                <Card title="캠페인 타입">
                   <SelectWrapper>
                     <Select
-                      name="expiresType"
-                      defaultValue="expired"
-                      {...register('expiresType')}
+                      name="campaignType"
+                      {...register('campaignType')}
                     >
-                      <option value={'expired'}>종료일 선택</option>
-                      <option value={'continue'}>종료일 없이 계속 게재</option>
+                      <option value={'banner'}>배너</option>
+                      <option value={'text'}>텍스트</option>
+                      <option value={'video'}>비디오</option>
                     </Select>
                   </SelectWrapper>
-                  <SelectWrapper>
-                    {watchType === 'expired' && (
-                      <DateInput
-                        type="date"
-                        min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
-                        value={watchExpiresAt}
-                        {...register('expiresAt')}
-                      />
-                    )}
-                  </SelectWrapper>
-                </SelectWrapper>
-              </Card>
-              <Card title='일일 예산'>
-                <SliderWrapper>
-                  <h2>{watchDailyBudget} 원</h2>
+                </Card>
+                <Card title="웹 사이트 주소">
                   <Input
-                    type="range"
-                    min="2000"
-                    max="200000"
-                    step="1000"
-                    name="dailyBudget"
-                    {...register('dailyBudget')}
+                    type="text"
+                    name="companyUrl"
+                    {...register('companyUrl')}
                   />
-                </SliderWrapper>
-              </Card>
-            </InputWrapper>
-          </ContentWrapper>
-          <ContentWrapper width="360px">
-            <Estimate>
-              <Modal>
-                {
-                  isPreviewModal &&
-                  <ADPreviewModal
-                    imageUrl={imageUrl}
-                    setIsPreviewModal={setIsPreviewModal}
-                  />
-                }
-              </Modal>
-              <ADPreviewButton
-                type="button"
-                onClick={() => setIsPreviewModal(true)}
-              >광고 미리보기</ADPreviewButton>
-              {imageUrl && <img src={imageUrl} height="120" width="280" />}
-              <Divider />
-              <DailyEstimateResultsWrapper>
-                <span>일일 추산 결과</span>
-                <DailyEstimateResultsContainer>
-                  <span>도달</span>
-                  <DailyEstimateResults>
-                    {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
-                  </DailyEstimateResults>
-                </DailyEstimateResultsContainer>
-                <DailyEstimateResultsContainer>
-                  <span>링크 클릭</span>
-                  <DailyEstimateResults>
-                    {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
-                  </DailyEstimateResults>
-                </DailyEstimateResultsContainer>
-              </DailyEstimateResultsWrapper>
-              <Divider />
-              <Message>결제 요약</Message>
-              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
-            </Estimate>
-            <ButtonWrapper>
-              <Button type="submit">시작하기</Button>
-            </ButtonWrapper>
-          </ContentWrapper>
-        </Form>
-      </FormWrapper>
-    </Container >
+                </Card>
+                <Card title="배너이미지 추가하기">
+                  <UploaderPadding />
+                </Card>
+              </InputWrapper>
+              <InputWrapper>
+                <Card title='기간'>
+                  <SelectWrapper>
+                    <SelectWrapper>
+                      <Select
+                        name="expiresType"
+                        defaultValue="expired"
+                        {...register('expiresType')}
+                      >
+                        <option value={'expired'}>종료일 선택</option>
+                        <option value={'continue'}>종료일 없이 계속 게재</option>
+                      </Select>
+                    </SelectWrapper>
+                    <SelectWrapper>
+                      {watchType === 'expired' && (
+                        <DateInput
+                          type="date"
+                          {...register('expiresAt')}
+                        />
+                      )}
+                    </SelectWrapper>
+                  </SelectWrapper>
+                </Card>
+                <Card title='일일 예산'>
+                  <SliderWrapper>
+                    <h2>{watchDailyBudget} 원</h2>
+                    <Input
+                      type="range"
+                      min="2000"
+                      max="200000"
+                      step="1000"
+                      name="dailyBudget"
+                      {...register('dailyBudget')}
+                    />
+                  </SliderWrapper>
+                </Card>
+              </InputWrapper>
+            </ContentWrapper>
+            <ContentWrapper width="360px">
+              <Estimate>
+                <ADPreviewButton
+                  type="button"
+                  onClick={() => setIsPreviewModal(true)}
+                >광고 미리보기</ADPreviewButton>
+                <Divider />
+                <DailyEstimateResultsWrapper>
+                  <span>일일 추산 결과</span>
+                  <DailyEstimateResultsContainer>
+                    <span>도달</span>
+                    <DailyEstimateResults>
+                      {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
+                    </DailyEstimateResults>
+                  </DailyEstimateResultsContainer>
+                  <DailyEstimateResultsContainer>
+                    <span>링크 클릭</span>
+                    <DailyEstimateResults>
+                      {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
+                    </DailyEstimateResults>
+                  </DailyEstimateResultsContainer>
+                </DailyEstimateResultsWrapper>
+                <Divider />
+                <Message>결제 요약</Message>
+                <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
+              </Estimate>
+              <ButtonWrapper>
+                <Button type="submit">시작하기</Button>
+              </ButtonWrapper>
+            </ContentWrapper>
+          </Form>
+        </FormWrapper>
+      </Container >
+      {isError &&
+        <Modal>
+          <ModalContent
+            errorType={errorType}
+            onHideModalClick={() => { setIsError(false) }}
+          />
+        </Modal>
+      }
+      <Modal>
+        {
+          isPreviewModal &&
+          <ADPreviewModal
+            imageUrl={imageUrl}
+            setIsPreviewModal={setIsPreviewModal}
+          />
+        }
+      </Modal>
+    </>
   );
 }

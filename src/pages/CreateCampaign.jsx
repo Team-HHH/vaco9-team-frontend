@@ -6,6 +6,7 @@ import CampaignForm from '../components/CampaignForm';
 import { fetchPaymentResult } from '../apis/payment';
 import { fetchNewCampaign } from '../apis/campaigns';
 import { fetchImageFile } from '../apis/image';
+import { checkFileSize } from '../utils/index';
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const Container = styled.div`
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
+  const [isFileSizeExceeded, setIsFileSizeExceeded] = useState(false);
 
   const IMP = window.IMP;
   IMP.init(process.env.REACT_APP_IMPORT_ID);
@@ -61,7 +63,14 @@ export default function CreateCampaign() {
     e.preventDefault();
 
     const data = new FormData();
-    data.append('image', e.target.image.files[0]);
+    const file = e.target.image.files[0];
+
+    if (!checkFileSize(file)) {
+      setIsFileSizeExceeded(true);
+      return;
+    }
+
+    data.append('image', file);
 
     try {
       const response = await fetchImageFile(data);
@@ -80,6 +89,8 @@ export default function CreateCampaign() {
         <CampaignForm
           imageUrl={url}
           onImageUpload={handleImageUpload}
+          isFileSizeExceeded={isFileSizeExceeded}
+          setIsFileSizeExceeded={setIsFileSizeExceeded}
           onFormSubmit={handleNewCampaignFormSubmit}
         />
       </Container>
