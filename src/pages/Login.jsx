@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
 import SplitLayout from '../components/SplitLayout';
 import LoginForm from '../components/LoginForm';
 import { loginToAdminPage } from '../reducers/user';

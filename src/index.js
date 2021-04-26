@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import store from './store';
 import App from './components/App';
-import { HeaderFont, ArticleFont } from './fonts/fonts';
+import { HeaderFont, ArticleFont } from './styles/fonts';
 
 ReactDOM.render(
   <Provider store={store}>

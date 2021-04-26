@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+
 import { getCampaigns } from '../reducers/campaigns';
 import Header from '../components/Header';
 import DashboardMain from '../components/DashboardMain';

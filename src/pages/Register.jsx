@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import SplitLayout from '../components/SplitLayout';
 import RegisterForm from '../components/RegisterForm';
 import { saveRegistrationData } from '../apis/register';
