@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { parseISO, differenceInCalendarDays } from 'date-fns';
+import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
 import Card from './Card';
 import Modal from './Modal';
 import ModalContent from './ModalContent';
@@ -126,10 +126,6 @@ const SliderWrapper = styled.div`
   flex-direction: column;
 `;
 
-const HiddenInput = styled.input`
-  display: none;
-`;
-
 const Estimate = styled.div`
   display: flex;
   flex-direction: column;
@@ -163,7 +159,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE}
+  background-color: ${color.OUTLINE};
 `;
 
 const ADPreviewButton = styled.button`
@@ -202,7 +198,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
   } = useForm();
   const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
-  const watchExpiresAt = watch('expiresAt');
+  const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
   return (
@@ -231,12 +227,6 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
           <Form onSubmit={handleSubmit(onFormSubmit)}>
             <ContentWrapper>
               <InputWrapper>
-                <HiddenInput
-                  type="text"
-                  name="content"
-                  value={imageUrl}
-                  {...register('content')}
-                />
                 <Card title="캠페인 제목">
                   <Input
                     type="text"
@@ -260,8 +250,8 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                 <Card title="웹 사이트 주소">
                   <Input
                     type="text"
-                    name="companyUrl"
-                    {...register('companyUrl')}
+                    name="campaignUrl"
+                    {...register('campaignUrl')}
                   />
                 </Card>
                 <Card title="배너이미지 추가하기">
@@ -269,7 +259,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                 </Card>
               </InputWrapper>
               <InputWrapper>
-                <Card title='기간'>
+                <Card title="기간">
                   <SelectWrapper>
                     <SelectWrapper>
                       <Select
@@ -285,6 +275,8 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                       {watchType === 'expired' && (
                         <DateInput
                           type="date"
+                          min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
+                          value={watchExpiresAt}
                           {...register('expiresAt')}
                         />
                       )}
@@ -330,7 +322,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                 </DailyEstimateResultsWrapper>
                 <Divider />
                 <Message>결제 요약</Message>
-                <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
+                <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
               </Estimate>
               <ButtonWrapper>
                 <Button type="submit">시작하기</Button>

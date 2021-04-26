@@ -18,14 +18,13 @@ export default function CreateCampaign() {
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState('');
 
-  const IMP = window.IMP;
-  IMP.init(process.env.REACT_APP_IMPORT_ID);
-
   async function handleNewCampaignFormSubmit(data) {
+    const IMP = window.IMP;
+    IMP.init(process.env.REACT_APP_IMPORT_ID);
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
-      const response = await fetchNewCampaign(data);
+      const response = await fetchNewCampaign({ ...data, content: url });
       const responseBody = await response.json();
 
       if (!response.ok) {
