@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Card from './Card';
 import Modal from './Modal';
 import ModalContent from './ModalContent';
-import ADPreviewModal from './ADPreviewModal';
+import AdPreview from './AdPreview';
 import { color } from '../css/color';
 
 const Container = styled.div`
@@ -191,7 +191,7 @@ const DailyEstimateResults = styled.span`
 `;
 
 export default function CampaignForm({ imageUrl, isError, errorType, setIsError, onImageUpload, onFormSubmit }) {
-  const [isPreviewModal, setIsPreviewModal] = useState(false);
+  const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
     watch,
@@ -303,8 +303,10 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
               <Estimate>
                 <ADPreviewButton
                   type="button"
-                  onClick={() => setIsPreviewModal(true)}
-                >광고 미리보기</ADPreviewButton>
+                  onClick={() => setIsAdPreview(true)}
+                >
+                  <span>광고 미리보기</span>
+                </ADPreviewButton>
                 <Divider />
                 <DailyEstimateResultsWrapper>
                   <span>일일 추산 결과</span>
@@ -322,11 +324,19 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>
                 <Divider />
-                <Message>결제 요약</Message>
-                <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
+                <Message>
+                  <span>결제 요약</span>
+                </Message>
+                <Message>
+                  <span>
+                    결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원
+                  </span>
+                </Message>
               </Estimate>
               <ButtonWrapper>
-                <Button type="submit">시작하기</Button>
+                <Button type="submit">
+                  <span>시작하기</span>
+                </Button>
               </ButtonWrapper>
             </ContentWrapper>
           </Form>
@@ -342,10 +352,10 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
       }
       <Modal>
         {
-          isPreviewModal &&
-          <ADPreviewModal
+          isAdPreview &&
+          <AdPreview
             imageUrl={imageUrl}
-            setIsPreviewModal={setIsPreviewModal}
+            setIsAdPreview={setIsAdPreview}
           />
         }
       </Modal>

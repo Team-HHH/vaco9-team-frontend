@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import popupVideoImage from '../assets/popup-video-image-mockup.jpg';
 import { color } from '../css/color';
 
-const ADPreviewModalWrapper = styled.div`
+const Container = styled.div`
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
   z-index: 999;
@@ -17,7 +17,7 @@ const ADPreviewModalWrapper = styled.div`
   justify-content: center;
 `;
 
-const ADPreviewModalContainer = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -30,11 +30,11 @@ const ADPreviewModalContainer = styled.div`
   font-family: 'Nanum Barun Gothic';
 `;
 
-const ADPreviewModalTitle = styled.span`
+const Title = styled.span`
   font-size: 18px;
 `;
 
-const ADPreviewModalImageContainer = styled.div`
+const ImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
@@ -42,24 +42,24 @@ const ADPreviewModalImageContainer = styled.div`
   margin: 10px;
 `;
 
-const ADPreviewModalPopup = styled.div`
+const Popup = styled.div`
   display: flex;
   width: 100%;
   height: 80%;
 `;
 
-const ADPreviewModalPopupImage = styled.img`
+const PopupImage = styled.img`
   width: 100%;
   height: 100%;
 `;
 
-const ADPreviewModalBanner = styled.div`
+const Banner = styled.div`
   display: flex;
   width: 100%;
   height: 20%;
 `;
 
-const ADPreviewModalBannerImage = styled.img`
+const BannerImage = styled.img`
   width: 100%;
   height: 100%;
 `;
@@ -76,28 +76,26 @@ const CloseButton = styled.button`
   }
 `;
 
-const ADPreviewModal = ({ imageUrl, setIsPreviewModal }) => {
+export default function AdPreview({ imageUrl, setIsAdPreview }) {
   return (
-    <ADPreviewModalWrapper>
-      <ADPreviewModalContainer>
-        <ADPreviewModalTitle>광고 미리보기</ADPreviewModalTitle>
-        <ADPreviewModalImageContainer>
-          <ADPreviewModalPopup>
-            <ADPreviewModalPopupImage src={popupVideoImage} />
-          </ADPreviewModalPopup>
-          <ADPreviewModalBanner>
-            {imageUrl && <ADPreviewModalBannerImage src={imageUrl} />}
-          </ADPreviewModalBanner>
-        </ADPreviewModalImageContainer>
-        <CloseButton onClick={() => setIsPreviewModal(false)}>확인</CloseButton>
-      </ADPreviewModalContainer>
-    </ADPreviewModalWrapper>
+    <Container>
+      <Wrapper>
+        <Title>광고 미리보기</Title>
+        <ImageContainer>
+          <Popup>
+            <PopupImage src={popupVideoImage} />
+          </Popup>
+          <Banner>
+            {imageUrl && <BannerImage src={imageUrl} />}
+          </Banner>
+        </ImageContainer>
+        <CloseButton onClick={() => setIsAdPreview(false)}>확인</CloseButton>
+      </Wrapper>
+    </Container>
   );
-};
+}
 
-export default ADPreviewModal;
-
-ADPreviewModal.propTypes = {
+AdPreview.propTypes = {
   imageUrl: PropTypes.string.isRequired,
-  setIsPreviewModal: PropTypes.func.isRequired,
+  setIsAdPreview: PropTypes.func.isRequired,
 };

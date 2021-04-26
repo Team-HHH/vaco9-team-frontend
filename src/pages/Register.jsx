@@ -3,7 +3,7 @@ import SplitLayout from '../components/SplitLayout';
 import RegisterForm from '../components/RegisterForm';
 import { saveRegistrationData } from '../apis/register';
 
-export default function RegisterPage() {
+export default function Register() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [isUserExists, setIsUserExists] = useState(false);
   const [isError, setIsError] = useState(false);

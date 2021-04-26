@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import Home from '../pages/Home';
 import CreateCampaign from '../pages/CreateCampaign';
 import Login from '../pages/Login';
-import RegisterPage from '../pages/RegisterPage';
+import Register from '../pages/Register';
 import DashBoard from '../pages/Dashboard';
 import PrivateRoute from '../helpers/PrivateRoute';
 
@@ -21,7 +21,7 @@ export default function App() {
           <Login />
         </Route>
         <Route path="/register">
-          <RegisterPage />
+          <Register />
         </Route>
         <PrivateRoute path="/dashboard">
           <DashBoard />

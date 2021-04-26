@@ -21,6 +21,7 @@ export default function CreateCampaign() {
   async function handleNewCampaignFormSubmit(data) {
     const IMP = window.IMP;
     IMP.init(process.env.REACT_APP_IMPORT_ID);
+
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
