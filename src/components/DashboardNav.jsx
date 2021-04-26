@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { color } from '../css/color';

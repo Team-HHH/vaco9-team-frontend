@@ -54,11 +54,10 @@ const Overview = styled(StaticOverview)`
 
 const Key = styled.p`
   font-size: 21px;
-  text-align: ${props => props.textAlign || 'left'}
+  text-align: ${props => props.textAlign || 'left'};
   padding: 0;
   text-align: center;
   margin: 0;
-  // margin-bottom: 10px;
 `;
 
 const Value = styled.p`
@@ -200,17 +199,17 @@ export default function DashboardMain() {
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-            <ResponsiveContainer>
-              <AreaChart data={chartDate}>
-                <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-                <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
-                <Tooltip />
-                <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
-                <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
-                <Legend />
-              </AreaChart>
-            </ResponsiveContainer>
-          )}
+          <ResponsiveContainer>
+            <AreaChart data={chartDate}>
+              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
+              <Tooltip />
+              <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
+              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+              <Legend />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </ChartContainer>
     </Container>
   );

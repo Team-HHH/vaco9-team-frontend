@@ -36,8 +36,8 @@ export const loginToAdminPage = (loginInput, history) => async (dispatch) => {
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
-  ? { isLoggedIn: true, info: user, }
-  : { isLoggedIn: false, info: null, };
+  ? { isLoggedIn: true, info: user }
+  : { isLoggedIn: false, info: null };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {

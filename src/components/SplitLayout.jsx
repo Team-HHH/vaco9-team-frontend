@@ -38,7 +38,7 @@ const Slogan = styled.p`
   margin: 0;
 `;
 
-export default function SplitLayout({ children, }) {
+export default function SplitLayout({ children }) {
   return (
     <SplitLayoutWrapper>
       <LeftSection>{children}</LeftSection>

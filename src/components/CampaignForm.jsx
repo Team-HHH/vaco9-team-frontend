@@ -44,7 +44,7 @@ const InputWrapper = styled.div`
   border: 1px solid ${color.OUTLINE};
   border-radius: 10px;
   margin: 10px 0;
-  padding: 10px;s
+  padding: 10px;
 `;
 
 const UploaderPadding = styled.div`
@@ -217,7 +217,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
               type="file"
               id="file"
               name="image"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               accept='image/jpg,impge/png,image/jpeg,image/gif'
             />
             <UploadInput type="submit" value="업로드" />
@@ -335,7 +335,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
         <Modal>
           <ModalContent
             errorType={errorType}
-            onHideModalClick={() => { setIsError(false) }}
+            onHideModalClick={() => setIsError(false)}
           />
         </Modal>
       }
