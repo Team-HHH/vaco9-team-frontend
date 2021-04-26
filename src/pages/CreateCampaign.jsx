@@ -15,7 +15,8 @@ const Container = styled.div`
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
-  const [isFileSizeExceeded, setIsFileSizeExceeded] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorType, setErrorType] = useState('');
 
   const IMP = window.IMP;
   IMP.init(process.env.REACT_APP_IMPORT_ID);
@@ -65,8 +66,15 @@ export default function CreateCampaign() {
     const data = new FormData();
     const file = e.target.image.files[0];
 
+    if (!file) {
+      setIsError(true);
+      setErrorType('FILE_NOT_EXIST');
+      return;
+    }
+
     if (!checkFileSize(file)) {
-      setIsFileSizeExceeded(true);
+      setIsError(true);
+      setErrorType('SIZE_EXCEEDED');
       return;
     }
 
@@ -79,6 +87,8 @@ export default function CreateCampaign() {
 
       setUrl(url);
     } catch (error) {
+      setIsError(true);
+      setErrorType('UPLOAD_FAIL');
     }
   }
 
@@ -88,9 +98,10 @@ export default function CreateCampaign() {
       <Container>
         <CampaignForm
           imageUrl={url}
+          isError={isError}
+          errorType={errorType}
+          setIsError={setIsError}
           onImageUpload={handleImageUpload}
-          isFileSizeExceeded={isFileSizeExceeded}
-          setIsFileSizeExceeded={setIsFileSizeExceeded}
           onFormSubmit={handleNewCampaignFormSubmit}
         />
       </Container>
