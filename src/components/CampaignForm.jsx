@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { parseISO, differenceInCalendarDays } from 'date-fns';
+import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
 import Card from './Card';
 import Modal from './Modal';
 import ADPreviewModal from './ADPreviewModal';
@@ -162,7 +162,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE}
+  background-color: ${color.OUTLINE};
 `;
 
 const ADPreviewButton = styled.button`
@@ -198,7 +198,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
   } = useForm();
   const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
-  const watchExpiresAt = watch('expiresAt');
+  const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
   return (
@@ -216,7 +216,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
             type="file"
             id="file"
             name="image"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             accept='image/jpg,impge/png,image/jpeg,image/gif'
           />
           <UploadInput type="submit" value="업로드" />
@@ -257,7 +257,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </Card>
             </InputWrapper>
             <InputWrapper>
-              <Card title='기간'>
+              <Card title="기간">
                 <SelectWrapper>
                   <SelectWrapper>
                     <Select
@@ -273,6 +273,8 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                     {watchType === 'expired' && (
                       <DateInput
                         type="date"
+                        min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
+                        value={watchExpiresAt}
                         {...register('expiresAt')}
                       />
                     )}
@@ -328,7 +330,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </DailyEstimateResultsWrapper>
               <Divider />
               <Message>결제 요약</Message>
-              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}</Message>
+              <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
             </Estimate>
             <ButtonWrapper>
               <Button type="submit">시작하기</Button>
