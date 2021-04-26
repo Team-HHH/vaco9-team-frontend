@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import Joi from 'joi';
+import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
+
 import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
-import Joi from 'joi';
 
 const schema = Joi.object({
   email: Joi.string()

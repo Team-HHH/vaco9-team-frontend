@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import popupVideoImage from '../assets/popup-video-image-mockup.jpg';
 
 const Container = styled.div`

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
-import PropTypes from 'prop-types';
+
 import Card from './Card';
 import Modal from './Modal';
 import ModalContent from './ModalContent';

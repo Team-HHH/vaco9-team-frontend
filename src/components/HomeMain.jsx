@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+
 import mainImg from '../assets/mainImg.png';
 import Footer from './Footer';
 

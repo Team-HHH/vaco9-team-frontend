@@ -1,8 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { FaRegUserCircle } from 'react-icons/fa';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+
 import { selectCampaign } from '../reducers/selectedCampaign';
 
 const NavWrapper = styled.div`
