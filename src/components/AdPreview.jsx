@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import popupVideoImage from '../assets/popup-video-image-mockup.jpg';
-import { color } from '../css/color';
 
 const Container = styled.div`
   background: rgba(0, 0, 0, 0.5);
@@ -70,9 +69,9 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   border: none;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.HOVER}
+    background-color: ${props => props.theme.HOVER}
   }
 `;
 

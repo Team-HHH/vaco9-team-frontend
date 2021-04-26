@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { color } from '../css/color';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
@@ -48,7 +47,7 @@ const FormWrapper = styled.div`
 `;
 
 const Label = styled.label`
-  color: ${color.BOLD};
+  color: ${props => props.theme.BOLD};
   margin: 3px;
 `;
 
@@ -68,9 +67,9 @@ const Button = styled.input`
   border-radius: 18px;
   padding: 10px 15px;
   width: 40%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.MAIN};
+    background-color: ${props => props.theme.MAIN};
     color: black;
   }
   &:focus {

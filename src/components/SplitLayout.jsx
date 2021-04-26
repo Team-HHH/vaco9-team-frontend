@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { color } from '../css/color';
 import logo from '../assets/logo.png';
 
 const SplitLayoutWrapper = styled.div`
@@ -18,7 +17,7 @@ const RightSection = styled.div`
   display: flex;
   justify-content: center;
   width: 70%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
 `;
 
 const LogoWrapper = styled.div`

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { color } from '../css/color';
 import logo from '../assets/logo.png';
 
 const Container = styled.div`
@@ -11,7 +10,7 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   font-family: 'Nanum Barun Gothic';
   font-size: 18px;
 `;
@@ -44,9 +43,9 @@ const HeaderLink = styled(Link)`
   justify-content: center;
   align-content: center;
   text-decoration: none;
-  color: ${color.MAIN_FONT};
+  color: ${props => props.theme.MAIN_FONT};
   &:hover {
-    color: ${color.BOLD};
+    color: ${props => props.theme.BOLD};
   }
 `;
 

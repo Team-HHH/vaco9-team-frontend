@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import mainImg from '../assets/mainImg.png';
 import Footer from './Footer';
-import { color } from '../css/color';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -51,9 +50,9 @@ const Button = styled.button`
   margin: 20px 0;
   border: none;
   border-radius: 5px;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.HOVER};
+    background-color: ${props => props.theme.HOVER};
     color: black;
   }
   &:focus {

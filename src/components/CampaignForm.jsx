@@ -7,7 +7,6 @@ import Card from './Card';
 import Modal from './Modal';
 import ModalContent from './ModalContent';
 import AdPreview from './AdPreview';
-import { color } from '../css/color';
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +41,7 @@ const ContentWrapper = styled.div`
 `;
 
 const InputWrapper = styled.div`
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 10px;
   margin: 10px 0;
   padding: 10px;
@@ -68,9 +67,9 @@ const UploadLabel = styled.label`
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
@@ -78,9 +77,9 @@ const UploadInput = styled.input`
   padding: 10px 30px;
   border-radius: 5px;
   border: none;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
@@ -95,7 +94,7 @@ const SelectWrapper = styled.div`
 `;
 
 const Select = styled.select`
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 0.4rem;
   background-color: #f9f9f9;
   padding: 10px;
@@ -103,7 +102,7 @@ const Select = styled.select`
 
 const DateInput = styled.input`
   margin: 10px 0;
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
 	width: 93%;
   border-radius: 0.4rem;
@@ -113,7 +112,7 @@ const DateInput = styled.input`
 `;
 
 const Input = styled.input`
-	border: 1px solid ${color.OUTLINE};
+	border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
 	width: 100%;
   border-radius: 0.4rem;
@@ -147,9 +146,9 @@ const Button = styled.button`
   border-radius: 18px;
   padding: 10px 15px;
   width: 40%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.HOVER};
+    background-color: ${props => props.theme.HOVER};
     color: black;
   }
   &:focus {
@@ -160,7 +159,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE};
+  background-color: ${props => props.theme.OUTLINE};
 `;
 
 const ADPreviewButton = styled.button`
@@ -169,9 +168,9 @@ const ADPreviewButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   border: none;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
