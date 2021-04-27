@@ -20,6 +20,7 @@ const TitleWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 40px;
+  margin-left: 20px;
 `;
 
 const Title = styled.h2`
@@ -36,7 +37,7 @@ const FormWrapper = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => props.width || '500px'};
+  width: ${props => props.width || 'fit-content'};
   margin: 0 40px;
 `;
 
@@ -132,7 +133,7 @@ const Estimate = styled.div`
 `;
 
 const Message = styled.span`
-  margin: 20px;
+  margin: 10px;
 `;
 
 const ButtonWrapper = styled.div`

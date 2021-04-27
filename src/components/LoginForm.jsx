@@ -1,23 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Joi from 'joi';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 
 import { commonErrorMessage } from '../constants/validationErrorMessage';
-
-const schema = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .max(20)
-    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])'))
-    .required(),
-});
+import { schema } from '../validations/loginFormSchema';
 
 const LoginWrapper = styled.div`
   display: flex;
