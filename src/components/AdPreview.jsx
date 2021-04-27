@@ -30,10 +30,6 @@ const Wrapper = styled.div`
   font-family: 'Nanum Barun Gothic';
 `;
 
-const Title = styled.span`
-  font-size: 18px;
-`;
-
 const ImageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,7 +76,6 @@ export default function AdPreview({ imageUrl, setIsAdPreview }) {
   return (
     <Container>
       <Wrapper>
-        <Title>광고 미리보기</Title>
         <ImageContainer>
           <Popup>
             <PopupImage src={popupVideoImage} />

@@ -45,7 +45,7 @@ export default function SplitLayout({ children }) {
       <RightSection>
         <LogoWrapper>
           <Logo src={logo} />
-          <Slogan>Flexilis</Slogan>
+          <Slogan>Flexilis Ads</Slogan>
           <Slogan>헬스케어 기업을 위한 최적의 광고 플랫폼</Slogan>
         </LogoWrapper>
       </RightSection>

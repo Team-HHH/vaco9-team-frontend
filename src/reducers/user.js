@@ -50,14 +50,20 @@ const initialState = user || null;
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-  case LOGIN_SUCCESS:
-    return {
-      ...action.payload,
-    };
-  case LOGIN_FAILURE:
-  case LOGOUT:
-    return null;
-  default:
-    return state;
+    case LOGIN_SUCCESS: {
+      return {
+        ...action.payload,
+      };
+    }
+    case LOGIN_FAILURE:
+    case LOGOUT: {
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+
+      return null;
+    }
+    default: {
+      return state;
+    }
   }
 }

@@ -40,12 +40,12 @@ const CloseButton = styled.button`
   }
 `;
 
-export default function ModalContent({ errorType, onHideModalClick }) {
+export default function ModalContent({ errorType, onCloseButtonClick }) {
   return (
     <ModalContainer>
       <ModalContentWrapper>
         <div>{errorType}</div>
-        <CloseButton onClick={onHideModalClick} >
+        <CloseButton onClick={onCloseButtonClick} >
           <span>Close</span>
         </CloseButton>
       </ModalContentWrapper>
@@ -55,5 +55,5 @@ export default function ModalContent({ errorType, onHideModalClick }) {
 
 ModalContent.propTypes = {
   errorType: PropTypes.string.isRequired,
-  onHideModalClick: PropTypes.func.isRequired,
+  onCloseButtonClick: PropTypes.func.isRequired,
 };

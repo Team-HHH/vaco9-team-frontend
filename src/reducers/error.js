@@ -21,18 +21,21 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-  case ERROR_OCCURED:
-    return {
-      ...state,
-      display: true,
-      message: action.payload.message,
-      link: action.payload.link,
-    };
-  case ERROR_SETTLED:
-    return {
-      ...initialState,
-    };
-  default:
-    return state;
+    case ERROR_OCCURED: {
+      return {
+        ...state,
+        display: true,
+        message: action.payload.message,
+        link: action.payload.link,
+      };
+    }
+    case ERROR_SETTLED: {
+      return {
+        ...initialState,
+      };
+    }
+    default: {
+      return state;
+    }
   }
 }

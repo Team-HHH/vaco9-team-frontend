@@ -16,6 +16,10 @@ export default function App() {
   const error = useSelector(state => state.error);
   const dispatch = useDispatch();
 
+  function handleModalCloseButtonClick() {
+    dispatch(errorSettled());
+  }
+
   return (
     <>
       <Router>
@@ -44,7 +48,7 @@ export default function App() {
         <Modal>
           <ModalContent
             errorType={error.message}
-            onHideModalClick={() => dispatch(errorSettled())}
+            onCloseButtonClick={handleModalCloseButtonClick}
           />
         </Modal>
       )}

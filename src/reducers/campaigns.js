@@ -1,7 +1,7 @@
 import { fetchCampaigns } from '../apis/campaigns';
 
 const GET_CAMPAIGNS_REQUEST = 'GET_CAMPAIGNS';
-const GET_CAMPAIGNS_SUCCESS = 'GET_CAMPAIGNS_SUCCESS';
+export const GET_CAMPAIGNS_SUCCESS = 'GET_CAMPAIGNS_SUCCESS';
 export const GET_CAMPAIGNS_ERROR = 'GET_CAMPAIGNS_ERROR';
 
 const actionCreator = (actionType, data) => {
@@ -29,16 +29,19 @@ export const getCampaigns = () => async (dispatch) => {
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-  case GET_CAMPAIGNS_REQUEST:
-    return {
-      ...state,
-    };
-  case GET_CAMPAIGNS_SUCCESS:
-    return {
-      ...action.payload,
-    };
-  default:
-    return state;
+    case GET_CAMPAIGNS_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case GET_CAMPAIGNS_SUCCESS: {
+      return {
+        ...action.payload,
+      };
+    }
+    default: {
+      return state;
+    }
   }
 }
 
