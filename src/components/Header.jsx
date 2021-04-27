@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import logo from '../assets/logo.png';
+import { logout } from '../reducers/user';
 
 const Container = styled.div`
   position: fixed;
@@ -11,6 +13,7 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
+  min-width: 900px;
   background-color: ${props => props.theme.SUB};
   font-family: 'Nanum Barun Gothic';
   font-size: 18px;
@@ -56,11 +59,22 @@ const Logo = styled.img`
 `;
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+
+  function handleLogoutClick() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('accessToken');
+    dispatch(logout());
+  }
+
   return (
     <Container>
       <LeftHeader>
         <HeaderItem>
-          <Logo src={logo} />
+          <HeaderLink to="/">
+            <Logo src={logo} />
+          </HeaderLink>
         </HeaderItem>
         <HeaderItem>
           <HeaderLink to="/campaign/category">
@@ -75,20 +89,30 @@ export default function Header() {
       </LeftHeader>
       <RightHeader>
         <HeaderItem>
-          <HeaderLink to="/dashboard">
-            대시보드
-          </HeaderLink>
-        </HeaderItem>
-        <HeaderItem>
           <HeaderLink to="/campaign/new">
             캠페인 시작하기
           </HeaderLink>
         </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/login">
-            로그인
-          </HeaderLink>
-        </HeaderItem>
+        {user ? (
+          <>
+            <HeaderItem>
+              <HeaderLink to="/dashboard">
+                대시보드
+              </HeaderLink>
+            </HeaderItem>
+            <HeaderItem>
+              <HeaderLink to="/" onClick={handleLogoutClick}>
+                로그아웃
+              </HeaderLink>
+            </HeaderItem>
+          </>
+        ) : (
+          <HeaderItem>
+            <HeaderLink to="/login">
+              로그인
+            </HeaderLink>
+          </HeaderItem>
+        )}
       </RightHeader>
     </Container>
   );
