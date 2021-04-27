@@ -1,38 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Joi from 'joi';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 
 import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
-
-const schema = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  name: Joi.string()
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .max(20)
-    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])'))
-    .required(),
-  passwordConfirm: Joi.string()
-    .min(8)
-    .max(20)
-    .valid(Joi.ref('password'))
-    .required(),
-  companyName: Joi.string()
-    .required(),
-  companyEmail: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  companyRegistrationNumber: Joi.string()
-    .pattern(new RegExp('([0-9]{3})-([0-9]{2})-([0-9]{5})'))
-    .required(),
-});
+import { schema } from '../validations/registerFormSchema';
 
 const RegisterWrapper = styled.div`
   display: flex;
@@ -136,7 +110,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="password"
-            render={() => <Message>{commonErrorMessage.INVALID_ErrorMessageASSWORD}</Message>}
+            render={() => <Message>{commonErrorMessage.INVALID_PASSWORD}</Message>}
           />
           <Label>비밀번호 확인</Label>
           <Input
