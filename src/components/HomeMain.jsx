@@ -24,7 +24,6 @@ const ContentWrapper = styled.div`
   display: flex;
   width: 50%;
   height: 100%;
-  // justify-content: center;
 `;
 
 const Content = styled.div`

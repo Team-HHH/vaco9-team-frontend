@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import SplitLayout from '../components/SplitLayout';
 import RegisterForm from '../components/RegisterForm';
 import { saveRegistrationData } from '../apis/register';
+import { errorOccured } from '../reducers/error';
 
 export default function Register() {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isUserExists, setIsUserExists] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  function handleRegisterFormSubmit(data) {
+  async function handleRegisterFormSubmit(data) {
     try {
-      const { message } = saveRegistrationData(data);
+      const response = await saveRegistrationData(data);
+      const { message } = await response.json();
 
-      if (message === 'register success') {
-        setIsRegistered(true);
-      } else if (message === 'user exists') {
-        setIsUserExists(true);
+      if (!response.ok) {
+        dispatch(errorOccured(message));
+        return;
       }
+
+      history.push('/login');
     } catch (error) {
-      setIsError(true);
+      dispatch(errorOccured('회원가입에 실패했습니다.'));
     }
   }
 
   return (
     <SplitLayout>
       <RegisterForm
-        isUserExists={isUserExists}
-        isRegistered={isRegistered}
-        isError={isError}
         onRegisterFormSubmit={handleRegisterFormSubmit}
       />
     </SplitLayout>

@@ -45,9 +45,9 @@ export default function ModalContent({ errorType, onHideModalClick }) {
     <ModalContainer>
       <ModalContentWrapper>
         <div>{errorType}</div>
-        <CloseButton
-          onClick={onHideModalClick}
-        >hide modal</CloseButton>
+        <CloseButton onClick={onHideModalClick} >
+          <span>Close</span>
+        </CloseButton>
       </ModalContentWrapper>
     </ModalContainer>
   );

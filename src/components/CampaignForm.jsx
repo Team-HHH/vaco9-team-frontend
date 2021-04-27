@@ -6,7 +6,6 @@ import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
 
 import Card from './Card';
 import Modal from './Modal';
-import ModalContent from './ModalContent';
 import AdPreview from './AdPreview';
 
 const Container = styled.div`
@@ -190,7 +189,7 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, isError, errorType, setIsError, onImageUpload, onFormSubmit }) {
+export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
@@ -342,32 +341,21 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
           </Form>
         </FormWrapper>
       </Container >
-      {isError &&
+      {
+        isAdPreview &&
         <Modal>
-          <ModalContent
-            errorType={errorType}
-            onHideModalClick={() => setIsError(false)}
-          />
-        </Modal>
-      }
-      <Modal>
-        {
-          isAdPreview &&
           <AdPreview
             imageUrl={imageUrl}
             setIsAdPreview={setIsAdPreview}
           />
-        }
-      </Modal>
+        </Modal>
+      }
     </>
   );
 }
 
 CampaignForm.propTypes = {
   imageUrl: PropTypes.string.isRequired,
-  isError: PropTypes.bool.isRequired,
-  errorType: PropTypes.string.isRequired,
-  setIsError: PropTypes.func.isRequired,
   onImageUpload: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
 };
