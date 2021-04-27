@@ -81,7 +81,7 @@ const NavCampaignItem = styled.button`
 
 export default function DashboardNav() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user?.info);
+  const user = useSelector((state) => state.user);
   const { allIds, byId } = useSelector(state => state.campaigns);
 
   function handleNavItemOnClick(event) {

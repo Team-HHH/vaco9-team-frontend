@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
-import logo from '../assets/logo.png';
-import { logout } from '../reducers/user';
+import useHeader from '../hooks/useHeader';
 
 const Container = styled.div`
   position: fixed;
@@ -53,27 +51,15 @@ const HeaderLink = styled(Link)`
   }
 `;
 
-const Logo = styled.img`
-  width: 80px;
-  padding: 3px;
-`;
-
 export default function Header() {
-  const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
-
-  function handleLogoutClick() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('accessToken');
-    dispatch(logout());
-  }
+  const { user, handleLogoutClick } = useHeader();
 
   return (
     <Container>
       <LeftHeader>
         <HeaderItem>
           <HeaderLink to="/">
-            <Logo src={logo} />
+            Flexilis Ads
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>

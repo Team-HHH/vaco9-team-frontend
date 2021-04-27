@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
-import mainImg from '../assets/mainImg.png';
-import Footer from './Footer';
+import mainImg from '../assets/mainImg.jpeg';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -35,18 +34,26 @@ const Content = styled.div`
 
 const Title = styled.h2`
   font-family: 'Nanum Barun Gothic Bold';
+  font-size: 4rem;
+  margin-bottom: 10px;
+`;
+
+const SubTitle = styled.span`
+  font-family: 'Nanum Barun Gothic Bold';
+  font-size: 2rem;
+  margin-bottom: 30px;
 `;
 
 const ImgContainer = styled.div`
   display: flex;
-  width: 50%;
-  height: 50%;
-  margin: 20% 0 0 0;
+  width: 70%;
+  height: 70%;
+  margin: 10% 90% 0 0;
 `;
 
 const Button = styled.button`
-  width: 120px;
-  height: 40px;
+  width: 200px;
+  height: 50px;
   margin: 20px 0;
   border: none;
   border-radius: 5px;
@@ -60,12 +67,17 @@ const Button = styled.button`
   }
 `;
 
+const ButtonText = styled.span`
+  font-family: 'Nanum Barun Gothic Bold';
+  font-size: 1rem;
+`;
 
 export default function HomeMain() {
   const history = useHistory();
-  const handleCampaignButtonClick = () => {
+
+  function handleCampaignButtonClick() {
     history.push('/campaign/new');
-  };
+  }
 
   return (
     <HomeWrapper>
@@ -76,11 +88,13 @@ export default function HomeMain() {
               헬스케어 기업을 위한<br />
               최적의 광고 플랫폼
             </Title>
-            <article
-            >니즈가 명확한 고객을 확보하세요</article
-            >
+            <SubTitle>
+              니즈가 명확한 고객을 확보하세요
+            </SubTitle>
             <Button onClick={handleCampaignButtonClick}>
-              캠페인 시작하기
+              <ButtonText>
+                캠페인 시작하기
+              </ButtonText>
             </Button>
           </Content>
         </ContentWrapper>
@@ -90,39 +104,6 @@ export default function HomeMain() {
           </ImgContainer>
         </ContentWrapper>
       </HomeSection>
-      <HomeSection>
-        <ContentWrapper>
-          <Content>
-            <Title>
-              내 비지니스에<br />
-              적합한 예산을<br />
-              설정하세요
-            </Title>
-            <div>
-              Google Ads는 광고 예산의 규모에 상관없이 이용할 수 있습니다.<br />
-              월예산 한도를 설정하면 그 이상 지출되는 경우가 없습니다. <br />
-              또한 언제든지 지출을 일시중지하거나 조정할 수 있습니다.
-            </div>
-          </Content>
-        </ContentWrapper>
-        <ContentWrapper>
-          <ImgContainer>
-            <img src={mainImg} alt="mainImg" />
-          </ImgContainer>
-        </ContentWrapper>
-      </HomeSection>
-      <HomeSection>
-        <Content height="100%">
-          <Title>서비스 이름과 함께 딱 맞는 고객에게 다가가세요.</Title>
-          <ImgContainer>
-            <img src={mainImg} alt="mainImg" />
-          </ImgContainer>
-          <article
-          >서비스 Ads를 사용하면 예산 내에서 관련성 높은 고객에게 더 많이 도달할 수 있습니다.</article
-          >
-        </Content>
-      </HomeSection>
-      <Footer />
     </HomeWrapper>
   );
 }

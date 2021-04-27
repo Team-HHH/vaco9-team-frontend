@@ -9,7 +9,7 @@ import DashboardNav from '../components/DashboardNav';
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 80px);
   display: flex;
   box-sizing: border-box;
   margin-top: 80px;
@@ -18,11 +18,13 @@ const Container = styled.div`
 const NavContainer = styled.div`
   width: 20%;
   height: 100%;
+  overflow-y: scroll;
 `;
 
 const MainContainer = styled.div`
   width: 80%;
   height: 100%;
+  overflow-y: hidden;
 `;
 
 export default function Dashboard() {
