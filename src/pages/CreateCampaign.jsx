@@ -10,6 +10,7 @@ import { fetchNewCampaign } from '../apis/campaigns';
 import { fetchImageFile } from '../apis/image';
 import { checkFileSize } from '../utils/index';
 import { errorOccured } from '../reducers/error';
+import { getEstimate } from '../reducers/target';
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +23,6 @@ export default function CreateCampaign() {
   const user = useSelector(state => state.user);
 
   async function handleNewCampaignFormSubmit(data) {
-    console.log(data);
     const IMP = window.IMP;
     IMP.init(process.env.REACT_APP_IMPORT_ID);
 
@@ -97,6 +97,10 @@ export default function CreateCampaign() {
     }
   }
 
+  function handleSliderChange(data) {
+    dispatch(getEstimate(data));
+  }
+
   return (
     <>
       <Header />
@@ -104,6 +108,7 @@ export default function CreateCampaign() {
         <CampaignForm
           imageUrl={url}
           onImageUpload={handleImageUpload}
+          onSliderChange={handleSliderChange}
           onFormSubmit={handleNewCampaignFormSubmit}
         />
       </Container>

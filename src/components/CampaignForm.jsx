@@ -190,7 +190,7 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+export default function CampaignForm({ imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
@@ -202,10 +202,11 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
-  const watchMinumumAge = watch('ageMin');
-  const watchageMax = watch('ageMax');
-  const watchgender = watch('gender');
-  const watchcountry = watch('country');
+  const watchAgeMin = watch('ageMin');
+  const watchAgeMax = watch('ageMax');
+  const watchGender = watch('gender');
+  const watchCountry = watch('country');
+  const data = { watchAgeMin, watchAgeMax, watchGender, watchCountry };
 
   return (
     <>
@@ -299,6 +300,7 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                       step="1000"
                       name="dailyBudget"
                       {...register('dailyBudget')}
+                      onChange={() => onSliderChange(data)}
                     />
                   </SliderWrapper>
                 </Card>
