@@ -1,10 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { FaRegUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
-import { color } from '../css/color';
+import { useSelector } from 'react-redux';
+import { FaRegUserCircle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
+
 import { selectCampaign } from '../reducers/selectedCampaign';
 
 const NavWrapper = styled.div`
@@ -12,7 +11,7 @@ const NavWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: ${color.WHITE};
+  background-color: ${props => props.theme.WHITE};
   font-family: 'Nanum Barun Gothic';
 `;
 
@@ -27,7 +26,7 @@ const NavProfile = styled.div`
   display: flex;
   width: 80%;
   justify-content: space-around;
-  background-color: ${color.WHITE};
+  background-color: ${props => props.theme.WHITE};
   border-radius: 5px;
 `;
 
@@ -73,16 +72,16 @@ const NavCampaignItem = styled.button`
   border-radius: 5px;
   background-color: white;
   &:hover {
-    background-color: ${color.MAIN}
+    background-color: ${props => props.theme.MAIN}
   }
   &:focus {
-    background-color: ${color.SUB}
+    background-color: ${props => props.theme.SUB}
   }
 `;
 
 export default function DashboardNav() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user?.info);
+  const user = useSelector((state) => state.user);
   const { allIds, byId } = useSelector(state => state.campaigns);
 
   function handleNavItemOnClick(event) {

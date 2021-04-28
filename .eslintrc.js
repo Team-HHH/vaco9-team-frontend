@@ -23,11 +23,11 @@ module.exports = {
     'indent': ['error', 2],
     'comma-dangle': ['error', {
       'arrays': 'never',
-      'objects': 'always',
+      'objects': 'only-multiline',
       'imports': 'never',
       'exports': 'never',
       'functions': 'never',
     }],
-    'no-trailing-spaces': ['error', { 'skipBlankLines': false, }],
+    'no-trailing-spaces': ['error', { 'skipBlankLines': false }],
   },
 };

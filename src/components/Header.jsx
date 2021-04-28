@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { color } from '../css/color';
-import logo from '../assets/logo.png';
+
+import useHeader from '../hooks/useHeader';
 
 const Container = styled.div`
   position: fixed;
@@ -11,7 +11,8 @@ const Container = styled.div`
   left: 0;
   height: 80px;
   width: 100%;
-  background-color: ${color.SUB};
+  min-width: 900px;
+  background-color: ${props => props.theme.SUB};
   font-family: 'Nanum Barun Gothic';
   font-size: 18px;
 `;
@@ -44,23 +45,22 @@ const HeaderLink = styled(Link)`
   justify-content: center;
   align-content: center;
   text-decoration: none;
-  color: ${color.MAIN_FONT};
+  color: ${props => props.theme.MAIN_FONT};
   &:hover {
-    color: ${color.BOLD};
+    color: ${props => props.theme.BOLD};
   }
 `;
 
-const Logo = styled.img`
-  width: 80px;
-  padding: 3px;
-`;
-
 export default function Header() {
+  const { user, handleLogoutClick } = useHeader();
+
   return (
     <Container>
       <LeftHeader>
         <HeaderItem>
-          <Logo src={logo} />
+          <HeaderLink to="/">
+            Flexilis Ads
+          </HeaderLink>
         </HeaderItem>
         <HeaderItem>
           <HeaderLink to="/campaign/category">
@@ -75,20 +75,30 @@ export default function Header() {
       </LeftHeader>
       <RightHeader>
         <HeaderItem>
-          <HeaderLink to="/dashboard">
-            대시보드
-          </HeaderLink>
-        </HeaderItem>
-        <HeaderItem>
           <HeaderLink to="/campaign/new">
             캠페인 시작하기
           </HeaderLink>
         </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/login">
-            로그인
-          </HeaderLink>
-        </HeaderItem>
+        {user ? (
+          <>
+            <HeaderItem>
+              <HeaderLink to="/dashboard">
+                대시보드
+              </HeaderLink>
+            </HeaderItem>
+            <HeaderItem>
+              <HeaderLink to="/" onClick={handleLogoutClick}>
+                로그아웃
+              </HeaderLink>
+            </HeaderItem>
+          </>
+        ) : (
+          <HeaderItem>
+            <HeaderLink to="/login">
+              로그인
+            </HeaderLink>
+          </HeaderItem>
+        )}
       </RightHeader>
     </Container>
   );

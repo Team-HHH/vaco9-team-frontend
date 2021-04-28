@@ -1,8 +1,8 @@
 import { fetchCampaigns } from '../apis/campaigns';
 
-const GET_CAMPAIGNS = 'GET_CAMPAIGNS';
-const GET_CAMPAIGNS_SUCCESS = 'GET_CAMPAIGNS_SUCCESS';
-const GET_CAMPAIGNS_ERROR = 'GET_CAMPAIGNS_ERROR';
+const GET_CAMPAIGNS_REQUEST = 'GET_CAMPAIGNS';
+export const GET_CAMPAIGNS_SUCCESS = 'GET_CAMPAIGNS_SUCCESS';
+export const GET_CAMPAIGNS_ERROR = 'GET_CAMPAIGNS_ERROR';
 
 const actionCreator = (actionType, data) => {
   return {
@@ -14,7 +14,7 @@ const actionCreator = (actionType, data) => {
 };
 
 export const getCampaigns = () => async (dispatch) => {
-  dispatch(actionCreator(GET_CAMPAIGNS));
+  dispatch(actionCreator(GET_CAMPAIGNS_REQUEST));
   try {
     const response = await fetchCampaigns();
     const responseBody = await response.json();
@@ -29,20 +29,19 @@ export const getCampaigns = () => async (dispatch) => {
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-  case GET_CAMPAIGNS:
-    return {
-      ...state,
-    };
-  case GET_CAMPAIGNS_SUCCESS:
-    return {
-      ...action.payload,
-    };
-  case GET_CAMPAIGNS_ERROR:
-    return {
-      ...state,
-    };
-  default:
-    return state;
+    case GET_CAMPAIGNS_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case GET_CAMPAIGNS_SUCCESS: {
+      return {
+        ...action.payload,
+      };
+    }
+    default: {
+      return state;
+    }
   }
 }
 

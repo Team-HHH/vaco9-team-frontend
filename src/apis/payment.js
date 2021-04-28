@@ -1,5 +1,5 @@
 export async function fetchPaymentResult(data) {
-  const url = 'http://localhost:5000/payment/verify';
+  const url = `${process.env.REACT_APP_SERVER_URL}/payment/verify`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {

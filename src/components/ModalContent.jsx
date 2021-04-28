@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { color } from '../css/color';
+import PropTypes from 'prop-types';
 
 const ModalContainer = styled.div`
   background-color: rgba(0,0,0,0.5);
@@ -24,7 +24,7 @@ const ModalContentWrapper = styled.div`
   align-items: center;
   padding: 1rem;
   border-radius: 20px;
-  background-color: ${color.WHITE};
+  background-color: ${props => props.theme.WHITE};
   font-family: 'Nanum Barun Gothic Bold';
 `;
 
@@ -34,21 +34,26 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   border: none;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.HOVER}
+    background-color: ${props => props.theme.HOVER}
   }
 `;
 
-export default function ModalContent({ errorType, onHideModalClick }) {
+export default function ModalContent({ errorType, onCloseButtonClick }) {
   return (
     <ModalContainer>
       <ModalContentWrapper>
         <div>{errorType}</div>
-        <CloseButton
-          onClick={onHideModalClick}
-        >hide modal</CloseButton>
+        <CloseButton onClick={onCloseButtonClick} >
+          <span>Close</span>
+        </CloseButton>
       </ModalContentWrapper>
     </ModalContainer>
   );
 }
+
+ModalContent.propTypes = {
+  errorType: PropTypes.string.isRequired,
+  onCloseButtonClick: PropTypes.func.isRequired,
+};

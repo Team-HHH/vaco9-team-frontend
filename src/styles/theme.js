@@ -1,4 +1,4 @@
-export const color = Object.freeze({
+const theme = {
   MAIN: '#fff3d6',
   SUB: '#ffde89',
   HOVER: '#ffc945',
@@ -10,5 +10,7 @@ export const color = Object.freeze({
   OUTLINE: '#ACACAC',
   LIGHT: '#efefef',
   DARK: '#e2e2e2',
-  WHITE: 'white',
-});
+  WHITE: '#ffffff',
+};
+
+export default theme;

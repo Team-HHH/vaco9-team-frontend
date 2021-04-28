@@ -21,6 +21,7 @@ const Container = styled.div`
   padding: 40px;
   background-color: #FAF8EF;
   font-family: 'Nanum Barun Gothic';
+  overflow-y: hidden;
 `;
 
 const OverviewContainer = styled.div`
@@ -49,16 +50,16 @@ const Overview = styled(StaticOverview)`
   transition: transform 0.3s ease;
   &:hover {
     transform: scale(1.05);
+    background-color: ${props => props.theme.SUB};
   }
 `;
 
 const Key = styled.p`
   font-size: 21px;
-  text-align: ${props => props.textAlign || 'left'}
+  text-align: ${props => props.textAlign || 'left'};
   padding: 0;
   text-align: center;
   margin: 0;
-  // margin-bottom: 10px;
 `;
 
 const Value = styled.p`
@@ -70,6 +71,7 @@ const Value = styled.p`
 
 const CompareValue = styled(Value)`
   font-size: 17px;
+  color: ${props => props.color && props.color[0] === '-' ? 'blue' : 'red'};
 `;
 
 const ChartContainer = styled.div`
@@ -82,6 +84,37 @@ const ChartContainer = styled.div`
   align-self: center;
 `;
 
+const typeConfigs = {
+  'reach': {
+    color: '#e74c3c',
+  },
+  'click': {
+    color: '#e67e22',
+  },
+  'ctr': {
+    color: '#27ae60',
+  },
+  'cpc': {
+    color: '#00adb5',
+  },
+  'all': {
+    color: '#363636',
+  },
+};
+
+const CustomizedAxisTick = ({ x, y, payload }) => {
+  const dateTip = parseISO(payload.value).toDateString();
+  const formattedDate = `${dateTip.slice(4, 7)}, ${dateTip.slice(8, 10)}`;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={23} y={0} dy={14} fontSize="0.90em" fontFamily="bold" textAnchor="end" fill="#363636">
+        {formattedDate}
+      </text>
+    </g>
+  );
+};
+
 export default function DashboardMain() {
   const [type, setType] = useState('all');
   const selectedCampaign = useSelector(state => state.selectedCampaign);
@@ -92,7 +125,8 @@ export default function DashboardMain() {
     return {
       ...dailyStats,
       date: dailyStats.date.slice(0, 10),
-      ctr: dailyStats.click / dailyStats.reach,
+      ctr: (dailyStats.click / dailyStats.reach).toFixed(2),
+      cpc: (dailyStats.usedBudget / dailyStats.click).toFixed(2),
     };
   });
   const overviewData = getOverviewData(campaign, todayIndex);
@@ -101,37 +135,9 @@ export default function DashboardMain() {
     setType('all');
   }, [campaign]);
 
-  const handleOverviewClick = (event) => {
+  function handleOverviewClick(event) {
     setType(event.target.closest('div').id);
-  };
-
-  const typeConfigs = {
-    'reach': {
-      color: '#e74c3c',
-    },
-    'click': {
-      color: '#e67e22',
-    },
-    'ctr': {
-      color: '#27ae60',
-    },
-    'all': {
-      color: '#363636',
-    },
-  };
-
-  const CustomizedAxisTick = ({ x, y, payload }) => {
-    const dateTip = parseISO(payload.value).toDateString();
-    const formattedDate = `${dateTip.slice(4, 7)}, ${dateTip.slice(8, 10)}`;
-
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text x={23} y={0} dy={14} fontSize="0.90em" fontFamily="bold" textAnchor="end" fill="#363636">
-          {formattedDate}
-        </text>
-      </g>
-    );
-  };
+  }
 
   return (
     <Container>
@@ -145,16 +151,15 @@ export default function DashboardMain() {
         >
           <Key>도달수</Key>
           <Value>{overviewData?.reach}</Value>
-          <CompareValue>{overviewData?.reachNetChange}</CompareValue>
+          <CompareValue color={overviewData?.reachNetChange}>{overviewData?.reachNetChange}</CompareValue>
         </Overview>
         <Overview
           id="click"
           onClick={handleOverviewClick}
-          onHover={() => console.log('hover')}
         >
           <Key>클릭수</Key>
           <Value>{overviewData?.click}</Value>
-          <CompareValue>{overviewData?.clickNetChange}</CompareValue>
+          <CompareValue color={overviewData?.clickNetChange}>{overviewData?.clickNetChange}</CompareValue>
         </Overview>
         <Overview
           id="ctr"
@@ -162,28 +167,26 @@ export default function DashboardMain() {
         >
           <Key>CTR</Key>
           <Value>{overviewData?.ctr}</Value>
-          <CompareValue>{overviewData?.ctrNetChange}</CompareValue>
+          <CompareValue color={overviewData?.ctrNetChange}>{overviewData?.ctrNetChange}</CompareValue>
         </Overview>
         <Overview
-          id="all"
+          id="cpc"
           onClick={handleOverviewClick}
         >
           <Key>CPC</Key>
           <Value>{overviewData?.cpc}원</Value>
-          <CompareValue>{overviewData?.cpcNetChange}</CompareValue>
+          <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
           id="all"
           onClick={handleOverviewClick}
         >
           <Key textAlign="center">예산 잔액</Key>
-          <Value>{campaign?.remainingBudget}원</Value>
+          <Value>{campaign?.remainingBudget.toLocaleString()}원</Value>
         </Overview>
         <StaticOverview>
-          <div>
-            <Key textAlign="center">일일 지출 한도</Key>
-            <Value>{campaign?.dailyBudget}</Value>
-          </div>
+          <Key textAlign="center">일일 지출 한도</Key>
+          <Value>{campaign?.dailyBudget.toLocaleString()}원</Value>
         </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
@@ -200,17 +203,17 @@ export default function DashboardMain() {
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-            <ResponsiveContainer>
-              <AreaChart data={chartDate}>
-                <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-                <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
-                <Tooltip />
-                <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
-                <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
-                <Legend />
-              </AreaChart>
-            </ResponsiveContainer>
-          )}
+          <ResponsiveContainer>
+            <AreaChart data={chartDate}>
+              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
+              <Tooltip />
+              <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
+              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+              <Legend />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </ChartContainer>
     </Container>
   );
@@ -218,15 +221,16 @@ export default function DashboardMain() {
 
 function getOverviewData(campaign, todayIndex) {
   if (campaign === undefined) return null;
+  if (campaign.stats.length === 0) return null;
 
   return {
-    reach: campaign?.stats[todayIndex].reach,
-    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
-    click: campaign?.stats[todayIndex].click,
-    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2) + '%',
-    ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2) + '%',
-    ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
-    cpc: ((campaign?.dailyBudget - campaign?.remainingBudget) / campaign?.stats[todayIndex].click).toFixed(1),
-    cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2) + '%',
+    reach: campaign?.stats[todayIndex].reach.toLocaleString(),
+    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+    click: campaign?.stats[todayIndex].click.toLocaleString(),
+    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2).toLocaleString() + '%',
+    ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
+    ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+    cpc: ((campaign?.dailyBudget - campaign?.remainingBudget) / campaign?.stats[todayIndex].click).toFixed(1).toLocaleString(),
+    cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
   };
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { color } from '../css/color';
+
 import logo from '../assets/logo.png';
 
 const SplitLayoutWrapper = styled.div`
@@ -18,7 +18,7 @@ const RightSection = styled.div`
   display: flex;
   justify-content: center;
   width: 70%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
 `;
 
 const LogoWrapper = styled.div`
@@ -38,14 +38,14 @@ const Slogan = styled.p`
   margin: 0;
 `;
 
-export default function SplitLayout({ children, }) {
+export default function SplitLayout({ children }) {
   return (
     <SplitLayoutWrapper>
       <LeftSection>{children}</LeftSection>
       <RightSection>
         <LogoWrapper>
           <Logo src={logo} />
-          <Slogan>Flexilis</Slogan>
+          <Slogan>Flexilis Ads</Slogan>
           <Slogan>헬스케어 기업을 위한 최적의 광고 플랫폼</Slogan>
         </LogoWrapper>
       </RightSection>

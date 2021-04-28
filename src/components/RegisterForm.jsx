@@ -1,38 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { color } from '../css/color';
+import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
-import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
-import Joi from 'joi';
 
-const schema = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  name: Joi.string()
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .max(20)
-    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])'))
-    .required(),
-  passwordConfirm: Joi.string()
-    .min(8)
-    .max(20)
-    .valid(Joi.ref('password'))
-    .required(),
-  companyName: Joi.string()
-    .required(),
-  companyEmail: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  companyRegistrationNumber: Joi.string()
-    .pattern(new RegExp('([0-9]{3})-([0-9]{2})-([0-9]{5})'))
-    .required(),
-});
+import { commonErrorMessage, registerErrorMessage } from '../constants/validationErrorMessage';
+import { schema } from '../validations/registerFormSchema';
 
 const RegisterWrapper = styled.div`
   display: flex;
@@ -48,7 +22,7 @@ const FormWrapper = styled.div`
 `;
 
 const Label = styled.label`
-  color: ${color.BOLD};
+  color: ${props => props.theme.BOLD};
   margin: 3px;
 `;
 
@@ -68,9 +42,9 @@ const Button = styled.input`
   border-radius: 18px;
   padding: 10px 15px;
   width: 40%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.MAIN};
+    background-color: ${props => props.theme.MAIN};
     color: black;
   }
   &:focus {
@@ -136,7 +110,7 @@ export default function RegisterForm({ onRegisterFormSubmit }) {
           <ErrorMessage
             errors={errors}
             name="password"
-            render={() => <Message>{commonErrorMessage.INVALID_ErrorMessageASSWORD}</Message>}
+            render={() => <Message>{commonErrorMessage.INVALID_PASSWORD}</Message>}
           />
           <Label>비밀번호 확인</Label>
           <Input

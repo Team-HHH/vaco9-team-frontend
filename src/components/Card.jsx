@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => props.width || '400px'}
+  width: ${props => props.width || '400px'};
   height: fit-content;
   align-items: center;
   justify-content: flex-start;
@@ -20,10 +21,7 @@ const CardItem = styled.div`
   width: 100%;
 `;
 
-export default function Card({
-  children,
-  title,
-}) {
+export default function Card({ children, title }) {
   return (
     <Container>
       <CardItem>
@@ -37,3 +35,8 @@ export default function Card({
     </Container>
   );
 }
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string.isRequired,
+};

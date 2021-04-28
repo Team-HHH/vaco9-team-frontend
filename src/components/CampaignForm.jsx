@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
+
 import Card from './Card';
 import Modal from './Modal';
-import ModalContent from './ModalContent';
-import ADPreviewModal from './ADPreviewModal';
-import { color } from '../css/color';
+import AdPreview from './AdPreview';
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +20,7 @@ const TitleWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 40px;
+  margin-left: 20px;
 `;
 
 const Title = styled.h2`
@@ -36,15 +37,15 @@ const FormWrapper = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => props.width || '500px'};
+  width: ${props => props.width || 'fit-content'};
   margin: 0 40px;
 `;
 
 const InputWrapper = styled.div`
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 10px;
   margin: 10px 0;
-  padding: 10px;s
+  padding: 10px;
 `;
 
 const UploaderPadding = styled.div`
@@ -67,9 +68,9 @@ const UploadLabel = styled.label`
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
@@ -77,9 +78,9 @@ const UploadInput = styled.input`
   padding: 10px 30px;
   border-radius: 5px;
   border: none;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
@@ -94,7 +95,7 @@ const SelectWrapper = styled.div`
 `;
 
 const Select = styled.select`
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 0.4rem;
   background-color: #f9f9f9;
   padding: 10px;
@@ -102,7 +103,7 @@ const Select = styled.select`
 
 const DateInput = styled.input`
   margin: 10px 0;
-  border: 1px solid ${color.OUTLINE};
+  border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
 	width: 93%;
   border-radius: 0.4rem;
@@ -112,7 +113,7 @@ const DateInput = styled.input`
 `;
 
 const Input = styled.input`
-	border: 1px solid ${color.OUTLINE};
+	border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
 	width: 100%;
   border-radius: 0.4rem;
@@ -132,7 +133,7 @@ const Estimate = styled.div`
 `;
 
 const Message = styled.span`
-  margin: 20px;
+  margin: 10px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -146,9 +147,9 @@ const Button = styled.button`
   border-radius: 18px;
   padding: 10px 15px;
   width: 40%;
-  background-color: ${color.SUB};
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${color.HOVER};
+    background-color: ${props => props.theme.HOVER};
     color: black;
   }
   &:focus {
@@ -159,7 +160,7 @@ const Button = styled.button`
 const Divider = styled.div`
   height: 1px;
   margin: 10px 0;
-  background-color: ${color.OUTLINE};
+  background-color: ${props => props.theme.OUTLINE};
 `;
 
 const ADPreviewButton = styled.button`
@@ -168,9 +169,9 @@ const ADPreviewButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   border: none;
-  background-color: ${color.LIGHT};
+  background-color: ${props => props.theme.LIGHT};
   &:hover {
-    background-color: ${color.DARK}
+    background-color: ${props => props.theme.DARK}
   }
 `;
 
@@ -189,8 +190,8 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, isError, errorType, setIsError, onImageUpload, onFormSubmit }) {
-  const [isPreviewModal, setIsPreviewModal] = useState(false);
+export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+  const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
     watch,
@@ -217,7 +218,7 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
               type="file"
               id="file"
               name="image"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               accept='image/jpg,impge/png,image/jpeg,image/gif'
             />
             <UploadInput type="submit" value="업로드" />
@@ -302,8 +303,10 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
               <Estimate>
                 <ADPreviewButton
                   type="button"
-                  onClick={() => setIsPreviewModal(true)}
-                >광고 미리보기</ADPreviewButton>
+                  onClick={() => setIsAdPreview(true)}
+                >
+                  <span>광고 미리보기</span>
+                </ADPreviewButton>
                 <Divider />
                 <DailyEstimateResultsWrapper>
                   <span>일일 추산 결과</span>
@@ -321,33 +324,39 @@ export default function CampaignForm({ imageUrl, isError, errorType, setIsError,
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>
                 <Divider />
-                <Message>결제 요약</Message>
-                <Message>결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원</Message>
+                <Message>
+                  <span>결제 요약</span>
+                </Message>
+                <Message>
+                  <span>
+                    결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원
+                  </span>
+                </Message>
               </Estimate>
               <ButtonWrapper>
-                <Button type="submit">시작하기</Button>
+                <Button type="submit">
+                  <span>시작하기</span>
+                </Button>
               </ButtonWrapper>
             </ContentWrapper>
           </Form>
         </FormWrapper>
       </Container >
-      {isError &&
+      {
+        isAdPreview &&
         <Modal>
-          <ModalContent
-            errorType={errorType}
-            onHideModalClick={() => { setIsError(false) }}
+          <AdPreview
+            imageUrl={imageUrl}
+            setIsAdPreview={setIsAdPreview}
           />
         </Modal>
       }
-      <Modal>
-        {
-          isPreviewModal &&
-          <ADPreviewModal
-            imageUrl={imageUrl}
-            setIsPreviewModal={setIsPreviewModal}
-          />
-        }
-      </Modal>
     </>
   );
 }
+
+CampaignForm.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  onImageUpload: PropTypes.func.isRequired,
+  onFormSubmit: PropTypes.func.isRequired,
+};

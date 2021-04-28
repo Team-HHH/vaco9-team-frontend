@@ -1,5 +1,5 @@
 export async function fetchCampaigns() {
-  const url = 'http://localhost:5000/campaign';
+  const url = `${process.env.REACT_APP_SERVER_URL}/campaign`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -11,7 +11,7 @@ export async function fetchCampaigns() {
 }
 
 export async function fetchNewCampaign(data) {
-  const url = 'http://localhost:5000/campaign';
+  const url = `${process.env.REACT_APP_SERVER_URL}/campaign`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {
