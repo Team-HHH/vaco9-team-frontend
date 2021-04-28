@@ -115,7 +115,7 @@ const DateInput = styled.input`
 const Input = styled.input`
 	border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
-	width: 100%;
+  width: ${props => props.width ? props.width : '100%'};
   border-radius: 0.4rem;
   &:focus {
     outline: none;
@@ -300,6 +300,69 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </InputWrapper>
             </ContentWrapper>
             <ContentWrapper width="360px">
+              <InputWrapper>
+                <span>나이</span>
+                <Input
+                  width={'50%'}
+                  type="text"
+                  min="18"
+                  max="65"
+                  name="minimumAge"
+                  {...register('minimumAge')}
+                />
+                <Input
+                  width={'50%'}
+                  type="text"
+                  min="18"
+                  max="65"
+                  name="maximumAge"
+                  {...register('maximumAge')}
+                />
+
+                <span>성별</span>
+                <div>
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="male"
+                    {...register('gender')}
+                  />
+                  <label
+                    htmlFor="male"
+                  >남자</label>
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="female"
+                    {...register('gender')}
+                  />
+                  <label
+                    htmlFor="female"
+                  >여자</label>
+                  <input
+                    type="radio"
+                    id="all"
+                    name="gender"
+                    value="all"
+                    {...register('gender')}
+                  />
+                  <label
+                    htmlFor="all">전체</label>
+                </div>
+                <span>국가</span>
+                <SelectWrapper>
+                  <Select
+                    name="region"
+                    {...register('region')}
+                  >
+                    <option value={'korea'}>한국</option>
+                    <option value={'china'}>중국</option>
+                    <option value={'japan'}>일본</option>
+                  </Select>
+                </SelectWrapper>
+              </InputWrapper>
               <Estimate>
                 <ADPreviewButton
                   type="button"
