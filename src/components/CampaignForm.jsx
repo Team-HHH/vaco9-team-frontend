@@ -202,6 +202,11 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
+  const watchMinumumAge = watch('ageMin');
+  const watchageMax = watch('ageMax');
+  const watchgender = watch('gender');
+  const watchcountry = watch('country');
+
   return (
     <>
       <Container>
@@ -307,18 +312,17 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                   type="text"
                   min="18"
                   max="65"
-                  name="minimumAge"
-                  {...register('minimumAge')}
+                  name="ageMin"
+                  {...register('ageMin')}
                 />
                 <Input
                   width={'50%'}
                   type="text"
                   min="18"
                   max="65"
-                  name="maximumAge"
-                  {...register('maximumAge')}
+                  name="ageMax"
+                  {...register('ageMax')}
                 />
-
                 <span>성별</span>
                 <div>
                   <input
@@ -343,23 +347,23 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                   >여자</label>
                   <input
                     type="radio"
-                    id="all"
+                    id="both"
                     name="gender"
-                    value="all"
+                    value="both"
                     {...register('gender')}
                   />
                   <label
-                    htmlFor="all">전체</label>
+                    htmlFor="both">전체</label>
                 </div>
                 <span>국가</span>
                 <SelectWrapper>
                   <Select
-                    name="region"
-                    {...register('region')}
+                    name="country"
+                    {...register('country')}
                   >
-                    <option value={'korea'}>한국</option>
-                    <option value={'china'}>중국</option>
-                    <option value={'japan'}>일본</option>
+                    <option value='South Korea'>한국</option>
+                    <option value='China'>중국</option>
+                    <option value='Japan'>일본</option>
                   </Select>
                 </SelectWrapper>
               </InputWrapper>

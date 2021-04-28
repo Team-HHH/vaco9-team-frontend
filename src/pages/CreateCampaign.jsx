@@ -22,6 +22,7 @@ export default function CreateCampaign() {
   const user = useSelector(state => state.user);
 
   async function handleNewCampaignFormSubmit(data) {
+    console.log(data);
     const IMP = window.IMP;
     IMP.init(process.env.REACT_APP_IMPORT_ID);
 
