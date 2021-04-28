@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../components/Header';
 import CampaignForm from '../components/CampaignForm';
@@ -19,6 +19,7 @@ const Container = styled.div`
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   async function handleNewCampaignFormSubmit(data) {
     const IMP = window.IMP;
@@ -43,9 +44,8 @@ export default function CreateCampaign() {
         merchant_uid: merchantId,
         name: data.title,
         amount: data.dailyBudget * campaignDuration,
-        buyer_email: 'test@gmail.com',
-        buyer_name: '홍길동',
-        buyer_tel: '010-1234-5678',
+        buyer_email: user.email,
+        buyer_name: user.name,
       }, async (rsp) => {
         if (rsp.success) {
           const { imp_uid, merchant_uid } = rsp;
@@ -55,6 +55,8 @@ export default function CreateCampaign() {
             dispatch(errorOccured('결제에 실패했습니다.'));
             return;
           }
+
+          dispatch(errorOccured('캠페인 생성이 완료되었습니다.', '/dashboard'));
         } else {
           dispatch(errorOccured('결제에 실패했습니다.'));
           return;
