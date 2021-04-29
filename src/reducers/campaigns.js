@@ -19,6 +19,7 @@ export const getCampaigns = () => async (dispatch) => {
     const response = await fetchCampaigns();
     const responseBody = await response.json();
     const { campaigns } = responseBody.data;
+    console.log(campaigns);
     const formatedCampaigns = formatCampaigns(campaigns);
 
     dispatch(actionCreator(GET_CAMPAIGNS_SUCCESS, formatedCampaigns));
@@ -45,7 +46,7 @@ export default function reducer(state = {}, action) {
   }
 }
 
-function formatCampaigns (campaigns) {
+function formatCampaigns(campaigns) {
   const byId = {};
   const allIds = [];
 

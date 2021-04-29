@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 import { format, parseISO, startOfDay, isEqual } from 'date-fns';
 import {
   ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  Bar,
   AreaChart,
   Brush,
   Area,
@@ -28,10 +31,10 @@ const OverviewContainer = styled.div`
   width: 100%;
   height: fit-content;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  // grid-template-columns: repeat(6, 1fr);
+   grid-template-columns: repeat(9, 1fr);
   margin: 20px 0;
   gap: 20px;
-
   box-sizing: border-box;
 `;
 
@@ -91,6 +94,9 @@ const typeConfigs = {
   'click': {
     color: '#e67e22',
   },
+  'cpm': {
+    color: '#e69c3c',
+  },
   'ctr': {
     color: '#27ae60',
   },
@@ -125,6 +131,7 @@ export default function DashboardMain() {
     return {
       ...dailyStats,
       date: dailyStats.date.slice(0, 10),
+      cpm: (dailyStats.usedBudget * 1000 / dailyStats.reach),
       ctr: (dailyStats.click / dailyStats.reach).toFixed(2),
       cpc: (dailyStats.usedBudget / dailyStats.click).toFixed(2),
     };
@@ -143,6 +150,24 @@ export default function DashboardMain() {
     <Container>
       <div>
         {format(today, 'yyyy년 M월 d일 (eee)')}
+        <label>{'status'}</label>
+        <button>{'결제'}</button>
+      </div>
+
+      <div>
+        <span>타겟</span>
+        <div>
+          <span>연령</span>
+          <span>{'22~33'}</span>
+        </div>
+        <div>
+          <span>성별</span>
+          <span>{'여성'}</span>
+        </div>
+        <div>
+          <span>국가</span>
+          <span>{'South Korea'}</span>
+        </div>
       </div>
       <OverviewContainer>
         <Overview
@@ -162,6 +187,14 @@ export default function DashboardMain() {
           <CompareValue color={overviewData?.clickNetChange}>{overviewData?.clickNetChange}</CompareValue>
         </Overview>
         <Overview
+          id="cpm"
+          onClick={handleOverviewClick}
+        >
+          <Key>CPM</Key>
+          <Value>{overviewData?.cpm}원</Value>
+          <CompareValue color={overviewData?.ctrNetChange}>{overviewData?.ctrNetChange}</CompareValue>
+        </Overview>
+        <Overview
           id="ctr"
           onClick={handleOverviewClick}
         >
@@ -178,6 +211,21 @@ export default function DashboardMain() {
           <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
+          id="bio"
+          onClick={handleOverviewClick}
+        >
+          <Key>인구 통계</Key>
+          <Value>{overviewData?.cpc}원</Value>
+          <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
+        </Overview> <Overview
+          id="country"
+          onClick={handleOverviewClick}
+        >
+          <Key>국가별</Key>
+          <Value>{overviewData?.cpc}원</Value>
+          <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
+        </Overview>
+        <Overview
           id="all"
           onClick={handleOverviewClick}
         >
@@ -190,7 +238,7 @@ export default function DashboardMain() {
         </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
-        {chartDate?.length > 0 && type === 'all' ? (
+        {chartDate?.length > 0 && (type === 'all' && (
           <ResponsiveContainer>
             <AreaChart data={chartDate}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
@@ -202,7 +250,7 @@ export default function DashboardMain() {
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
-        ) : (
+        )) || ((type === 'reach' || type === 'click' || type === 'cpm' || type === 'ctr' || type === 'cpc') && (
           <ResponsiveContainer>
             <AreaChart data={chartDate}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
@@ -213,7 +261,12 @@ export default function DashboardMain() {
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
-        )}
+        )) || ((type === 'bio') && (
+          <div>bio 그래프입니다.</div>
+        )) || ((type === 'country') && (
+          <div>country 그래프입니다.</div>
+        ))
+        }
       </ChartContainer>
     </Container>
   );
@@ -228,6 +281,10 @@ function getOverviewData(campaign, todayIndex) {
     reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
     click: campaign?.stats[todayIndex].click.toLocaleString(),
     clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2).toLocaleString() + '%',
+
+    cpm: ((campaign?.dailyBudget - campaign?.remainingBudget) * 1000 / campaign?.stats[todayIndex].reach).toFixed(1).toLocaleString(),
+    cpmNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
     ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
     cpc: ((campaign?.dailyBudget - campaign?.remainingBudget) / campaign?.stats[todayIndex].click).toFixed(1).toLocaleString(),
