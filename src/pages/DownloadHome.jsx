@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import electron from '../assets/electron.png';
 import vaco from '../assets/vaco.png';
+import feature from '../assets/feature.png';
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const Header = styled.div`
   background-color: rgba(255, 255, 255, 0.8);;
 `;
 
-const LeftHeader = styled.div`
+const LeftSection = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 50%;
@@ -30,7 +31,7 @@ const LeftHeader = styled.div`
   margin: auto 10%;
 `;
 
-const RightHeader = styled.div`
+const RightSection = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 50%;
@@ -84,7 +85,7 @@ const DownloadLink = styled.a`
   border: none;
   min-width: 150px;
   padding: 20px 40px;
-  margin-top: 20px;
+  margin: 20px 0 40px 0;
   background-color: #d2d6ae;
   transition: transform 0.3s ease;
   &:hover {
@@ -94,16 +95,28 @@ const DownloadLink = styled.a`
 `;
 
 const Image = styled.img`
-  width: 840px;
-  height: 500px;
-  margin: 40px;
+  width: ${props => props.width || '840px'}
+  height: ${props => props.height || '500px'}
 `;
 
 const Feature = styled.div`
-display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 80px;
+  margin: 40px;
+`;
+
+const FeatureWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: space-evenly;
+  width: 60vw;
+  margin: 20px;
+`;
+
+const Paragraph = styled.p`
+  width: 40vw;
+  margin: 40px;
 `;
 
 const Logo = styled.img`
@@ -116,19 +129,19 @@ export default function DownloadHome() {
   return (
     <Container>
       <Header>
-        <LeftHeader>
+        <LeftSection>
           <HeaderItem>
             <HeaderLink>Flexilis</HeaderLink>
           </HeaderItem>
-        </LeftHeader>
-        <RightHeader>
+        </LeftSection>
+        <RightSection>
           <HeaderItem>
             <HeaderLink to="/">Feature</HeaderLink>
           </HeaderItem>
           <HeaderItem>
             <HeaderLink to="/campaign/new">앱에 광고 등록하기</HeaderLink>
           </HeaderItem>
-        </RightHeader>
+        </RightSection>
       </Header>
       <HomeSection>
         <Title>스트레칭, Flexilis와 함께</Title>
@@ -136,8 +149,24 @@ export default function DownloadHome() {
         <DownloadLink href="https://hhh-campaign-images.s3.ap-northeast-2.amazonaws.com/electron-darwin-x64.zip" download>
           Download Now
         </DownloadLink>
-        <Image src={electron} alt="electron" />
+        <Image width="840px" height="500px" src={electron} alt="electron" />
       </HomeSection>
+      <Feature>
+        <SubTitle>Feature</SubTitle>
+        <FeatureWrapper>
+          <div>
+            <Image width="500px" height="360px" src={feature} alt="feature" />
+          </div>
+          <div>
+            <div>
+              <Paragraph>원하는 시간에 스트레칭 알람을 등록할 수 있습니다.</Paragraph>
+              <Paragraph>스트레칭 알람이 등록된 시간에 선택한 부위의 스트레칭 영상이 팝업으로 재생됩니다.</Paragraph>
+              <Paragraph>팝업 3분 전 푸시 알람을 띄워줍니다.</Paragraph>
+              <Paragraph>커스텀 영상 재생이 가능합니다.</Paragraph>
+            </div>
+          </div>
+        </FeatureWrapper>
+      </Feature>
       <Feature>
         <SubTitle>Sponsored By</SubTitle>
         <Logo src={vaco} alt="vaco" />
