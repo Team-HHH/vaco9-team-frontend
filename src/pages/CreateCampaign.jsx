@@ -99,6 +99,12 @@ export default function CreateCampaign() {
   }
 
   function handleSliderChange(data) {
+    for (const key in data) {
+      if (!data[key]) {
+        return;
+      }
+    }
+
     dispatch(getEstimate(data));
   }
 

@@ -300,7 +300,6 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                       step="1000"
                       name="dailyBudget"
                       {...register('dailyBudget')}
-                      onChange={() => onSliderChange(data)}
                     />
                   </SliderWrapper>
                 </Card>
@@ -326,37 +325,16 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                   {...register('maxAge')}
                 />
                 <span>성별</span>
-                <div>
-                  <input
-                    type="radio"
-                    id="male"
+                <SelectWrapper>
+                  <Select
                     name="gender"
-                    value="male"
                     {...register('gender')}
-                  />
-                  <label
-                    htmlFor="male"
-                  >남자</label>
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    value="female"
-                    {...register('gender')}
-                  />
-                  <label
-                    htmlFor="female"
-                  >여자</label>
-                  <input
-                    type="radio"
-                    id="both"
-                    name="gender"
-                    value="both"
-                    {...register('gender')}
-                  />
-                  <label
-                    htmlFor="both">전체</label>
-                </div>
+                  >
+                    <option value='male'>남성</option>
+                    <option value='female'>여성</option>
+                    <option value='both'>모두</option>
+                  </Select>
+                </SelectWrapper>
                 <span>국가</span>
                 <SelectWrapper>
                   <Select
@@ -368,6 +346,10 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                     <option value='Japan'>일본</option>
                   </Select>
                 </SelectWrapper>
+                <button onClick={(e) => {
+                  e.preventDefault();
+                  onSliderChange(data);
+                }}>확인</button>
               </InputWrapper>
               <Estimate>
                 <ADPreviewButton
@@ -382,13 +364,12 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                   <DailyEstimateResultsContainer>
                     <span>도달</span>
                     <DailyEstimateResults>
-                      {watchDailyBudget / estimate.cpm}천명
+                      {watchDailyBudget / estimate.cpm * 1000}명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                   <DailyEstimateResultsContainer>
                     <span>링크 클릭</span>
                     <DailyEstimateResults>
-                      {/* {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100} */}
                       {watchDailyBudget / estimate.cpc}명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
