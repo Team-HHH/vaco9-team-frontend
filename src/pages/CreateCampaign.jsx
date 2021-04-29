@@ -10,6 +10,7 @@ import { fetchNewCampaign } from '../apis/campaigns';
 import { fetchImageFile } from '../apis/image';
 import { checkFileSize } from '../utils/index';
 import { errorOccured } from '../reducers/error';
+import { getEstimate } from '../reducers/estimate';
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ export default function CreateCampaign() {
   const [url, setUrl] = useState('');
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const estimate = useSelector(state => state.estimate);
 
   async function handleNewCampaignFormSubmit(data) {
     const IMP = window.IMP;
@@ -96,13 +98,25 @@ export default function CreateCampaign() {
     }
   }
 
+  function handleSliderChange(data) {
+    for (const key in data) {
+      if (!data[key]) {
+        return;
+      }
+    }
+
+    dispatch(getEstimate(data));
+  }
+
   return (
     <>
       <Header />
       <Container>
         <CampaignForm
+          estimate={estimate}
           imageUrl={url}
           onImageUpload={handleImageUpload}
+          onSliderChange={handleSliderChange}
           onFormSubmit={handleNewCampaignFormSubmit}
         />
       </Container>
