@@ -115,7 +115,7 @@ const DateInput = styled.input`
 const Input = styled.input`
 	border: 1px solid ${props => props.theme.OUTLINE};
 	padding: 10px 15px;
-	width: 100%;
+  width: ${props => props.width ? props.width : '100%'};
   border-radius: 0.4rem;
   &:focus {
     outline: none;
@@ -190,7 +190,7 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) {
+export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
@@ -201,6 +201,12 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
+
+  const minAge = watch('minAge');
+  const maxAge = watch('maxAge');
+  const gender = watch('gender');
+  const country = watch('country');
+  const data = { minAge, maxAge, gender, country };
 
   return (
     <>
@@ -300,6 +306,51 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
               </InputWrapper>
             </ContentWrapper>
             <ContentWrapper width="360px">
+              <InputWrapper>
+                <span>나이</span>
+                <Input
+                  width={'50%'}
+                  type="number"
+                  min="18"
+                  max="65"
+                  name="minAge"
+                  {...register('minAge')}
+                />
+                <Input
+                  width={'50%'}
+                  type="number"
+                  min="18"
+                  max="65"
+                  name="maxAge"
+                  {...register('maxAge')}
+                />
+                <span>성별</span>
+                <SelectWrapper>
+                  <Select
+                    name="gender"
+                    {...register('gender')}
+                  >
+                    <option value='male'>남성</option>
+                    <option value='female'>여성</option>
+                    <option value='both'>모두</option>
+                  </Select>
+                </SelectWrapper>
+                <span>국가</span>
+                <SelectWrapper>
+                  <Select
+                    name="country"
+                    {...register('country')}
+                  >
+                    <option value='South Korea'>한국</option>
+                    <option value='China'>중국</option>
+                    <option value='Japan'>일본</option>
+                  </Select>
+                </SelectWrapper>
+                <button onClick={(e) => {
+                  e.preventDefault();
+                  onSliderChange(data);
+                }}>확인</button>
+              </InputWrapper>
               <Estimate>
                 <ADPreviewButton
                   type="button"
@@ -313,13 +364,13 @@ export default function CampaignForm({ imageUrl, onImageUpload, onFormSubmit }) 
                   <DailyEstimateResultsContainer>
                     <span>도달</span>
                     <DailyEstimateResults>
-                      {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
+                      {watchDailyBudget / estimate.cpm * 1000}명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                   <DailyEstimateResultsContainer>
                     <span>링크 클릭</span>
                     <DailyEstimateResults>
-                      {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
+                      {watchDailyBudget / estimate.cpc}명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>
