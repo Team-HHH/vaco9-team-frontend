@@ -5,6 +5,8 @@ import { format, parseISO, startOfDay, isEqual } from 'date-fns';
 import {
   ResponsiveContainer,
   BarChart,
+  CartesianGrid,
+  Bar,
   AreaChart,
   Brush,
   Area,
@@ -33,7 +35,6 @@ const OverviewContainer = styled.div`
    grid-template-columns: repeat(9, 1fr);
   margin: 20px 0;
   gap: 20px;
-
   box-sizing: border-box;
 `;
 
@@ -94,7 +95,7 @@ const typeConfigs = {
     color: '#e67e22',
   },
   'cpm': {
-    color: '#1406d1',
+    color: '#e69c3c',
   },
   'ctr': {
     color: '#27ae60',
@@ -149,6 +150,24 @@ export default function DashboardMain() {
     <Container>
       <div>
         {format(today, 'yyyy년 M월 d일 (eee)')}
+        <label>{'status'}</label>
+        <button>{'결제'}</button>
+      </div>
+
+      <div>
+        <span>타겟</span>
+        <div>
+          <span>연령</span>
+          <span>{'22~33'}</span>
+        </div>
+        <div>
+          <span>성별</span>
+          <span>{'여성'}</span>
+        </div>
+        <div>
+          <span>국가</span>
+          <span>{'South Korea'}</span>
+        </div>
       </div>
       <OverviewContainer>
         <Overview
@@ -192,14 +211,14 @@ export default function DashboardMain() {
           <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
-          id="cpc"
+          id="bio"
           onClick={handleOverviewClick}
         >
           <Key>인구 통계</Key>
           <Value>{overviewData?.cpc}원</Value>
           <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview> <Overview
-          id="cpc"
+          id="country"
           onClick={handleOverviewClick}
         >
           <Key>국가별</Key>
@@ -219,7 +238,7 @@ export default function DashboardMain() {
         </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
-        {chartDate?.length > 0 && type === 'all' ? (
+        {chartDate?.length > 0 && (type === 'all' && (
           <ResponsiveContainer>
             <AreaChart data={chartDate}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
@@ -231,18 +250,23 @@ export default function DashboardMain() {
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
-        ) : (
-            <ResponsiveContainer>
-              <AreaChart data={chartDate}>
-                <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-                <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
-                <Tooltip />
-                <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
-                <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
-                <Legend />
-              </AreaChart>
-            </ResponsiveContainer>
-          )}
+        )) || ((type === 'reach' || type === 'click' || type === 'cpm' || type === 'ctr' || type === 'cpc') && (
+          <ResponsiveContainer>
+            <AreaChart data={chartDate}>
+              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
+              <Tooltip />
+              <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
+              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+              <Legend />
+            </AreaChart>
+          </ResponsiveContainer>
+        )) || ((type === 'bio') && (
+          <div>bio 그래프입니다.</div>
+        )) || ((type === 'country') && (
+          <div>country 그래프입니다.</div>
+        ))
+        }
       </ChartContainer>
     </Container>
   );
@@ -267,62 +291,3 @@ function getOverviewData(campaign, todayIndex) {
     cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
   };
 }
-
-const byAge = {};
-const byGender = {};
-const byCountry = {};
-
-let byAgeData;
-let byGenderData;
-let byCountryData;
-
-function joinDataToObject(array, key) {
-  for (let i = 0; i < array.length; i++) {
-    const { age, gender, country } = array[i];
-
-    if (byAge[age]) {
-      byAge[age][key]++;
-    } else {
-      byAge[age] = {};
-      byAge[age][key] = 1;
-    }
-
-    if (byCountry[country]) {
-      byCountry[country][key]++;
-    } else {
-      byCountry[country] = {};
-      byCountry[country][key] = 1;
-    }
-
-    if (byGender[gender]) {
-      byGender[gender][key]++;
-    } else {
-      byGender[gender] = {};
-      byGender[gender][key] = 1;
-    }
-  }
-}
-
-function ObjectToArray(object, byKey) {
-  let result = [];
-  for (const key in object) {
-    const tmp = {};
-    tmp[byKey] = key;
-    tmp.click = object[key].click;
-    tmp.reach = object[key].reach;
-
-    result.push(tmp);
-  }
-
-  return result;
-}
-
-function processStats(reach, click) {
-  joinDataToObject(reach, 'reach');
-  joinDataToObject(click, 'click');
-
-  byAgeData = ObjectToArray(byAge, 'age');
-  byGenderData = ObjectToArray(byCountry, 'country');
-  byCountryData = ObjectToArray(byGender, 'gender');
-}
-
