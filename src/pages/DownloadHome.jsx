@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import electron from '../assets/electron.png';
+import vaco from '../assets/vaco.png';
 
 const Container = styled.div`
   display: flex;
@@ -72,12 +74,35 @@ margin: 24px;
 
 const DownloadButton = styled.button`
   cursor: pointer;
-    font-size: 18px;
-    font-weight: 300;
+  font-size: 18px;
+  font-weight: 300;
   border-radius: 4px;
-    min-width: 150px;
-    padding: 20px 40px;
-    margin-top: 20px;
+  border: none;
+  min-width: 150px;
+  padding: 20px 40px;
+  margin-top: 20px;
+   &:hover {
+    background-color: #DADADA;
+  }
+`;
+
+const Image = styled.img`
+  width: 840px;
+  height: 500px;
+  margin: 40px;
+`;
+
+const Feature = styled.div`
+display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 80px;
+`;
+
+const Logo = styled.img`
+width: 240px;
+  height: 80px;
+  margin: 20px;
 `;
 
 export default function DownloadHome() {
@@ -102,7 +127,12 @@ export default function DownloadHome() {
         <Title>스트레칭, Flexilis와 함께</Title>
         <SubTitle>Flexilis는 스트레칭 알람 데스크탑 앱입니다.</SubTitle>
         <DownloadButton>Download Now</DownloadButton>
+        <Image src={electron} alt="electron" />
       </HomeSection>
+      <Feature>
+        <SubTitle>Sponsored By</SubTitle>
+        <Logo src={vaco} alt="vaco" />
+      </Feature>
     </Container>
   );
 }
