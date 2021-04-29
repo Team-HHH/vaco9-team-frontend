@@ -190,7 +190,7 @@ const DailyEstimateResults = styled.span`
   font-size: 20px;
 `;
 
-export default function CampaignForm({ imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
+export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
@@ -202,11 +202,11 @@ export default function CampaignForm({ imageUrl, onImageUpload, onSliderChange, 
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
-  const watchAgeMin = watch('ageMin');
-  const watchAgeMax = watch('ageMax');
-  const watchGender = watch('gender');
-  const watchCountry = watch('country');
-  const data = { watchAgeMin, watchAgeMax, watchGender, watchCountry };
+  const minAge = watch('minAge');
+  const maxAge = watch('maxAge');
+  const gender = watch('gender');
+  const country = watch('country');
+  const data = { minAge, maxAge, gender, country };
 
   return (
     <>
@@ -311,19 +311,19 @@ export default function CampaignForm({ imageUrl, onImageUpload, onSliderChange, 
                 <span>나이</span>
                 <Input
                   width={'50%'}
-                  type="text"
+                  type="number"
                   min="18"
                   max="65"
-                  name="ageMin"
-                  {...register('ageMin')}
+                  name="minAge"
+                  {...register('minAge')}
                 />
                 <Input
                   width={'50%'}
-                  type="text"
+                  type="number"
                   min="18"
                   max="65"
-                  name="ageMax"
-                  {...register('ageMax')}
+                  name="maxAge"
+                  {...register('maxAge')}
                 />
                 <span>성별</span>
                 <div>
@@ -382,13 +382,14 @@ export default function CampaignForm({ imageUrl, onImageUpload, onSliderChange, 
                   <DailyEstimateResultsContainer>
                     <span>도달</span>
                     <DailyEstimateResults>
-                      {watchDailyBudget * 10 / 100} ~ {watchDailyBudget * 30 / 100}
+                      {watchDailyBudget / estimate.cpm}천명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                   <DailyEstimateResultsContainer>
                     <span>링크 클릭</span>
                     <DailyEstimateResults>
-                      {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100}
+                      {/* {watchDailyBudget * 1.5 / 100} ~ {watchDailyBudget * 4 / 100} */}
+                      {watchDailyBudget / estimate.cpc}명
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>

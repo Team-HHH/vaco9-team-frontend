@@ -34,4 +34,6 @@ export async function fetchEstimate(data) {
     },
     body: JSON.stringify(data),
   });
+
+  return response;
 }

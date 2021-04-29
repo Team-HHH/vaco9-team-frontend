@@ -13,16 +13,15 @@ const actionCreator = (actionType, data) => {
   };
 };
 
-
-export const getEstimate = () => async (dispatch) => {
+export const getEstimate = (data) => async (dispatch) => {
   dispatch(actionCreator(GET_ESTIMATE_REQUEST));
   try {
-    const response = await fetchEstimate();
+    const response = await fetchEstimate(data);
     const responseBody = await response.json();
-    const { estimate } = responseBody.data;
-    const formatedTargetStats = formatCampaigns(estimate);
+    console.log(responseBody);
+    const { cpm, cpc } = responseBody;
 
-    dispatch(actionCreator(GET_ESTIMATE_SUCCESS, formatedTargetStats));
+    dispatch(actionCreator(GET_ESTIMATE_SUCCESS, { cpm, cpc }));
   } catch (error) {
     dispatch(actionCreator(GET_ESTIMATE_ERROR, { error }));
   }
