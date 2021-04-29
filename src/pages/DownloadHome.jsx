@@ -19,6 +19,7 @@ const Header = styled.div`
   min-width: 900px;
   font-family: 'Nanum Barun Gothic';
   font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.8);;
 `;
 
 const LeftHeader = styled.div`
@@ -72,17 +73,23 @@ const SubTitle = styled.span`
 margin: 24px;
 `;
 
-const DownloadButton = styled.button`
+const DownloadLink = styled.a`
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 500;
   border-radius: 4px;
   border: none;
   min-width: 150px;
   padding: 20px 40px;
   margin-top: 20px;
-   &:hover {
-    background-color: #DADADA;
+  background-color: #d2d6ae;
+  transition: transform 0.3s ease;
+  &:hover {
+    background-color: #ced1b8;
+    transform: scale(1.03);
   }
 `;
 
@@ -126,7 +133,9 @@ export default function DownloadHome() {
       <HomeSection>
         <Title>스트레칭, Flexilis와 함께</Title>
         <SubTitle>Flexilis는 스트레칭 알람 데스크탑 앱입니다.</SubTitle>
-        <DownloadButton>Download Now</DownloadButton>
+        <DownloadLink href="https://hhh-campaign-images.s3.ap-northeast-2.amazonaws.com/electron-darwin-x64.zip" download>
+          Download Now
+        </DownloadLink>
         <Image src={electron} alt="electron" />
       </HomeSection>
       <Feature>
