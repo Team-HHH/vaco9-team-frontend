@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { } from 'react-router-dom';
 
 import Home from '../pages/Home';
 import CreateCampaign from '../pages/CreateCampaign';
