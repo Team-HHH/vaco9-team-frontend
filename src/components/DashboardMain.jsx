@@ -132,7 +132,7 @@ const Overview = styled(StaticOverview)`
 `;
 
 const Key = styled.p`
-  font-size: 16px;
+  font-size: 20px;
   text-align: ${props => props.textAlign || 'left'};
   padding: 0;
   text-align: center;
@@ -371,17 +371,16 @@ export default function DashboardMain() {
           <TargetText>~{campaign?.expiresAt && format(parseISO(campaign?.expiresAt), 'yyyy년 M월 d일')}</TargetText>
         </TargetItem>
         <TargetItem>
-          <TargetText>연령:</TargetText>
-          <TargetText>{`${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</TargetText>
+          <TargetText>{`연령 : ${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</TargetText>
         </TargetItem>
         <TargetItem>
-          <TargetText>성별:</TargetText>
-          <TargetText>{campaign?.gender === 'both' ? '무관' : campaign?.gender === 'male' ? '남성' : '여성'}</TargetText>
+          <TargetText></TargetText>
+          <TargetText>{campaign?.gender === 'both' ? `성별 : 무관` : campaign?.gender === 'male' ? `성별 : 남성` : `성별 : 여성`}</TargetText>
         </TargetItem>
         <TargetItem>
 
           <Dropdown>
-            <span>국가</span>
+            <span>선택 국가</span>
             <DropdownContent>
               {countryNames?.map(name => {
                 return (<p key={name}>{name}</p>);
@@ -504,7 +503,6 @@ export default function DashboardMain() {
               >
                 <option value="reach">Reach</option>
                 <option value="click">Click</option>
-                {/* <option value="gdp_md_est">GDP</option> */}
               </Selector>
             </GeoContainer>
             <GeoContainer width="35%">
@@ -517,7 +515,7 @@ export default function DashboardMain() {
                       backgroundColor={index % 2 ? 'white' : 'beige'}
                     >
                       <Rank>{el}</Rank>
-                      <Rank>{countryData[el][property]}명</Rank>
+                      <Rank>{(countryData[el][property]).toLocaleString()}명</Rank>
                     </RankWrapper>
                   );
                 })}
