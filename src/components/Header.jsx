@@ -87,18 +87,18 @@ export default function Header() {
               </HeaderLink>
             </HeaderItem>
             <HeaderItem>
-              <HeaderLink to="/" onClick={handleLogoutClick}>
+              <HeaderLink to="/main" onClick={handleLogoutClick}>
                 로그아웃
               </HeaderLink>
             </HeaderItem>
           </>
         ) : (
-            <HeaderItem>
-              <HeaderLink to="/login">
-                로그인
+          <HeaderItem>
+            <HeaderLink to="/login">
+              로그인
             </HeaderLink>
-            </HeaderItem>
-          )}
+          </HeaderItem>
+        )}
       </RightHeader>
     </Container>
   );
