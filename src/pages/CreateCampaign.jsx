@@ -68,7 +68,7 @@ export default function CreateCampaign() {
         pay_method: 'card',
         merchant_uid: merchantId,
         name: data.title,
-        amount: data.dailyBudget * campaignDuration,
+        amount: dailyBudget * campaignDuration,
         buyer_email: user.email,
         buyer_name: user.name,
       }, async (rsp) => {
