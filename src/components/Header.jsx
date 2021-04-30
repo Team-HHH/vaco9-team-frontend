@@ -58,17 +58,17 @@ export default function Header() {
     <Container>
       <LeftHeader>
         <HeaderItem>
-          <HeaderLink to="/">
+          <HeaderLink to="/main">
             Flexilis Ads
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>
-          <HeaderLink to="/campaign/category">
+          <HeaderLink to="/main">
             캠페인 유형
           </HeaderLink>
         </HeaderItem>
         <HeaderItem>
-          <HeaderLink to="/price">
+          <HeaderLink to="/main">
             비용
           </HeaderLink>
         </HeaderItem>
@@ -93,12 +93,12 @@ export default function Header() {
             </HeaderItem>
           </>
         ) : (
-          <HeaderItem>
-            <HeaderLink to="/login">
-              로그인
+            <HeaderItem>
+              <HeaderLink to="/login">
+                로그인
             </HeaderLink>
-          </HeaderItem>
-        )}
+            </HeaderItem>
+          )}
       </RightHeader>
     </Container>
   );
