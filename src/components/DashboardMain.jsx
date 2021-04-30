@@ -411,6 +411,7 @@ export default function DashboardMain() {
 function getOverviewData(campaign, todayIndex) {
   if (campaign === undefined) return null;
   if (campaign.stats.length === 0) return null;
+  if (!campaign?.stats[todayIndex]) return null;
 
   return {
     reach: campaign?.stats[todayIndex].reach.toLocaleString(),

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { BsCloudUpload } from 'react-icons/bs';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
+import Select from 'react-select';
 
 import Card from './Card';
 import Modal from './Modal';
 import AdPreview from './AdPreview';
-import countries from '../constants/countries';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -131,7 +131,7 @@ const SelectWrapper = styled.div`
   width: 100%;
 `;
 
-const Select = styled.select`
+const CustomSelect = styled.select`
   border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 0.4rem;
   background-color: ${props => props.theme.BACKGROUND};
@@ -404,14 +404,30 @@ const TotalPaymentAmout = styled.span`
   font-size: 15px;
 `;
 
-export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
+const countries = [
+  { value: 'South Korea', label: '한국' },
+  { value: 'Japan', label: '일본' },
+  { value: 'China', label: '중국' },
+  { value: 'India', label: '인도' },
+  { value: 'United States of America', label: '미국' }
+];
+
+const ReactSelectWrapper = styled.div`
+  display: inline;
+  margin-left: 5%;
+  min-width: 30%;
+  width: fit-content;
+`;
+
+export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSliderChange, onFormSubmit, onCountrySelect }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
     watch,
     handleSubmit,
+    control,
   } = useForm();
-  const watchDailyBudget = watch('dailyBudget', 2000);
+  const watchDailyBudget = watch('dailyBudget', 5000);
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
@@ -419,8 +435,7 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
   const minAge = watch('minAge');
   const maxAge = watch('maxAge');
   const gender = watch('gender');
-  const country = watch('country');
-  const data = { minAge, maxAge, gender, country };
+  const data = { minAge, maxAge, gender };
 
   return (
     <>
@@ -462,14 +477,14 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </Card>
                 <Card title="캠페인 타입">
                   <SelectWrapper>
-                    <Select
+                    <CustomSelect
                       name="campaignType"
                       {...register('campaignType')}
                     >
                       <option value={'banner'}>배너</option>
                       <option value={'text'}>텍스트</option>
                       <option value={'video'}>비디오</option>
-                    </Select>
+                    </CustomSelect>
                   </SelectWrapper>
                 </Card>
                 <Card title="웹 사이트 주소">
@@ -493,13 +508,22 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </TargetSettingHeader>
                 <TargetSettingAge>
                   <Label>나이</Label>
-                  <Input
-                    width={'22%'}
-                    type="number"
-                    min="18"
-                    max="65"
+                  <Controller
+                    control={control}
                     name="minAge"
-                    {...register('minAge')}
+                    onChange={() => console.log('hellow')}
+                    render={({ onChange, name }) => (
+                      <Input
+                        width={'22%'}
+                        type="number"
+                        min="18"
+                        max="65"
+                        name={name}
+                        onChange={(e) => {
+                          console.log(data)
+                        }}
+                      />
+                    )}
                   />
                   <LimitText>세 이상</LimitText>
                   <Input
@@ -525,18 +549,14 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </TargetSettingGenderAndCountry>
                 <TargetSettingGenderAndCountry>
                   <Label>국가</Label>
-                  <TargetGenderAndCountrySelect
-                    name="country"
-                    {...register('country')}
-                  >
-                    {
-                      Object.entries(countries).map((item, index) => {
-                        const [englishName, koreanName] = item;
-
-                        return <option key={index} value={englishName}>{koreanName}</option>;
-                      })
-                    }
-                  </TargetGenderAndCountrySelect>
+                  <ReactSelectWrapper>
+                    <Select
+                      onChange={onCountrySelect}
+                      options={countries}
+                      onClick={() => onSliderChange(data)}
+                      isMulti
+                    />
+                  </ReactSelectWrapper>
                 </TargetSettingGenderAndCountry>
                 <TargetSettingButtonWrapper>
                   <TargetSettingButton
@@ -554,14 +574,14 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 <Card title="기간">
                   <EndDateWrapper>
                     <EndDateOption>
-                      <Select
+                      <CustomSelect
                         name="expiresType"
                         defaultValue="expired"
                         {...register('expiresType')}
                       >
                         <option value={'expired'}>종료일 선택</option>
                         <option value={'continue'}>종료일 없이 계속 게재</option>
-                      </Select>
+                      </CustomSelect>
                     </EndDateOption>
                     <EndDateSetting>
                       {watchType === 'expired' && (
@@ -577,12 +597,12 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </Card>
                 <Card title='일일 예산'>
                   <SliderWrapper>
-                    <SliderPrice>{watchDailyBudget} 원</SliderPrice>
+                    <SliderPrice>{watchDailyBudget.toLocaleString()} 원</SliderPrice>
                     <Slider
                       type="range"
-                      min="2000"
+                      min="5000"
                       max="200000"
-                      step="1000"
+                      step="5000"
                       name="dailyBudget"
                       {...register('dailyBudget')}
                     />
@@ -608,13 +628,13 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                   <DailyEstimateResultsContainer>
                     <DailyEstimateReachAndClick>도달</DailyEstimateReachAndClick>
                     <DailyEstimateResults>
-                      {watchDailyBudget / estimate.cpm * 1000} 명
+                      {estimate.cpm ? `${(Math.floor(watchDailyBudget / estimate.cpm * 1000 * 0.95)).toLocaleString()} ~ ${(Math.floor(watchDailyBudget / estimate.cpm * 1000 * 1.05)).toLocaleString()}명` : '타켓을 설정하세요'}
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                   <DailyEstimateResultsContainer>
                     <DailyEstimateReachAndClick>링크 클릭</DailyEstimateReachAndClick>
                     <DailyEstimateResults>
-                      {watchDailyBudget / estimate.cpc} 명
+                      {estimate.cpm ? `${(Math.floor(watchDailyBudget / estimate.cpc * 0.95)).toLocaleString()} ~ ${(Math.floor(watchDailyBudget / estimate.cpc * 1.05)).toLocaleString()}명` : '타켓을 설정하세요'}
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>
@@ -626,9 +646,9 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 <PaymentAmountContainer>
                   <PaymentAmountDescription>
                     <PaymentAmountText>총 결제금액</PaymentAmountText>
-                    <PaymentAmountSubText>일일 {watchDailyBudget}원X{campaignDuration}일</PaymentAmountSubText>
+                    <PaymentAmountSubText>일일 {watchDailyBudget.toLocaleString()}원X{campaignDuration}일</PaymentAmountSubText>
                   </PaymentAmountDescription>
-                  <TotalPaymentAmout>{watchDailyBudget * campaignDuration} 원</TotalPaymentAmout>
+                  <TotalPaymentAmout>{(watchDailyBudget * campaignDuration).toLocaleString()} 원</TotalPaymentAmout>
                 </PaymentAmountContainer>
               </Estimate>
               <ButtonWrapper>

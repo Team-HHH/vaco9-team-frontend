@@ -19,6 +19,7 @@ const Container = styled.div`
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const estimate = useSelector(state => state.estimate);
@@ -30,7 +31,8 @@ export default function CreateCampaign() {
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
-      const response = await fetchNewCampaign({ ...data, content: url });
+      console.log(selectedCountry)
+      const response = await fetchNewCampaign({ ...data, content: url, country: selectedCountry });
       const responseBody = await response.json();
 
       if (!response.ok) {
@@ -99,13 +101,17 @@ export default function CreateCampaign() {
   }
 
   function handleSliderChange(data) {
-    for (const key in data) {
-      if (!data[key]) {
+    console.log('in handleSliderChange')
+    const selectedTarget = {...data, country: selectedCountry};
+    console.log(selectedTarget)
+    for (const key in selectedTarget) {
+      if (!selectedTarget[key]) {
+        console.log('return')
         return;
       }
     }
 
-    dispatch(getEstimate(data));
+    dispatch(getEstimate(selectedTarget));
   }
 
   return (
@@ -118,6 +124,7 @@ export default function CreateCampaign() {
           onImageUpload={handleImageUpload}
           onSliderChange={handleSliderChange}
           onFormSubmit={handleNewCampaignFormSubmit}
+          onCountrySelect={setSelectedCountry}
         />
       </Container>
     </>
