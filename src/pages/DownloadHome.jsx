@@ -50,6 +50,7 @@ const HeaderItemWrapper = styled.div`
 const HeaderItem = styled.div`
   margin: auto;
   cursor: pointer;
+  font-size: ${props => props.fontSize || '20px'}
 `;
 
 const HeaderLink = styled(Link)`
@@ -148,7 +149,7 @@ export default function DownloadHome() {
       <Header>
         <LeftSection>
           <HeaderItemWrapper>
-            <HeaderItem onClick={scrollTop}>Flexilis</HeaderItem>
+            <HeaderItem fontSize="30px" onClick={scrollTop}>Flexilis</HeaderItem>
           </HeaderItemWrapper>
         </LeftSection>
         <RightSection>
