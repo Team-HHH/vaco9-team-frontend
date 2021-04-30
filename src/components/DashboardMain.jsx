@@ -34,22 +34,49 @@ const Container = styled.div`
 `;
 
 const DateWrapper = styled.div`
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  height: 30px;
+  display: flex;
+`;
+
+const DateItem = styled.div`
+  display: flex;
 `;
 
 const DateText = styled.span`
-  margin-right: 10px;
+  margin: 0 10px 0 0;
   font-size: 20px;
+  height: 100%;
+  padding: 5px;
 `;
 
 const CampaignStatus = styled.div`
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   width: fit-content;
+  height: 100%;
   background-color: ${props => props.status === 'opened' ? '#2eb872' : props.status === 'pending' ? '#fa4659' : '#687980'};
   border-radius: 5px;
   padding: 5px;
-  margin-right: 10px;
+  margin: 0 10px 0 0;
+`;
+
+const Button = styled.button`
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  font-size: 16px;
+  height: 100%;
+  margin: 0;
+  background-color: ${props => props.theme.SUB};
+  &:hover {
+    background-color: ${props => props.theme.HOVER};
+    color: black;
+  }
+  &:focus {
+    outline: none;
+  }
 `;
 
 const DropdownContent = styled.div`
@@ -105,7 +132,7 @@ const Overview = styled(StaticOverview)`
 `;
 
 const Key = styled.p`
-  font-size: 16px;
+  font-size: 20px;
   text-align: ${props => props.textAlign || 'left'};
   padding: 0;
   text-align: center;
@@ -150,22 +177,6 @@ const TargetItem = styled.div`
 
 const TargetText = styled.span`
   margin: auto;
-`;
-
-const Button = styled.button`
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  width: fit-content;
-  font-size: 16px;
-  background-color: ${props => props.theme.SUB};
-  &:hover {
-    background-color: ${props => props.theme.HOVER};
-    color: black;
-  }
-  &:focus {
-    outline: none;
-  }
 `;
 
 const GeoWrapper = styled.div`
@@ -341,14 +352,18 @@ export default function DashboardMain() {
   return (
     <Container>
       <DateWrapper>
-        <DateText>{format(today, 'yyyy년 M월 d일 (eee)')}</DateText>
+        <DateItem>
+          <DateText>{format(today, 'yyyy년 M월 d일 (eee)')}</DateText>
+        </DateItem>
         <CampaignStatus status={campaign?.status}>{campaign?.status === 'opened' ? '진행중' : campaign?.status === 'pending' ? '결제대기' : '기간종료'}</CampaignStatus>
         {campaign?.status === 'pending' && (
-          <Button
-            onClick={handleRequestPaymentButtonClick}
-          >
-            결제하기
-          </Button>
+          <DateItem>
+            <Button
+              onClick={handleRequestPaymentButtonClick}
+            >
+              결제하기
+            </Button>
+          </DateItem>
         )}
       </DateWrapper>
       <TargetWrapper>
@@ -356,17 +371,16 @@ export default function DashboardMain() {
           <TargetText>~{campaign?.expiresAt && format(parseISO(campaign?.expiresAt), 'yyyy년 M월 d일')}</TargetText>
         </TargetItem>
         <TargetItem>
-          <TargetText>연령:</TargetText>
-          <TargetText>{`${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</TargetText>
+          <TargetText>{`연령 : ${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</TargetText>
         </TargetItem>
         <TargetItem>
-          <TargetText>성별:</TargetText>
-          <TargetText>{campaign?.gender === 'both' ? '무관' : campaign?.gender === 'male' ? '남성' : '여성'}</TargetText>
+          <TargetText></TargetText>
+          <TargetText>{campaign?.gender === 'both' ? `성별 : 무관` : campaign?.gender === 'male' ? `성별 : 남성` : `성별 : 여성`}</TargetText>
         </TargetItem>
         <TargetItem>
 
           <Dropdown>
-            <span>국가</span>
+            <span>선택 국가</span>
             <DropdownContent>
               {countryNames?.map(name => {
                 return (<p key={name}>{name}</p>);
@@ -381,7 +395,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>도달수</Key>
-          <Value>{overviewData?.reach}회</Value>
+          <Value>{overviewData?.reach}</Value>
           <CompareValue color={overviewData?.reachNetChange}>{overviewData?.reachNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -389,7 +403,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>클릭수</Key>
-          <Value>{overviewData?.click}회</Value>
+          <Value>{overviewData?.click}</Value>
           <CompareValue color={overviewData?.clickNetChange}>{overviewData?.clickNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -397,7 +411,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>CPM</Key>
-          <Value>{overviewData?.cpm}원</Value>
+          <Value>{overviewData?.cpm}</Value>
           <CompareValue color={overviewData?.cpmNetChange}>{overviewData?.cpmNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -413,7 +427,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>CPC</Key>
-          <Value>{overviewData?.cpc}원</Value>
+          <Value>{overviewData?.cpc}</Value>
           <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -489,7 +503,6 @@ export default function DashboardMain() {
               >
                 <option value="reach">Reach</option>
                 <option value="click">Click</option>
-                {/* <option value="gdp_md_est">GDP</option> */}
               </Selector>
             </GeoContainer>
             <GeoContainer width="35%">
@@ -502,7 +515,7 @@ export default function DashboardMain() {
                       backgroundColor={index % 2 ? 'white' : 'beige'}
                     >
                       <Rank>{el}</Rank>
-                      <Rank>{countryData[el][property]}명</Rank>
+                      <Rank>{(countryData[el][property]).toLocaleString()}명</Rank>
                     </RankWrapper>
                   );
                 })}
@@ -522,17 +535,17 @@ function getOverviewData(campaign, todayIndex) {
   if (!campaign?.stats[todayIndex]) return null;
 
   return {
-    reach: campaign?.stats[todayIndex].reach.toLocaleString(),
+    reach: campaign?.stats[todayIndex].reach.toLocaleString()+'회',
     reachNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
-    click: campaign?.stats[todayIndex].click.toLocaleString(),
+    click: campaign?.stats[todayIndex].click.toLocaleString()+'회',
     clickNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
 
-    cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString(),
+    cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString()+'원',
     cpmNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
     ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
-    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString(),
+    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString()+'원',
     cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' : (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }

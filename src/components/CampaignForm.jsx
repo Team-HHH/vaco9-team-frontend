@@ -20,7 +20,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
-  margin-top: 80px;
+  margin: auto;
   font-family: 'Nanum Barun Gothic';
 `;
 
@@ -42,12 +42,21 @@ const FormWrapper = styled.div`
   width: 100%;
   justify-content: center;
   align-content: center;
+  margin-bottom: 50px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: ${props => props.width || '600px'};
+  margin: 0 100px 0 0;
+`;
+
+const EstimateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 360px;
   margin: 0 100px 0 0;
 `;
 
@@ -322,28 +331,6 @@ const TargetGenderAndCountrySelect = styled.select`
   outline: none;
 `;
 
-const TargetSettingButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const TargetSettingButton = styled.button`
-  width: 15%;
-  padding: 10px 15px;
-  margin: 20px 0;
-  border: none;
-  border-radius: 18px;
-  cursor: pointer;
-  background-color: ${props => props.theme.SUB};
-  &:hover {
-    background-color: ${props => props.theme.HOVER};
-    color: black;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
-
 const EndDateWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -615,10 +602,9 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                 </Card>
               </InputWrapper>
             </ContentWrapper>
-            <ContentWrapper
-              width="360px"
-            >
+            <EstimateWrapper>
               <Estimate>
+                <Divider />
                 <ADPreviewButton
                   type="button"
                   onClick={() => setIsAdPreview(true)}
@@ -661,7 +647,7 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                   <span>시작하기</span>
                 </Button>
               </ButtonWrapper>
-            </ContentWrapper>
+            </EstimateWrapper>
           </Form>
         </FormWrapper>
       </Container >
