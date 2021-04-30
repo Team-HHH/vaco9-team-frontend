@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,9 +19,31 @@ const Container = styled.div`
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [minAge, setMinAge] = useState(null);
+  const [maxAge, setMaxAge] = useState(null);
+  const [gender, setGender] = useState('male');
+  const [dailyBudget, setDailyBudget] = useState(5000);
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const estimate = useSelector(state => state.estimate);
+
+  useEffect(() => {
+    const selectedTarget = {
+      minAge,
+      maxAge,
+      gender,
+      country: selectedCountry
+    };
+
+    for (const key in selectedTarget) {
+      if (!selectedTarget[key]) {
+        return;
+      }
+    }
+
+    dispatch(getEstimate(selectedTarget));
+  }, [selectedCountry, minAge, maxAge, gender]);
 
   async function handleNewCampaignFormSubmit(data) {
     const IMP = window.IMP;
@@ -30,7 +52,8 @@ export default function CreateCampaign() {
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
-      const response = await fetchNewCampaign({ ...data, content: url });
+      console.log(selectedCountry)
+      const response = await fetchNewCampaign({ ...data, content: url, country: selectedCountry, minAge, maxAge, gender, dailyBudget });
       const responseBody = await response.json();
 
       if (!response.ok) {
@@ -98,16 +121,6 @@ export default function CreateCampaign() {
     }
   }
 
-  function handleSliderChange(data) {
-    for (const key in data) {
-      if (!data[key]) {
-        return;
-      }
-    }
-
-    dispatch(getEstimate(data));
-  }
-
   return (
     <>
       <Header />
@@ -116,8 +129,13 @@ export default function CreateCampaign() {
           estimate={estimate}
           imageUrl={url}
           onImageUpload={handleImageUpload}
-          onSliderChange={handleSliderChange}
           onFormSubmit={handleNewCampaignFormSubmit}
+          onCountrySelect={setSelectedCountry}
+          setMinAge={setMinAge}
+          setMaxAge={setMaxAge}
+          setGender={setGender}
+          setDailyBudget={setDailyBudget}
+          dailyBudget={dailyBudget}
         />
       </Container>
     </>

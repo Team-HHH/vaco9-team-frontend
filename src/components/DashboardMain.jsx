@@ -301,7 +301,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>도달수</Key>
-          <Value>{overviewData?.reach}</Value>
+          <Value>{overviewData?.reach}회</Value>
           <CompareValue color={overviewData?.reachNetChange}>{overviewData?.reachNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -309,7 +309,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>클릭수</Key>
-          <Value>{overviewData?.click}</Value>
+          <Value>{overviewData?.click}회</Value>
           <CompareValue color={overviewData?.clickNetChange}>{overviewData?.clickNetChange}</CompareValue>
         </Overview>
         <Overview
@@ -352,7 +352,7 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key textAlign="center">예산 잔액</Key>
-          <Value>{campaign?.remainingBudget.toLocaleString()}원</Value>
+          <Value>{Math.floor(campaign?.remainingBudget).toLocaleString()}원</Value>
         </Overview>
         <StaticOverview>
           <Key textAlign="center">일일 지출 한도</Key>
@@ -411,19 +411,20 @@ export default function DashboardMain() {
 function getOverviewData(campaign, todayIndex) {
   if (campaign === undefined) return null;
   if (campaign.stats.length === 0) return null;
+  if (!campaign?.stats[todayIndex]) return null;
 
   return {
     reach: campaign?.stats[todayIndex].reach.toLocaleString(),
-    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
+    reachNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
     click: campaign?.stats[todayIndex].click.toLocaleString(),
-    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
+    clickNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
 
     cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString(),
-    cpmNetChange: ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
+    cpmNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
-    ctrNetChange: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
+    ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
     cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString(),
-    cpcNetChange: (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
+    cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' :  (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }

@@ -43,8 +43,3 @@ export default function reducer(state = {}, action) {
     }
   }
 }
-
-function formatCampaigns(estimate) {
-
-  return estimate;
-}
