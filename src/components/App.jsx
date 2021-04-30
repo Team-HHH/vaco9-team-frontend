@@ -35,11 +35,11 @@ export default function App() {
   return (
     <>
       <Switch>
+        <Route path="/main">
+          <Home />
+        </Route>
         <Route exact path="/">
           <DownloadHome />
-        </Route>
-        <Route exact path="/main">
-          <Home />
         </Route>
         <PrivateRoute path="/campaign/new">
           <CreateCampaign />
