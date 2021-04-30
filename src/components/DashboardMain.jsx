@@ -21,6 +21,7 @@ import { fetchPaymentResult } from '../apis/payment';
 import { errorOccured } from '../reducers/error';
 import GeoChart from './GeoChart';
 import data from '../json/GeoChart.world.geo.json';
+import noData from '../assets/no-data.png';
 
 const Container = styled.div`
   width: 100%;
@@ -227,6 +228,18 @@ const Rank = styled.span`
   margin: 10px;
 `;
 
+const WarningContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Warning = styled.h1`
+  font-size: 36px;
+`;
+
 
 const CustomizedAxisTick = ({ x, y, payload }) => {
   const dateTip = parseISO(payload.value).toDateString();
@@ -289,7 +302,7 @@ export default function DashboardMain() {
   }, [campaign]);
 
   function countrySortedBy() {
-    let arr = [];
+    const arr = [];
     for (let key in countryData) {
       const tmp = {
         country: key,
@@ -455,7 +468,11 @@ export default function DashboardMain() {
       </OverviewContainer>
       <ChartContainer>
         {marketingChartData?.length === 0 &&
-          <div>데이터가 존재하지 않습니다.</div>
+          <WarningContainer>
+            <img src={noData} alt="" width="300px" height="280px" />
+            <Warning fontSize="60px">데이터가 존재하지 않습니다.</Warning>
+
+          </WarningContainer>
         }
         {marketingChartData?.length > 0 && (type === 'all' && (
           <ResponsiveContainer>
@@ -535,17 +552,17 @@ function getOverviewData(campaign, todayIndex) {
   if (!campaign?.stats[todayIndex]) return null;
 
   return {
-    reach: campaign?.stats[todayIndex].reach.toLocaleString()+'회',
+    reach: campaign?.stats[todayIndex].reach.toLocaleString() + '회',
     reachNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
-    click: campaign?.stats[todayIndex].click.toLocaleString()+'회',
+    click: campaign?.stats[todayIndex].click.toLocaleString() + '회',
     clickNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
 
-    cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString()+'원',
+    cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString() + '원',
     cpmNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
     ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
-    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString()+'원',
+    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString() + '원',
     cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' : (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }
