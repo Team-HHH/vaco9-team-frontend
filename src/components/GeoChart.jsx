@@ -12,19 +12,15 @@ const targetCountries = {
 };
 
 const Container = styled.div`
-  display: flex;
-    width: 60%;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  text-align: center;
 `;
 
 const Map = styled.svg`
   display: block;
   width: 100%;
-  height: 500px;
+  height: 100%;
 `;
 
 export default function GeoChart({ data, property }) {
@@ -93,10 +89,10 @@ export default function GeoChart({ data, property }) {
   }, [data, dimensions, property, selectedCountry]);
 
   return (
-    <Container>
-      <div ref={wrapperRef}>
-        <Map ref={svgRef}></Map>
-      </div>
+    // <Container>
+    <Container ref={wrapperRef}>
+      <Map ref={svgRef}></Map>
     </Container>
+    // </Container>
   );
 }

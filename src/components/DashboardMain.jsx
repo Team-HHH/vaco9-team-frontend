@@ -53,13 +53,36 @@ const CampaignStatus = styled.div`
   margin-right: 10px;
 `;
 
+const DropdownContent = styled.div`
+  display: none;
+  position: absolute;
+  top: 40px;
+  background-color: #f9f9f9;
+  width: 160px;
+  margin-left: -58px;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 10px 12px;
+  z-index: 1;
+`;
+
+const Dropdown = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &:hover ${DropdownContent}{
+    display: block;
+  }
+`;
+
 const OverviewContainer = styled.div`
   width: 100%;
   height: 20%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   margin: 20px 0;
-  gap: 20px;
+  gap: 16px;
   box-sizing: border-box;
 `;
 
@@ -70,7 +93,7 @@ const StaticOverview = styled.div`
   height: 100%;
   width: 100%;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 20px;
 `;
 
@@ -83,7 +106,7 @@ const Overview = styled(StaticOverview)`
 `;
 
 const Key = styled.p`
-  font-size: 21px;
+  font-size: 16px;
   text-align: ${props => props.textAlign || 'left'};
   padding: 0;
   text-align: center;
@@ -112,18 +135,11 @@ const ChartContainer = styled.div`
   align-self: center;
 `;
 
-const MapWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-`;
-
 const TargetWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-content: center;
   background-color: white;
-  border-radius: 10px;
   width: 100%;
   height: 7%;
 `;
@@ -208,6 +224,7 @@ export default function DashboardMain() {
   const overviewData = getOverviewData(campaign, todayIndex);
   const countryData = {};
   const demographicData = {};
+  const countryNames = campaign?.country;
 
   campaign?.exposed.forEach(elem => {
     if (!demographicData[elem.age]) {
@@ -293,8 +310,15 @@ export default function DashboardMain() {
           <TargetText>{campaign?.gender === 'both' ? '무관' : campaign?.gender === 'male' ? '남성' : '여성'}</TargetText>
         </TargetItem>
         <TargetItem>
-          <TargetText>국가:</TargetText>
-          <TargetText>{campaign?.country}</TargetText>
+
+          <Dropdown>
+            <span>국가</span>
+            <DropdownContent>
+              {countryNames?.map(name => {
+                return (<p key={name}>{name}</p>);
+              })}
+            </DropdownContent>
+          </Dropdown>
         </TargetItem>
       </TargetWrapper>
       <OverviewContainer>
@@ -399,10 +423,9 @@ export default function DashboardMain() {
             </BarChart>
           </ResponsiveContainer>
         )) || ((type === 'country') && (
-          <MapWrapper>
+          <ResponsiveContainer>
             <GeoChart data={data} property='reach' />
-            <ReactTooltip>{content}</ReactTooltip>
-          </MapWrapper>
+          </ResponsiveContainer>
         ))
         }
       </ChartContainer>
@@ -419,14 +442,14 @@ function getOverviewData(campaign, todayIndex) {
     reach: campaign?.stats[todayIndex].reach.toLocaleString(),
     reachNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
     click: campaign?.stats[todayIndex].click.toLocaleString(),
-    clickNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
+    clickNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
 
     cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString(),
-    cpmNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
+    cpmNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
-    ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' :  ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
+    ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
     cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString(),
-    cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' :  (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
+    cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' : (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }
