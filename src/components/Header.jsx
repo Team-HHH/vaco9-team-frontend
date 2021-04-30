@@ -63,16 +63,6 @@ export default function Header() {
             Flexilis Ads
           </HeaderLink>
         </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/main">
-            캠페인 유형
-          </HeaderLink>
-        </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/main">
-            비용
-          </HeaderLink>
-        </HeaderItem>
       </LeftHeader>
       <RightHeader>
         <HeaderItem>
