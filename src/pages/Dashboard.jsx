@@ -12,7 +12,6 @@ const Container = styled.div`
   height: calc(100vh - 80px);
   display: flex;
   box-sizing: border-box;
-  margin-top: 80px;
 `;
 
 const NavContainer = styled.div`
