@@ -14,6 +14,7 @@ import { getEstimate } from '../reducers/estimate';
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
 `;
 
@@ -122,22 +123,20 @@ export default function CreateCampaign() {
   }
 
   return (
-    <>
+    <Container>
       <Header />
-      <Container>
-        <CampaignForm
-          estimate={estimate}
-          imageUrl={url}
-          onImageUpload={handleImageUpload}
-          onFormSubmit={handleNewCampaignFormSubmit}
-          onCountrySelect={setSelectedCountry}
-          setMinAge={setMinAge}
-          setMaxAge={setMaxAge}
-          setGender={setGender}
-          setDailyBudget={setDailyBudget}
-          dailyBudget={dailyBudget}
-        />
-      </Container>
-    </>
+      <CampaignForm
+        estimate={estimate}
+        imageUrl={url}
+        onImageUpload={handleImageUpload}
+        onFormSubmit={handleNewCampaignFormSubmit}
+        onCountrySelect={setSelectedCountry}
+        setMinAge={setMinAge}
+        setMaxAge={setMaxAge}
+        setGender={setGender}
+        setDailyBudget={setDailyBudget}
+        dailyBudget={dailyBudget}
+      />
+    </Container>
   );
 }

@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import useHeader from '../hooks/useHeader';
 
 const Container = styled.div`
-  position: fixed;
+  position: sticky;
   display: flex;
   top: 0;
   left: 0;
+  z-index: 999;
   height: 80px;
   width: 100%;
   min-width: 900px;
