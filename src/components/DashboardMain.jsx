@@ -17,7 +17,6 @@ import {
 } from 'recharts';
 import ReactTooltip from 'react-tooltip';
 
-import MapChart from './MapChart';
 import { fetchPaymentResult } from '../apis/payment';
 import { errorOccured } from '../reducers/error';
 import GeoChart from './GeoChart';
@@ -78,10 +77,10 @@ const Dropdown = styled.div`
 
 const OverviewContainer = styled.div`
   width: 100%;
-  height: 20%;
+  height: 15%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  margin: 20px 0;
+  margin: 16px 0;
   gap: 16px;
   box-sizing: border-box;
 `;
@@ -167,6 +166,16 @@ const Button = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+const GeoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const GeoContainer = styled.div`
+  width: ${props => props.width}
 `;
 
 const typeConfigs = {
@@ -423,9 +432,12 @@ export default function DashboardMain() {
             </BarChart>
           </ResponsiveContainer>
         )) || ((type === 'country') && (
-          <ResponsiveContainer>
-            <GeoChart data={data} property='reach' />
-          </ResponsiveContainer>
+          <GeoWrapper>
+            <GeoContainer width="65%">
+              <GeoChart data={data} property='reach' />
+            </GeoContainer>
+            <GeoContainer width="35%">sampel</GeoContainer>
+          </GeoWrapper>
         ))
         }
       </ChartContainer>

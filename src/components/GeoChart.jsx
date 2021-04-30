@@ -25,6 +25,7 @@ const Map = styled.svg`
 
 export default function GeoChart({ data, property }) {
   const svgRef = useRef();
+  const tltpRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -78,21 +79,20 @@ export default function GeoChart({ data, property }) {
       .text(
         feature =>
           feature &&
-          'reach: ' +
+          '도달수: ' +
           feature.properties['reach'] +
+          '클릭수' +
           ': ' +
-          'click' +
           feature.properties['click']
       )
       .attr('x', 10)
       .attr('y', 25);
+
   }, [data, dimensions, property, selectedCountry]);
 
   return (
-    // <Container>
     <Container ref={wrapperRef}>
       <Map ref={svgRef}></Map>
     </Container>
-    // </Container>
   );
 }
