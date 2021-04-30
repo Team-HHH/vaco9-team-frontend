@@ -16,13 +16,13 @@ const Container = styled.div`
 `;
 
 const NavContainer = styled.div`
-  width: 20%;
+  width: 15%;
   height: 100%;
   overflow-y: scroll;
 `;
 
 const MainContainer = styled.div`
-  width: 80%;
+  width: 85%;
   height: 100%;
   overflow-y: hidden;
 `;

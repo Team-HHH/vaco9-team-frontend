@@ -24,6 +24,11 @@ export default function App() {
       history.push(error.link);
     }
 
+    if (error.link === 'reload') {
+      history.push('/dashboard');
+      window.location.reload();
+    }
+
     dispatch(errorSettled());
   }
 

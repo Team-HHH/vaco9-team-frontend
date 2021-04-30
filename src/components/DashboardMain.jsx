@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { format, parseISO, startOfDay, isEqual } from 'date-fns';
+import { useSelector, useDispatch } from 'react-redux';
+import { format, parseISO, startOfDay, isEqual, differenceInCalendarDays } from 'date-fns';
 import {
   ResponsiveContainer,
   BarChart,
@@ -15,24 +15,47 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
+import ReactTooltip from 'react-tooltip';
+
+import MapChart from './MapChart';
+import { fetchPaymentResult } from '../apis/payment';
+import { errorOccured } from '../reducers/error';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  padding: 30px;
   background-color: #FAF8EF;
   font-family: 'Nanum Barun Gothic';
   overflow-y: hidden;
 `;
 
+const DateWrapper = styled.div`
+  margin-bottom: 10px
+`;
+
+const DateText = styled.span`
+  margin-right: 10px;
+  font-size: 20px;
+`;
+
+const CampaignStatus = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  width: fit-content;
+  background-color: ${props => props.status === 'opened' ? '#2eb872' : props.status === 'pending' ? '#fa4659' : '#687980'};
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+`;
+
 const OverviewContainer = styled.div`
   width: 100%;
-  height: fit-content;
+  height: 20%;
   display: grid;
-  // grid-template-columns: repeat(6, 1fr);
-   grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   margin: 20px 0;
   gap: 20px;
   box-sizing: border-box;
@@ -42,7 +65,7 @@ const StaticOverview = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 140px;
+  height: 100%;
   width: 100%;
   background-color: white;
   border-radius: 10px;
@@ -87,6 +110,47 @@ const ChartContainer = styled.div`
   align-self: center;
 `;
 
+const MapWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+`;
+
+const TargetWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  background-color: white;
+  border-radius: 10px;
+  width: 100%;
+  height: 7%;
+`;
+
+const TargetItem = styled.div`
+  display: flex;
+  height: 100%;
+`;
+
+const TargetText = styled.span`
+  margin: auto;
+`;
+
+const Button = styled.button`
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  font-size: 16px;
+  background-color: ${props => props.theme.SUB};
+  &:hover {
+    background-color: ${props => props.theme.HOVER};
+    color: black;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
 const typeConfigs = {
   'reach': {
     color: '#e74c3c',
@@ -123,20 +187,39 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
 
 export default function DashboardMain() {
   const [type, setType] = useState('all');
+  const [content, setContent] = useState('');
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   const selectedCampaign = useSelector(state => state.selectedCampaign);
   const campaign = useSelector(state => state.campaigns.byId?.[selectedCampaign]);
   const today = startOfDay(new Date());
   const todayIndex = campaign?.stats.findIndex(stats => isEqual(parseISO(stats.date), today));
-  const chartDate = campaign?.stats.map(dailyStats => {
+  const marketingChartData = campaign?.stats.map(dailyStats => {
     return {
       ...dailyStats,
       date: dailyStats.date.slice(0, 10),
-      cpm: (dailyStats.usedBudget * 1000 / dailyStats.reach),
+      cpm: (dailyStats.usedBudget / dailyStats.reach * 1000).toFixed(2),
       ctr: (dailyStats.click / dailyStats.reach).toFixed(2),
       cpc: (dailyStats.usedBudget / dailyStats.click).toFixed(2),
     };
   });
   const overviewData = getOverviewData(campaign, todayIndex);
+  const countryData = {};
+  const demographicData = {};
+
+  campaign?.exposed.forEach(elem => {
+    if (!demographicData[elem.age]) {
+      demographicData[elem.age] = { age: elem.age, reach: 0, click: 0 };
+    }
+    if (!countryData[elem.country]) {
+      countryData[elem.country] = { reach: 0, click: 0 };
+    }
+
+    demographicData[elem.age].reach += elem.reach;
+    demographicData[elem.age].click += elem.click;
+    countryData[elem.country].reach += elem.reach;
+    countryData[elem.country].click += elem.click;
+  });
 
   useEffect(() => {
     setType('all');
@@ -146,29 +229,72 @@ export default function DashboardMain() {
     setType(event.target.closest('div').id);
   }
 
+  async function handleRequestPaymentButtonClick() {
+    const IMP = window.IMP;
+    IMP.init(process.env.REACT_APP_IMPORT_ID);
+
+    const campaignDuration = differenceInCalendarDays(parseISO(campaign?.expiresAt), new Date());
+
+    try {
+      IMP.request_pay({
+        pg: 'html5_inicis',
+        pay_method: 'card',
+        merchant_uid: campaign?._id,
+        name: campaign?.title,
+        amount: campaign?.dailyBudget * campaignDuration,
+        buyer_email: user.email,
+        buyer_name: user.name,
+      }, async (rsp) => {
+        if (rsp.success) {
+          const { imp_uid, merchant_uid } = rsp;
+          const response = await fetchPaymentResult({ imp_uid, merchant_uid });
+
+          if (!response.ok) {
+            dispatch(errorOccured('결제에 실패했습니다.'));
+            return;
+          }
+
+          dispatch(errorOccured('결제가 완료되었습니다.', 'reload'));
+        } else {
+          dispatch(errorOccured('결제에 실패했습니다.'));
+          return;
+        }
+      });
+    } catch (err) {
+      dispatch(errorOccured('캠페인 생성에 실패했습니다.'));
+    }
+  }
+
   return (
     <Container>
-      <div>
-        {format(today, 'yyyy년 M월 d일 (eee)')}
-        <label>{'status'}</label>
-        <button>{'결제'}</button>
-      </div>
-
-      <div>
-        <span>타겟</span>
-        <div>
-          <span>연령</span>
-          <span>{'22~33'}</span>
-        </div>
-        <div>
-          <span>성별</span>
-          <span>{'여성'}</span>
-        </div>
-        <div>
-          <span>국가</span>
-          <span>{'South Korea'}</span>
-        </div>
-      </div>
+      <DateWrapper>
+        <DateText>{format(today, 'yyyy년 M월 d일 (eee)')}</DateText>
+        <CampaignStatus status={campaign?.status}>{campaign?.status === 'opened' ? '진행중' : campaign?.status === 'pending' ? '결제대기' : '기간종료'}</CampaignStatus>
+        {campaign?.status === 'pending' && (
+          <Button
+            onClick={handleRequestPaymentButtonClick}
+          >
+            결제하기
+          </Button>
+        )}
+      </DateWrapper>
+      <TargetWrapper>
+        <TargetItem>
+          <TargetText>~{campaign?.expiresAt && format(parseISO(campaign?.expiresAt), 'yyyy년 M월 d일')}</TargetText>
+        </TargetItem>
+        <TargetItem>
+          <TargetText>연령:</TargetText>
+          <TargetText>{`${campaign?.minAge} ~ ${campaign?.maxAge}`}</TargetText>
+        </TargetItem>
+        <TargetItem>
+          <TargetText>성별:</TargetText>
+          <TargetText>{campaign?.gender === 'both' ? '무관' : campaign?.gender === 'male' ? '남성' : '여성'}</TargetText>
+        </TargetItem>
+        <TargetItem>
+          <TargetText>국가:</TargetText>
+          <TargetText>{campaign?.country}</TargetText>
+        </TargetItem>
+      </TargetWrapper>
       <OverviewContainer>
         <Overview
           id="reach"
@@ -192,7 +318,7 @@ export default function DashboardMain() {
         >
           <Key>CPM</Key>
           <Value>{overviewData?.cpm}원</Value>
-          <CompareValue color={overviewData?.ctrNetChange}>{overviewData?.ctrNetChange}</CompareValue>
+          <CompareValue color={overviewData?.cpmNetChange}>{overviewData?.cpmNetChange}</CompareValue>
         </Overview>
         <Overview
           id="ctr"
@@ -215,15 +341,11 @@ export default function DashboardMain() {
           onClick={handleOverviewClick}
         >
           <Key>인구 통계</Key>
-          <Value>{overviewData?.cpc}원</Value>
-          <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview> <Overview
           id="country"
           onClick={handleOverviewClick}
         >
           <Key>국가별</Key>
-          <Value>{overviewData?.cpc}원</Value>
-          <CompareValue color={overviewData?.cpcNetChange}>{overviewData?.cpcNetChange}</CompareValue>
         </Overview>
         <Overview
           id="all"
@@ -238,33 +360,47 @@ export default function DashboardMain() {
         </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
-        {chartDate?.length > 0 && (type === 'all' && (
+        {marketingChartData?.length > 0 && (type === 'all' && (
           <ResponsiveContainer>
-            <AreaChart data={chartDate}>
+            <AreaChart data={marketingChartData}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
               <YAxis yAxisId={1} domain={['dataMin', 'dataMax']} />
               <Tooltip />
               <Area type='natural' dataKey='reach' stackId="1" stroke={typeConfigs['reach'].color} fill={typeConfigs['reach'].color} yAxisId={1} />
               <Area type='natural' dataKey='click' stackId="2" stroke={typeConfigs['click'].color} fill={typeConfigs['click'].color} yAxisId={1} />
-              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={'#363636'} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
         )) || ((type === 'reach' || type === 'click' || type === 'cpm' || type === 'ctr' || type === 'cpc') && (
           <ResponsiveContainer>
-            <AreaChart data={chartDate}>
+            <AreaChart data={marketingChartData}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
               <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
               <Tooltip />
               <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
-              <Brush dataKey="date" startIndex={Math.round(chartDate?.length * 0.45)} stroke={'#363636'} />
+              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={'#363636'} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
         )) || ((type === 'bio') && (
-          <div>bio 그래프입니다.</div>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={Object.values(demographicData)}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="age" />
+              <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+              <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+              <Tooltip />
+              <Legend />
+              <Bar yAxisId="left" dataKey="reach" fill="#8884d8" />
+              <Bar yAxisId="right" dataKey="click" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         )) || ((type === 'country') && (
-          <div>country 그래프입니다.</div>
+          <MapWrapper>
+            <MapChart setTooltipContent={setContent} data={countryData}/>
+            <ReactTooltip>{content}</ReactTooltip>
+          </MapWrapper>
         ))
         }
       </ChartContainer>
@@ -278,16 +414,16 @@ function getOverviewData(campaign, todayIndex) {
 
   return {
     reach: campaign?.stats[todayIndex].reach.toLocaleString(),
-    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+    reachNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex - 1].reach * 100).toFixed(2).toLocaleString() + '%',
     click: campaign?.stats[todayIndex].click.toLocaleString(),
-    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex].click * 100).toFixed(2).toLocaleString() + '%',
+    clickNetChange: ((campaign?.stats[todayIndex].click - campaign?.stats[todayIndex - 1].click) / campaign?.stats[todayIndex - 1].click * 100).toFixed(2).toLocaleString() + '%',
 
-    cpm: ((campaign?.dailyBudget - campaign?.remainingBudget) * 1000 / campaign?.stats[todayIndex].reach).toFixed(1).toLocaleString(),
-    cpmNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+    cpm: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000).toFixed(2).toLocaleString(),
+    cpmNetChange: ((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].reach * 1000 - campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].reach * 1000)).toFixed(2).toLocaleString() + '%',
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
-    ctrNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
-    cpc: ((campaign?.dailyBudget - campaign?.remainingBudget) / campaign?.stats[todayIndex].click).toFixed(1).toLocaleString(),
-    cpcNetChange: ((campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].reach) / campaign?.stats[todayIndex].reach * 100).toFixed(2).toLocaleString() + '%',
+    ctrNetChange: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
+    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString(),
+    cpcNetChange: (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }
