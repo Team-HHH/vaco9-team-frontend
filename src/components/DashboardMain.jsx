@@ -20,6 +20,8 @@ import ReactTooltip from 'react-tooltip';
 import MapChart from './MapChart';
 import { fetchPaymentResult } from '../apis/payment';
 import { errorOccured } from '../reducers/error';
+import GeoChart from './GeoChart';
+import data from '../json/GeoChart.world.geo.json';
 
 const Container = styled.div`
   width: 100%;
@@ -398,7 +400,7 @@ export default function DashboardMain() {
           </ResponsiveContainer>
         )) || ((type === 'country') && (
           <MapWrapper>
-            <MapChart setTooltipContent={setContent} data={countryData}/>
+            <GeoChart data={data} property='reach' />
             <ReactTooltip>{content}</ReactTooltip>
           </MapWrapper>
         ))
