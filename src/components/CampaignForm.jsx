@@ -179,7 +179,6 @@ const Slider = styled.input`
     border-radius: 2px;
     border: 1px solid #000101;
   }
-
   &::-webkit-slider-thumb {
     height: 16px;
     width: 16px;
@@ -192,7 +191,6 @@ const Slider = styled.input`
   &:active::-webkit-slider-thumb {
     background: ${props => props.theme.HOVER};
   }
-
   &:focus {
     outline: none;
   }
