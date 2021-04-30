@@ -205,6 +205,7 @@ const Selector = styled.select`
 const RankWrapper = styled.li`
   display: flex;
   justify-content: space-between;
+  background: ${props => props.backgroundColor};
 `;
 
 const RankTitle = styled.h2`
@@ -494,9 +495,12 @@ export default function DashboardMain() {
             <GeoContainer width="35%">
               <RankTitle>{properties[property]}</RankTitle>
               <ol>
-                {countrySortedBy().map(el => {
+                {countrySortedBy().map((el, index) => {
                   return (
-                    <RankWrapper key={el}>
+                    <RankWrapper
+                      key={el}
+                      backgroundColor={index % 2 ? 'white' : 'beige'}
+                    >
                       <Rank>{el}</Rank>
                       <Rank>{countryData[el][property]}명</Rank>
                     </RankWrapper>

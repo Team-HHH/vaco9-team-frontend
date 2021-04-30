@@ -93,7 +93,7 @@ export default function DashboardNav() {
       <NavProfileContainer>
         <NavProfile>
           <NavIconContainer>
-            <FaRegUserCircle size={50} />
+            <FaRegUserCircle size={35} />
           </NavIconContainer>
           <NavUserInfos>
             <NavUserInfoItem>{user.name}</NavUserInfoItem>
