@@ -356,7 +356,7 @@ export default function DashboardMain() {
         </TargetItem>
         <TargetItem>
           <TargetText>연령:</TargetText>
-          <TargetText>{`${campaign?.minAge} ~ ${campaign?.maxAge}`}</TargetText>
+          <TargetText>{`${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</TargetText>
         </TargetItem>
         <TargetItem>
           <TargetText>성별:</TargetText>

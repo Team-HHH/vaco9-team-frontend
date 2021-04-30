@@ -200,5 +200,5 @@ function scrollTop() {
 }
 
 function scrollBottom() {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  window.scrollTo({ top: 870, behavior: 'smooth' });
 }
