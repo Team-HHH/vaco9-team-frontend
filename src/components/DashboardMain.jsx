@@ -199,6 +199,23 @@ const typeConfigs = {
   },
 };
 
+const Selector = styled.select`
+`;
+
+const RankWrapper = styled.li`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const RankTitle = styled.h2`
+  text-align: center;
+`;
+
+const Rank = styled.span`
+  margin: 10px;
+`;
+
+
 const CustomizedAxisTick = ({ x, y, payload }) => {
   const dateTip = parseISO(payload.value).toDateString();
   const formattedDate = `${dateTip.slice(4, 7)}, ${dateTip.slice(8, 10)}`;
@@ -234,6 +251,12 @@ export default function DashboardMain() {
   const countryData = {};
   const demographicData = {};
   const countryNames = campaign?.country;
+  const [property, setProperty] = useState('reach');
+  let rankBy = [];
+  const properties = {
+    reach: '도달수',
+    click: '클릭수'
+  };
 
   campaign?.exposed.forEach(elem => {
     if (!demographicData[elem.age]) {
@@ -252,6 +275,27 @@ export default function DashboardMain() {
   useEffect(() => {
     setType('all');
   }, [campaign]);
+
+  function countrySortedBy() {
+    let arr = [];
+    for (let key in countryData) {
+      const tmp = {
+        country: key,
+        reach: countryData[key].reach,
+        click: countryData[key].click,
+      };
+
+      arr.push(tmp);
+    }
+
+    arr.sort((a, b) => {
+      if (a[property] < b[property]) return -1;
+      if (a[property] > b[property]) return 1;
+      return 0;
+    });
+
+    return arr.map(el => el.country);
+  }
 
   function handleOverviewClick(event) {
     setType(event.target.closest('div').id);
@@ -395,6 +439,9 @@ export default function DashboardMain() {
         </StaticOverview>
       </OverviewContainer>
       <ChartContainer>
+        {marketingChartData?.length === 0 &&
+          <div>데이터가 존재하지 않습니다.</div>
+        }
         {marketingChartData?.length > 0 && (type === 'all' && (
           <ResponsiveContainer>
             <AreaChart data={marketingChartData}>
@@ -434,9 +481,29 @@ export default function DashboardMain() {
         )) || ((type === 'country') && (
           <GeoWrapper>
             <GeoContainer width="65%">
-              <GeoChart data={data} property='reach' />
+              <GeoChart targetCountries={countryData} data={data} property={property} />
+              <Selector
+                value={property}
+                onChange={event => setProperty(event.target.value)}
+              >
+                <option value="reach">Reach</option>
+                <option value="click">Click</option>
+                {/* <option value="gdp_md_est">GDP</option> */}
+              </Selector>
             </GeoContainer>
-            <GeoContainer width="35%">sampel</GeoContainer>
+            <GeoContainer width="35%">
+              <RankTitle>{properties[property]}</RankTitle>
+              <ol>
+                {countrySortedBy().map(el => {
+                  return (
+                    <RankWrapper key={el}>
+                      <Rank>{el}</Rank>
+                      <Rank>{countryData[el][property]}명</Rank>
+                    </RankWrapper>
+                  );
+                })}
+              </ol>
+            </GeoContainer>
           </GeoWrapper>
         ))
         }

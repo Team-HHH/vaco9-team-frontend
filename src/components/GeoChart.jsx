@@ -3,14 +3,6 @@ import styled from 'styled-components';
 import { select, geoPath, geoMercator, min, max, scaleLinear } from 'd3';
 import useResizeObserver from './useResizeObserver';
 
-const targetCountries = {
-  'South Korea': { click: 3000, reach: 450000 },
-  'Japan': { click: 5000, reach: 45000 },
-  'China': { click: 30000, reach: 450000 },
-  'United States of America': { click: 60000, reach: 800000 },
-  'India': { click: 100000, reach: 800000 },
-};
-
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -23,9 +15,8 @@ const Map = styled.svg`
   height: 100%;
 `;
 
-export default function GeoChart({ data, property }) {
+export default function GeoChart({ targetCountries, data, property }) {
   const svgRef = useRef();
-  const tltpRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -48,6 +39,7 @@ export default function GeoChart({ data, property }) {
     const svg = select(svgRef.current);
     const minProp = min(data.features, feature => feature.properties[property]);
     const maxProp = max(data.features, feature => feature.properties[property]);
+
     const colorScale = scaleLinear()
       .domain([minProp, maxProp])
       .range(['#efefef', 'green']);
@@ -79,11 +71,8 @@ export default function GeoChart({ data, property }) {
       .text(
         feature =>
           feature &&
-          '도달수: ' +
-          feature.properties['reach'] +
-          '클릭수' +
-          ': ' +
-          feature.properties['click']
+          feature.properties.sovereignt +
+          feature.properties[property]
       )
       .attr('x', 10)
       .attr('y', 25);
