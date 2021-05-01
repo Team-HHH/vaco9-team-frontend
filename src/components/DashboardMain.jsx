@@ -22,6 +22,7 @@ import { errorOccured } from '../reducers/error';
 import GeoChart from './GeoChart';
 import data from '../json/GeoChart.world.geo.json';
 import noData from '../assets/no-data.png';
+import Select from 'react-select';
 
 const Container = styled.div`
   width: 100%;
@@ -211,7 +212,18 @@ const typeConfigs = {
   },
 };
 
+const SelectorWrapper = styled.div`
+  display: flex;
+  place-content: flex-end;
+`;
+
 const Selector = styled.select`
+  border: 1px solid ${props => props.theme.OUTLINE};
+  border-radius: 0.4rem;
+  background-color: ${props => props.theme.BACKGROUND};
+  padding: 5px;
+  cursor: pointer;
+  outline: none;
 `;
 
 const RankWrapper = styled.li`
@@ -254,6 +266,11 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
   );
 };
 
+const options = [
+  { value: 'reach', label: '도달' },
+  { value: 'click', label: '클릭' }
+]
+
 export default function DashboardMain() {
   const [type, setType] = useState('all');
   const [content, setContent] = useState('');
@@ -268,7 +285,7 @@ export default function DashboardMain() {
       ...dailyStats,
       date: dailyStats.date.slice(0, 10),
       cpm: (dailyStats.usedBudget / dailyStats.reach * 1000).toFixed(2),
-      ctr: (dailyStats.click / dailyStats.reach).toFixed(2),
+      ctr: (dailyStats.click / dailyStats.reach).toFixed(4),
       cpc: (dailyStats.usedBudget / dailyStats.click).toFixed(2),
     };
   });
@@ -490,7 +507,7 @@ export default function DashboardMain() {
           <ResponsiveContainer>
             <AreaChart data={marketingChartData}>
               <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0, 1] : ['dataMin', 'dataMax']} />
+              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0.005, 0.015] : ['dataMin', 'dataMax']} />
               <Tooltip />
               <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
               <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={'#363636'} />
@@ -502,27 +519,45 @@ export default function DashboardMain() {
             <BarChart data={Object.values(demographicData)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="age" />
-              <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-              <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+              <YAxis yAxisId="left" orientation="left" stroke="#000000" domain={['dataMin', 'dataMax']} tickFormatter={tick => {
+                if (tick > 1000000000) {
+                  return Math.round(tick / 100000000) / 10 + 'Bn';
+                } else if (tick > 1000000) {
+                  return Math.round(tick / 100000) / 10 + 'M';
+                } else {
+                  return Math.round(tick / 100) / 10 + 'K';
+                }
+              }} />
+              <YAxis yAxisId="right" orientation="right" stroke="#000000" domain={['dataMin', 'dataMax']} tickFormatter={tick => {
+                if (tick > 1000000000) {
+                  return Math.round(tick / 100000000) / 10 + 'Bn';
+                } else if (tick > 1000000) {
+                  return Math.round(tick / 100000) / 10 + 'M';
+                } else {
+                  return Math.round(tick / 100) / 10 + 'K';
+                }
+              }} />
               <Tooltip />
               <Legend />
-              <Bar yAxisId="left" dataKey="reach" fill="#8884d8" />
-              <Bar yAxisId="right" dataKey="click" fill="#82ca9d" />
+              <Bar yAxisId="left" dataKey="reach" fill="#ffab73" />
+              <Bar yAxisId="right" dataKey="click" fill="#8ac4d0" />
             </BarChart>
           </ResponsiveContainer>
         )) || ((type === 'country') && (
           <GeoWrapper>
             <GeoContainer width="65%">
               <GeoChart targetCountries={countryData} data={data} property={property} />
-              <Selector
-                value={property}
-                onChange={event => setProperty(event.target.value)}
-              >
-                <option value="reach">Reach</option>
-                <option value="click">Click</option>
-              </Selector>
             </GeoContainer>
             <GeoContainer width="35%">
+              <SelectorWrapper>
+                <Selector
+                  value={property}
+                  onChange={event => setProperty(event.target.value)}
+                >
+                  <option value="reach">Reach</option>
+                  <option value="click">Click</option>
+                </Selector>
+              </SelectorWrapper>
               <RankTitle>{properties[property]}</RankTitle>
               <ol>
                 {countrySortedBy().map((el, index) => {
@@ -562,7 +597,7 @@ function getOverviewData(campaign, todayIndex) {
 
     ctr: ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach) * 100).toFixed(2).toLocaleString() + '%',
     ctrNetChange: !campaign?.stats[todayIndex - 1] ? '' : ((campaign?.stats[todayIndex].click / campaign?.stats[todayIndex].reach - campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) / (campaign?.stats[todayIndex - 1].click / campaign?.stats[todayIndex - 1].reach) * 100).toFixed(2).toLocaleString() + '%',
-    cpc: (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString() + '원',
+    cpc: campaign?.stats[todayIndex].click !== 0 ? (campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click).toFixed(0).toLocaleString() + '원' : '데이터가 없습니다',
     cpcNetChange: !campaign?.stats[todayIndex - 1] ? '' : (((campaign?.stats[todayIndex].usedBudget / campaign?.stats[todayIndex].click) - (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)) / (campaign?.stats[todayIndex - 1].usedBudget / campaign?.stats[todayIndex - 1].click)).toFixed(2).toLocaleString() + '%',
   };
 }

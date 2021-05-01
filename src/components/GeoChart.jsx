@@ -71,8 +71,7 @@ export default function GeoChart({ targetCountries, data, property }) {
       .text(
         feature =>
           feature &&
-          feature.properties.sovereignt +
-          feature.properties[property]
+          `${feature.properties.sovereignt} - ${feature.properties[property]}`
       )
       .attr('x', 10)
       .attr('y', 25);
