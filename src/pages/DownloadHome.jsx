@@ -164,7 +164,7 @@ export default function DownloadHome() {
       <HomeSection>
         <Title>스트레칭, Flexilis와 함께</Title>
         <SubTitle>Flexilis는 스트레칭 알람 데스크탑 앱입니다.</SubTitle>
-        <DownloadLink href="https://hhh-campaign-images.s3.ap-northeast-2.amazonaws.com/electron-darwin-x64.zip" download>
+        <DownloadLink href={process.env.REACT_APP_DOWNLOAD_URL} download>
           Download Now
         </DownloadLink>
         <Image width="840px" height="500px" src={electron} alt="electron" />
