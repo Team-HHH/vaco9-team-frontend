@@ -12,17 +12,16 @@ const Container = styled.div`
   height: calc(100vh - 80px);
   display: flex;
   box-sizing: border-box;
-  margin-top: 80px;
 `;
 
 const NavContainer = styled.div`
-  width: 20%;
+  width: 15%;
   height: 100%;
   overflow-y: scroll;
 `;
 
 const MainContainer = styled.div`
-  width: 80%;
+  width: 85%;
   height: 100%;
   overflow-y: hidden;
 `;

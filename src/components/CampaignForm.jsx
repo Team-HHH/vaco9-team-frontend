@@ -1,30 +1,40 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { BsCloudUpload } from 'react-icons/bs';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
+import Select from 'react-select';
 
 import Card from './Card';
 import Modal from './Modal';
 import AdPreview from './AdPreview';
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: ${props => props.theme.CAMPAIGN_FORM_BACKGROUND};
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
-  margin-top: 80px;
+  margin: auto;
   font-family: 'Nanum Barun Gothic';
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   height: 40px;
-  margin-left: 20px;
+  font-size: 30px;
+  padding: 25px 25px 25px 0;
 `;
 
-const Title = styled.h2`
-  margin: 20px;
+const Title = styled.span`
+  margin: 10px;
 `;
 
 const FormWrapper = styled.div`
@@ -32,13 +42,22 @@ const FormWrapper = styled.div`
   width: 100%;
   justify-content: center;
   align-content: center;
+  margin-bottom: 50px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => props.width || 'fit-content'};
-  margin: 0 40px;
+  width: ${props => props.width || '600px'};
+  margin: 0 100px 0 0;
+`;
+
+const EstimateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 360px;
+  margin: 0 100px 0 0;
 `;
 
 const InputWrapper = styled.div`
@@ -46,42 +65,69 @@ const InputWrapper = styled.div`
   border-radius: 10px;
   margin: 10px 0;
   padding: 10px;
+  background-color: #fff;
 `;
 
-const UploaderPadding = styled.div`
-  height: 40px;
+const UploaderWrapper = styled.section`
+  height: 0;
+`;
+
+const UploaderAddImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 3px;
+  left: 33%;
+`;
+
+const UploaderAddImageRule = styled.span`
+  font-size: 10px;
+  padding-bottom: 3px;
+  color: ${props => props.theme.TARGET_SUB_TITLE};
 `;
 
 const Uploader = styled.form`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   position: relative;
-  top: 330px;
-  left: 30px;
+  top: 400px;
+  left: 45px;
   width: 500px;
-  height: fit-content;
-  z-index: 1;
 `;
 
 const UploadLabel = styled.label`
-  padding: 10px 30px;
-  border-radius: 5px;
-  cursor: pointer;
+  margin-left: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
   font-size: 14px;
-  background-color: ${props => props.theme.LIGHT};
+  cursor: pointer;
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${props => props.theme.DARK}
+    background-color: ${props => props.theme.HOVER};
+    color: black;
+  }
+  &:focus {
+    outline: none;
   }
 `;
 
 const UploadInput = styled.input`
-  padding: 10px 30px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 10px;
   border: none;
-  background-color: ${props => props.theme.LIGHT};
+  cursor: pointer;
+  background-color: ${props => props.theme.SUB};
   &:hover {
-    background-color: ${props => props.theme.DARK}
+    background-color: ${props => props.theme.HOVER};
+    color: black;
   }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const UploadBar = styled.div`
+  display: flex;
 `;
 
 const Form = styled.form`
@@ -94,11 +140,13 @@ const SelectWrapper = styled.div`
   width: 100%;
 `;
 
-const Select = styled.select`
+const CustomSelect = styled.select`
   border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 0.4rem;
-  background-color: #f9f9f9;
+  background-color: ${props => props.theme.BACKGROUND};
   padding: 10px;
+  cursor: pointer;
+  outline: none;
 `;
 
 const DateInput = styled.input`
@@ -107,9 +155,8 @@ const DateInput = styled.input`
 	padding: 10px 15px;
 	width: 93%;
   border-radius: 0.4rem;
-  &:focus {
-    outline: none;
-  }
+  cursor: pointer;
+  outline: none;
 `;
 
 const Input = styled.input`
@@ -125,6 +172,43 @@ const Input = styled.input`
 const SliderWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+`;
+
+const Slider = styled.input`
+  appearance: none;
+  cursor: pointer;
+  &::-webkit-slider-runnable-track {
+    height: 5px;
+    width: 100%;
+    cursor: pointer;
+    pointer-events: none;
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    background-color: #f9f9f9;
+    border-radius: 2px;
+    border: 1px solid #000101;
+  }
+  &::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    appearance: none;
+    background: #fff;
+    border-radius: 8px;
+    margin-top: -6px;
+    border: 1px solid #c77;
+  }
+  &:active::-webkit-slider-thumb {
+    background: ${props => props.theme.HOVER};
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SliderPrice = styled.span`
+  align-self: center;
+  font-size: 30px;
+  margin: 20px;
 `;
 
 const Estimate = styled.div`
@@ -132,21 +216,18 @@ const Estimate = styled.div`
   flex-direction: column;
 `;
 
-const Message = styled.span`
-  margin: 10px;
-`;
-
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 `;
 
 const Button = styled.button`
   margin: 20px 0;
+  width: 40%;
+  padding: 10px 15px;
   border: none;
   border-radius: 18px;
-  padding: 10px 15px;
-  width: 40%;
+  cursor: pointer;
   background-color: ${props => props.theme.SUB};
   &:hover {
     background-color: ${props => props.theme.HOVER};
@@ -163,7 +244,12 @@ const Divider = styled.div`
   background-color: ${props => props.theme.OUTLINE};
 `;
 
+const Label = styled.label`
+  margin: 3px;
+`;
+
 const ADPreviewButton = styled.button`
+  margin: 15px;
   padding: 10px 30px;
   border-radius: 5px;
   cursor: pointer;
@@ -184,42 +270,167 @@ const DailyEstimateResultsWrapper = styled.div`
 const DailyEstimateResultsContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-bottom: 15px;
+`;
+
+const DailyEstimateResultsTitle = styled.span`
+  padding-bottom: 30px;
+  font-size: 18px;
+`;
+
+const DailyEstimateReachAndClick = styled.span`
+  align-self: center;
+  font-size: 14px;
+  color: ${props => props.theme.TARGET_SUB_TITLE};
 `;
 
 const DailyEstimateResults = styled.span`
   font-size: 20px;
+  color: black;
 `;
 
-export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSliderChange, onFormSubmit }) {
+const LimitText = styled.span`
+  font-size: 13px;
+`;
+
+const TargetSettingHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+`;
+
+const TargetTitle = styled.span`
+  font-size: 23px;
+`;
+
+const TargetSubTitle = styled.span`
+  margin-top: 10px;
+  font-size: 13px;
+  color: ${props => props.theme.TARGET_SUB_TITLE};
+`;
+
+const TargetSettingAge = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 40px;
+`;
+
+const TargetSettingGenderAndCountry = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 4%;
+`;
+
+const TargetGenderAndCountrySelect = styled.select`
+  margin-left: 5%;
+  border: 1px solid ${props => props.theme.OUTLINE};
+  border-radius: 0.4rem;
+  background-color: ${props => props.theme.BACKGROUND};
+  padding: 10px;
+  outline: none;
+`;
+
+const EndDateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const EndDateOption = styled.div`
+  display: flex;
+  margin: 5px;
+  width: 100%;
+`;
+
+const EndDateSetting = styled.div`
+  display: flex;
+  margin: 5px;
+  width: 100%;
+`;
+
+const PaymentSummaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+`;
+
+const PaymentSummaryText = styled.span`
+  font-size: 18px;
+`;
+
+const PaymentSummarySubText = styled.span`
+  margin: 15px 0 0 1px;
+  margin-top: 15px;
+  font-size: 15px;
+  color: ${props => props.theme.TARGET_SUB_TITLE};
+`;
+
+const PaymentAmountContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 10px 10px 11px;
+`;
+
+const PaymentAmountDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PaymentAmountText = styled.span`
+  font-size: 14px;
+`;
+
+const PaymentAmountSubText = styled.span`
+  margin: 15px 0 0 1px;
+  margin-top: 15px;
+  font-size: 12px;
+  color: ${props => props.theme.TARGET_SUB_TITLE};
+`;
+
+const TotalPaymentAmout = styled.span`
+  font-size: 15px;
+`;
+
+const countries = [
+  { value: 'South Korea', label: '한국' },
+  { value: 'Japan', label: '일본' },
+  { value: 'China', label: '중국' },
+  { value: 'India', label: '인도' },
+  { value: 'United States of America', label: '미국' }
+];
+
+const ReactSelectWrapper = styled.div`
+  display: inline;
+  margin-left: 5%;
+  min-width: 30%;
+  width: fit-content;
+`;
+
+export default function CampaignForm({ estimate, imageUrl, onImageUpload, onFormSubmit, onCountrySelect, setMinAge, setMaxAge, setGender, setDailyBudget, dailyBudget }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
     watch,
     handleSubmit,
+    control,
   } = useForm();
-  const watchDailyBudget = watch('dailyBudget', 2000);
   const watchType = watch('expiresType', 'expired');
   const watchExpiresAt = watch('expiresAt', format(addDays(new Date(), 5), 'yyyy-MM-dd'));
   const campaignDuration = differenceInCalendarDays(parseISO(watchExpiresAt), new Date());
 
-  const minAge = watch('minAge');
-  const maxAge = watch('maxAge');
-  const gender = watch('gender');
-  const country = watch('country');
-  const data = { minAge, maxAge, gender, country };
-
   return (
     <>
+      <GlobalStyle />
       <Container>
         <TitleWrapper>
           <Title>캠페인 시작하기</Title>
         </TitleWrapper>
-        <section>
+        <UploaderWrapper>
           <Uploader
             onSubmit={onImageUpload}
             encType="multipart/form-data"
           >
-            <UploadLabel htmlFor="file">배너 이미지 선택</UploadLabel>
+            <UploadLabel htmlFor="file">이미지 선택</UploadLabel>
             <input
               type="file"
               id="file"
@@ -227,9 +438,12 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
               style={{ display: 'none' }}
               accept='image/jpg,impge/png,image/jpeg,image/gif'
             />
-            <UploadInput type="submit" value="업로드" />
+            <UploadBar>
+              <UploadInput type="submit" value="업로드" />
+              <BsCloudUpload size={20} style={{ color: imageUrl ? 'green' : 'red', margin: '10px 10px 10px 20px' }} />
+            </UploadBar>
           </Uploader>
-        </section>
+        </UploaderWrapper>
         <FormWrapper>
           <Form onSubmit={handleSubmit(onFormSubmit)}>
             <ContentWrapper>
@@ -244,14 +458,14 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </Card>
                 <Card title="캠페인 타입">
                   <SelectWrapper>
-                    <Select
+                    <CustomSelect
                       name="campaignType"
                       {...register('campaignType')}
                     >
                       <option value={'banner'}>배너</option>
                       <option value={'text'}>텍스트</option>
                       <option value={'video'}>비디오</option>
-                    </Select>
+                    </CustomSelect>
                   </SelectWrapper>
                 </Card>
                 <Card title="웹 사이트 주소">
@@ -261,24 +475,99 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                     {...register('campaignUrl')}
                   />
                 </Card>
-                <Card title="배너이미지 추가하기">
-                  <UploaderPadding />
+                <Card title="배너 이미지 추가하기">
+                  <UploaderAddImageContainer>
+                    <UploaderAddImageRule>이미지 업로드는 최대 1MB까지 가능합니다.</UploaderAddImageRule>
+                    <UploaderAddImageRule>이미지 선택 후 '업로드'를 클릭하세요.</UploaderAddImageRule>
+                  </UploaderAddImageContainer>
                 </Card>
               </InputWrapper>
               <InputWrapper>
+                <TargetSettingHeader>
+                  <TargetTitle>타겟</TargetTitle>
+                  <TargetSubTitle>누구에게 광고를 내보내시겠어요?</TargetSubTitle>
+                </TargetSettingHeader>
+                <TargetSettingAge>
+                  <Label>나이</Label>
+                  <Controller
+                    control={control}
+                    name="minAge"
+                    render={({ onChange, name }) => (
+                      <Input
+                        width={'22%'}
+                        type="number"
+                        min="18"
+                        max="65"
+                        name={name}
+                        onChange={(e) => {
+                          setMinAge(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+                  <LimitText>세 이상</LimitText>
+                  <Controller
+                    control={control}
+                    name="maxAge"
+                    render={({ onChange, name }) => (
+                      <Input
+                        width={'22%'}
+                        type="number"
+                        min="18"
+                        max="65"
+                        name={name}
+                        onChange={(e) => {
+                          setMaxAge(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+                  <LimitText>세 이하</LimitText>
+                </TargetSettingAge>
+                <TargetSettingGenderAndCountry>
+                  <Label>성별</Label>
+                  <Controller
+                    control={control}
+                    name="gender"
+                    render={({ onChange, name }) => (
+                      <TargetGenderAndCountrySelect
+                        name={name}
+                        onChange={(e) => {
+                          setGender(e.target.value);
+                        }}
+                      >
+                        <option value='male'>남성</option>
+                        <option value='female'>여성</option>
+                        <option value='both'>모두</option>
+                      </TargetGenderAndCountrySelect>
+                    )}
+                  />
+                </TargetSettingGenderAndCountry>
+                <TargetSettingGenderAndCountry>
+                  <Label>국가</Label>
+                  <ReactSelectWrapper>
+                    <Select
+                      onChange={onCountrySelect}
+                      options={countries}
+                      isMulti
+                    />
+                  </ReactSelectWrapper>
+                </TargetSettingGenderAndCountry>
+              </InputWrapper>
+              <InputWrapper>
                 <Card title="기간">
-                  <SelectWrapper>
-                    <SelectWrapper>
-                      <Select
+                  <EndDateWrapper>
+                    <EndDateOption>
+                      <CustomSelect
                         name="expiresType"
                         defaultValue="expired"
                         {...register('expiresType')}
                       >
                         <option value={'expired'}>종료일 선택</option>
                         <option value={'continue'}>종료일 없이 계속 게재</option>
-                      </Select>
-                    </SelectWrapper>
-                    <SelectWrapper>
+                      </CustomSelect>
+                    </EndDateOption>
+                    <EndDateSetting>
                       {watchType === 'expired' && (
                         <DateInput
                           type="date"
@@ -287,71 +576,35 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                           {...register('expiresAt')}
                         />
                       )}
-                    </SelectWrapper>
-                  </SelectWrapper>
+                    </EndDateSetting>
+                  </EndDateWrapper>
                 </Card>
                 <Card title='일일 예산'>
                   <SliderWrapper>
-                    <h2>{watchDailyBudget} 원</h2>
-                    <Input
-                      type="range"
-                      min="2000"
-                      max="200000"
-                      step="1000"
+                    <SliderPrice>{(dailyBudget * 1).toLocaleString()} 원</SliderPrice>
+                    <Controller
+                      control={control}
                       name="dailyBudget"
-                      {...register('dailyBudget')}
+                      render={({ onChange, name }) => (
+                        <Slider
+                          type="range"
+                          min="5000"
+                          max="200000"
+                          step="5000"
+                          name={name}
+                          onChange={(e) => {
+                            setDailyBudget(e.target.value);
+                          }}
+                        />
+                      )}
                     />
                   </SliderWrapper>
                 </Card>
               </InputWrapper>
             </ContentWrapper>
-            <ContentWrapper width="360px">
-              <InputWrapper>
-                <span>나이</span>
-                <Input
-                  width={'50%'}
-                  type="number"
-                  min="18"
-                  max="65"
-                  name="minAge"
-                  {...register('minAge')}
-                />
-                <Input
-                  width={'50%'}
-                  type="number"
-                  min="18"
-                  max="65"
-                  name="maxAge"
-                  {...register('maxAge')}
-                />
-                <span>성별</span>
-                <SelectWrapper>
-                  <Select
-                    name="gender"
-                    {...register('gender')}
-                  >
-                    <option value='male'>남성</option>
-                    <option value='female'>여성</option>
-                    <option value='both'>모두</option>
-                  </Select>
-                </SelectWrapper>
-                <span>국가</span>
-                <SelectWrapper>
-                  <Select
-                    name="country"
-                    {...register('country')}
-                  >
-                    <option value='South Korea'>한국</option>
-                    <option value='China'>중국</option>
-                    <option value='Japan'>일본</option>
-                  </Select>
-                </SelectWrapper>
-                <button onClick={(e) => {
-                  e.preventDefault();
-                  onSliderChange(data);
-                }}>확인</button>
-              </InputWrapper>
+            <EstimateWrapper>
               <Estimate>
+                <Divider />
                 <ADPreviewButton
                   type="button"
                   onClick={() => setIsAdPreview(true)}
@@ -360,36 +613,41 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onSlid
                 </ADPreviewButton>
                 <Divider />
                 <DailyEstimateResultsWrapper>
-                  <span>일일 추산 결과</span>
+                  <DailyEstimateResultsTitle>
+                    일일 추산 결과
+                  </DailyEstimateResultsTitle>
                   <DailyEstimateResultsContainer>
-                    <span>도달</span>
+                    <DailyEstimateReachAndClick>도달</DailyEstimateReachAndClick>
                     <DailyEstimateResults>
-                      {watchDailyBudget / estimate.cpm * 1000}명
+                      {estimate.cpm ? `${(Math.floor(dailyBudget / estimate.cpm * 1000 * 0.95)).toLocaleString()} ~ ${(Math.floor(dailyBudget / estimate.cpm * 1000 * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                   <DailyEstimateResultsContainer>
-                    <span>링크 클릭</span>
+                    <DailyEstimateReachAndClick>링크 클릭</DailyEstimateReachAndClick>
                     <DailyEstimateResults>
-                      {watchDailyBudget / estimate.cpc}명
+                      {estimate.cpm ? `${(Math.floor(dailyBudget / estimate.cpc * 0.95)).toLocaleString()} ~ ${(Math.floor(dailyBudget / estimate.cpc * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
                     </DailyEstimateResults>
                   </DailyEstimateResultsContainer>
                 </DailyEstimateResultsWrapper>
                 <Divider />
-                <Message>
-                  <span>결제 요약</span>
-                </Message>
-                <Message>
-                  <span>
-                    결제금액 : {watchDailyBudget}원 * {campaignDuration}일 = {watchDailyBudget * campaignDuration}원
-                  </span>
-                </Message>
+                <PaymentSummaryContainer>
+                  <PaymentSummaryText>결제 요약</PaymentSummaryText>
+                  <PaymentSummarySubText>광고가 {campaignDuration}일 동안 게재됩니다.</PaymentSummarySubText>
+                </PaymentSummaryContainer>
+                <PaymentAmountContainer>
+                  <PaymentAmountDescription>
+                    <PaymentAmountText>총 결제금액</PaymentAmountText>
+                    <PaymentAmountSubText>일일 {(dailyBudget * 1).toLocaleString()}원X{campaignDuration}일</PaymentAmountSubText>
+                  </PaymentAmountDescription>
+                  <TotalPaymentAmout>{(dailyBudget * campaignDuration).toLocaleString()} 원</TotalPaymentAmout>
+                </PaymentAmountContainer>
               </Estimate>
               <ButtonWrapper>
                 <Button type="submit">
                   <span>시작하기</span>
                 </Button>
               </ButtonWrapper>
-            </ContentWrapper>
+            </EstimateWrapper>
           </Form>
         </FormWrapper>
       </Container >

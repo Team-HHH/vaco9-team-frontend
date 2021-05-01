@@ -18,7 +18,6 @@ export const getEstimate = (data) => async (dispatch) => {
   try {
     const response = await fetchEstimate(data);
     const responseBody = await response.json();
-    console.log(responseBody);
     const { cpm, cpc } = responseBody;
 
     dispatch(actionCreator(GET_ESTIMATE_SUCCESS, { cpm, cpc }));
@@ -43,9 +42,4 @@ export default function reducer(state = {}, action) {
       return state;
     }
   }
-}
-
-function formatCampaigns(estimate) {
-
-  return estimate;
 }

@@ -39,7 +39,7 @@ export const loginToAdminPage = (loginInput, history) => async (dispatch) => {
 
     dispatch(succeedToLogin(user));
 
-    history.push('/');
+    history.push('/main');
   } catch (error) {
     dispatch(failToLogin());
   }

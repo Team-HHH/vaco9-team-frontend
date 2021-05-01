@@ -45,7 +45,7 @@ export default function reducer(state = {}, action) {
   }
 }
 
-function formatCampaigns (campaigns) {
+function formatCampaigns(campaigns) {
   const byId = {};
   const allIds = [];
 

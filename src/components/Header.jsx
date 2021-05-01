@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import useHeader from '../hooks/useHeader';
 
 const Container = styled.div`
-  position: fixed;
+  position: sticky;
   display: flex;
   top: 0;
   left: 0;
+  z-index: 999;
   height: 80px;
   width: 100%;
   min-width: 900px;
@@ -58,18 +59,8 @@ export default function Header() {
     <Container>
       <LeftHeader>
         <HeaderItem>
-          <HeaderLink to="/">
+          <HeaderLink to="/main">
             Flexilis Ads
-          </HeaderLink>
-        </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/campaign/category">
-            캠페인 유형
-          </HeaderLink>
-        </HeaderItem>
-        <HeaderItem>
-          <HeaderLink to="/price">
-            비용
           </HeaderLink>
         </HeaderItem>
       </LeftHeader>
@@ -87,7 +78,7 @@ export default function Header() {
               </HeaderLink>
             </HeaderItem>
             <HeaderItem>
-              <HeaderLink to="/" onClick={handleLogoutClick}>
+              <HeaderLink to="/main" onClick={handleLogoutClick}>
                 로그아웃
               </HeaderLink>
             </HeaderItem>

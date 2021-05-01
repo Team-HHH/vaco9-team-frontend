@@ -11,6 +11,8 @@ const theme = {
   LIGHT: '#efefef',
   DARK: '#e2e2e2',
   WHITE: '#ffffff',
+  TARGET_SUB_TITLE: '#65676B',
+  CAMPAIGN_FORM_BACKGROUND: '#fffef8',
 };
 
 export default theme;

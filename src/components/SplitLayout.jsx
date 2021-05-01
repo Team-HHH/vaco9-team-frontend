@@ -6,18 +6,24 @@ import logo from '../assets/logo.png';
 
 const SplitLayoutWrapper = styled.div`
   display: flex;
-  height: 100vh;
+  flex-direction: row;
+  width: 100vw;
+  min-height: 100vh;
 `;
 
 const LeftSection = styled.div`
-  width: 30%;
+  width: 385px;
+  height: auto;
+  order: 1;
   background-color: white;
 `;
 
 const RightSection = styled.div`
   display: flex;
   justify-content: center;
-  width: 70%;
+  width: calc(100vw - 385px);
+  height: auto;
+  order: 2;
   background-color: ${props => props.theme.SUB};
 `;
 

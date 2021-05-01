@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import {  } from 'react-router-dom';
 
 import Home from '../pages/Home';
 import CreateCampaign from '../pages/CreateCampaign';
@@ -11,6 +10,7 @@ import DashBoard from '../pages/Dashboard';
 import PrivateRoute from '../helpers/PrivateRoute';
 import Modal from '../components/Modal';
 import ModalContent from '../components/ModalContent';
+import DownloadHome from '../pages/DownloadHome';
 import { errorSettled } from '../reducers/error';
 
 export default function App() {
@@ -23,14 +23,22 @@ export default function App() {
       history.push(error.link);
     }
 
+    if (error.link === 'reload') {
+      history.push('/dashboard');
+      window.location.reload();
+    }
+
     dispatch(errorSettled());
   }
 
   return (
     <>
       <Switch>
-        <Route exact path="/">
+        <Route path="/main">
           <Home />
+        </Route>
+        <Route exact path="/">
+          <DownloadHome />
         </Route>
         <PrivateRoute path="/campaign/new">
           <CreateCampaign />
@@ -48,14 +56,16 @@ export default function App() {
           <Redirect to="/" />
         </Route>
       </Switch>
-      {error.display && (
-        <Modal>
-          <ModalContent
-            errorType={error.message}
-            onCloseButtonClick={handleModalCloseButtonClick}
-          />
-        </Modal>
-      )}
+      {
+        error.display && (
+          <Modal>
+            <ModalContent
+              errorType={error.message}
+              onCloseButtonClick={handleModalCloseButtonClick}
+            />
+          </Modal>
+        )
+      }
     </>
   );
 }
