@@ -1,7 +1,7 @@
 import React from 'react';
 
-import useHeader from '../../hooks/useHeader';
 import { Header as S } from './styles';
+import useHeader from '../../hooks/useHeader';
 
 export default function Header() {
   const { user, handleLogoutClick } = useHeader();

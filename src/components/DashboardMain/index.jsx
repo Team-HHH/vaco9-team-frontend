@@ -14,14 +14,13 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
-import ReactTooltip from 'react-tooltip';
 
-import { fetchPaymentResult } from '../../apis/payment';
-import { errorOccured } from '../../reducers/error';
-import GeoChart from '../GeoChart';
-import data from '../../json/GeoChart.world.geo.json';
-import noData from '../../assets/no-data.png';
 import { DashboardMain as S } from './styles';
+import GeoChart from '../GeoChart';
+import noData from '../../assets/no-data.png';
+import { errorOccured } from '../../reducers/error';
+import data from '../../json/GeoChart.world.geo.json';
+import { fetchPaymentResult } from '../../apis/payment';
 
 const typeConfigs = {
   'reach': {

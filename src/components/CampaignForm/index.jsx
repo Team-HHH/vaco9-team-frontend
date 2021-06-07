@@ -5,18 +5,11 @@ import { BsCloudUpload } from 'react-icons/bs';
 import { parseISO, differenceInCalendarDays, format, addDays } from 'date-fns';
 import Select from 'react-select';
 
+import { CampaignForm as S } from './styles';
 import Card from '../Card';
 import Modal from '../Modal';
 import AdPreview from '../AdPreview';
-import { CampaignForm as S } from './styles';
-
-const countries = [
-  { value: 'South Korea', label: '한국' },
-  { value: 'Japan', label: '일본' },
-  { value: 'China', label: '중국' },
-  { value: 'India', label: '인도' },
-  { value: 'United States of America', label: '미국' }
-];
+import { campaignCountries } from '../../constants';
 
 export default function CampaignForm({ estimate, imageUrl, onImageUpload, onFormSubmit, onCountrySelect, setMinAge, setMaxAge, setGender, setDailyBudget, dailyBudget }) {
   const [isAdPreview, setIsAdPreview] = useState(false);
@@ -160,7 +153,7 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                   <S.ReactSelectWrapper>
                     <Select
                       onChange={onCountrySelect}
-                      options={countries}
+                      options={campaignCountries}
                       isMulti
                     />
                   </S.ReactSelectWrapper>
@@ -236,9 +229,9 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                   </S.DailyEstimateResultsContainer>
                   <S.DailyEstimateResultsContainer>
                     <S.DailyEstimateReachAndClick>링크 클릭</S.DailyEstimateReachAndClick>
-                    <DS.ailyEstimateResults>
+                    <S.DailyEstimateResults>
                       {estimate.cpm ? `${(Math.floor(dailyBudget / estimate.cpc * 0.95)).toLocaleString()} ~ ${(Math.floor(dailyBudget / estimate.cpc * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
-                    </DS.ailyEstimateResults>
+                    </S.DailyEstimateResults>
                   </S.DailyEstimateResultsContainer>
                 </S.DailyEstimateResultsWrapper>
                 <S.Divider />

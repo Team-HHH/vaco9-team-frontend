@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { parseISO, differenceInCalendarDays } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { CreateCampaign as S } from './styles';
 import Header from '../../components/Header';
 import CampaignForm from '../../components/CampaignForm';
-import { fetchPaymentResult } from '../../apis/payment';
-import { fetchNewCampaign } from '../../apis/campaigns';
-import { fetchImageFile } from '../../apis/image';
 import { checkFileSize } from '../../utils/index';
 import { errorOccured } from '../../reducers/error';
 import { getEstimate } from '../../reducers/estimate';
-import { CreateCampaign as S } from './styles';
+import { fetchImageFile } from '../../apis/image';
+import { fetchPaymentResult } from '../../apis/payment';
+import { fetchNewCampaign } from '../../apis/campaigns';
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');

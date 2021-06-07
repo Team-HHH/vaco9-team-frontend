@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import logo from '../../assets/logo.png';
 import { SplitLayout as S } from './styles';
+import logo from '../../assets/logo.png';
 
 export default function SplitLayout({ children }) {
   return (

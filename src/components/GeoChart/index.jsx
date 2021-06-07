@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { select, geoPath, geoMercator, min, max, scaleLinear } from 'd3';
 
-import useResizeObserver from '../useResizeObserver';
 import { GeoChart as S } from './styles';
+import useResizeObserver from '../useResizeObserver';
 
 export default function GeoChart({ targetCountries, data, property }) {
   const svgRef = useRef();

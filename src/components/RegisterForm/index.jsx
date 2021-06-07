@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { commonErrorMessage, registerErrorMessage } from '../../constants/validationErrorMessage';
-import { schema } from '../../validations/registerFormSchema';
 import { RegisterForm as S } from './styles';
+import { schema } from '../../validations/registerFormSchema';
+import { commonErrorMessage, registerErrorMessage } from '../../constants/validationErrorMessage';
 
 export default function RegisterForm({ onRegisterFormSubmit }) {
   const {

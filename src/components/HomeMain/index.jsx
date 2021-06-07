@@ -1,8 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import mainImg from '../../assets/mainImg.jpeg';
 import { HomeMain as S } from './styles';
+import mainImg from '../../assets/mainImg.jpeg';
 
 export default function HomeMain() {
   const history = useHistory();

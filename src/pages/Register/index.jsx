@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import SplitLayout from '../../components/SplitLayout';
 import RegisterForm from '../../components/RegisterForm';
-import { saveRegistrationData } from '../../apis/register';
 import { errorOccured } from '../../reducers/error';
+import { saveRegistrationData } from '../../apis/register';
 
 export default function Register() {
   const dispatch = useDispatch();

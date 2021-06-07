@@ -1,9 +1,9 @@
 import React from 'react';
 
-import electron from '../../assets/electron.png';
+import { DownloadHome as S } from './styles';
 import vaco from '../../assets/vaco.png';
 import feature from '../../assets/feature.png';
-import { DownloadHome as S } from './styles';
+import electron from '../../assets/electron.png';
 
 export default function DownloadHome() {
   return (

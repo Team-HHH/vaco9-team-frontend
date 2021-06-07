@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { commonErrorMessage } from '../../constants/validationErrorMessage';
-import { schema } from '../../validations/loginFormSchema';
 import { LoginForm as S } from './styles';
+import { schema } from '../../validations/loginFormSchema';
+import { commonErrorMessage } from '../../constants/validationErrorMessage';
 
 export default function LoginForm({ handleLoginSubmit }) {
   const {
