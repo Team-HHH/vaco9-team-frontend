@@ -14,22 +14,19 @@ import { fetchNewCampaign } from '../../apis/campaigns';
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [minAge, setMinAge] = useState(null);
-  const [maxAge, setMaxAge] = useState(null);
-  const [gender, setGender] = useState('male');
-  const [dailyBudget, setDailyBudget] = useState(5000);
+  const [targetData, setTargetData] = useState({
+    minAge: null,
+    maxAge: null,
+    gender: 'male',
+    country: null,
+    dailyBudget: '5000',
+  });
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const estimate = useSelector(state => state.estimate);
 
   useEffect(() => {
-    const selectedTarget = {
-      minAge,
-      maxAge,
-      gender,
-      country: selectedCountry
-    };
+    const selectedTarget = { ...targetData };
 
     for (const key in selectedTarget) {
       if (!selectedTarget[key]) {
@@ -38,7 +35,7 @@ export default function CreateCampaign() {
     }
 
     dispatch(getEstimate(selectedTarget));
-  }, [selectedCountry, minAge, maxAge, gender]);
+  }, [targetData]);
 
   async function handleNewCampaignFormSubmit(data) {
     const IMP = window.IMP;
@@ -47,8 +44,11 @@ export default function CreateCampaign() {
     const campaignDuration = differenceInCalendarDays(parseISO(data.expiresAt), new Date());
 
     try {
-      console.log(selectedCountry)
-      const response = await fetchNewCampaign({ ...data, content: url, country: selectedCountry, minAge, maxAge, gender, dailyBudget });
+      const response = await fetchNewCampaign({
+        ...data,
+        ...targetData,
+        content: url,
+      });
       const responseBody = await response.json();
 
       if (!response.ok) {
@@ -63,7 +63,7 @@ export default function CreateCampaign() {
         pay_method: 'card',
         merchant_uid: merchantId,
         name: data.title,
-        amount: dailyBudget * campaignDuration,
+        amount: targetData.dailyBudget * campaignDuration,
         buyer_email: user.email,
         buyer_name: user.name,
       }, async (rsp) => {
@@ -87,11 +87,11 @@ export default function CreateCampaign() {
     }
   }
 
-  async function handleImageUpload(e) {
-    e.preventDefault();
+  async function handleImageUpload(event) {
+    event.preventDefault();
 
     const data = new FormData();
-    const file = e.target.image.files[0];
+    const file = event.target.image.files[0];
 
     if (!file) {
       dispatch(errorOccured('파일이 존재하지 않습니다.'));
@@ -122,14 +122,10 @@ export default function CreateCampaign() {
       <CampaignForm
         estimate={estimate}
         imageUrl={url}
+        targetData={targetData}
+        setTargetData={setTargetData}
         onImageUpload={handleImageUpload}
         onFormSubmit={handleNewCampaignFormSubmit}
-        onCountrySelect={setSelectedCountry}
-        setMinAge={setMinAge}
-        setMaxAge={setMaxAge}
-        setGender={setGender}
-        setDailyBudget={setDailyBudget}
-        dailyBudget={dailyBudget}
       />
     </S.Container>
   );
