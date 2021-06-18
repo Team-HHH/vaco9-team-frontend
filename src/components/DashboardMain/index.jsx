@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { format, parseISO, startOfDay, isEqual, differenceInCalendarDays } from 'date-fns';
+import { format, parseISO, startOfDay, isEqual } from 'date-fns';
 import {
   ResponsiveContainer,
   BarChart,
@@ -18,9 +18,8 @@ import {
 import { DashboardMain as S } from './styles';
 import GeoChart from '../GeoChart';
 import noData from '../../assets/no-data.png';
-import { errorOccured } from '../../reducers/error';
 import data from '../../json/GeoChart.world.geo.json';
-import { fetchPaymentResult } from '../../apis/payment';
+import { requestPay } from '../../utils/requestPay';
 
 const typeConfigs = {
   'reach': {
@@ -133,40 +132,15 @@ export default function DashboardMain() {
     setType(event.target.closest('div').id);
   }
 
-  async function handleRequestPaymentButtonClick() {
-    const IMP = window.IMP;
-    IMP.init(process.env.REACT_APP_IMPORT_ID);
-
-    const campaignDuration = differenceInCalendarDays(parseISO(campaign?.expiresAt), new Date());
-
-    try {
-      IMP.request_pay({
-        pg: 'html5_inicis',
-        pay_method: 'card',
-        merchant_uid: campaign?._id,
-        name: campaign?.title,
-        amount: campaign?.dailyBudget * campaignDuration,
-        buyer_email: user.email,
-        buyer_name: user.name,
-      }, async (rsp) => {
-        if (rsp.success) {
-          const { imp_uid, merchant_uid } = rsp;
-          const response = await fetchPaymentResult({ imp_uid, merchant_uid });
-
-          if (!response.ok) {
-            dispatch(errorOccured('결제에 실패했습니다.'));
-            return;
-          }
-
-          dispatch(errorOccured('결제가 완료되었습니다.', 'reload'));
-        } else {
-          dispatch(errorOccured('결제에 실패했습니다.'));
-          return;
-        }
-      });
-    } catch (err) {
-      dispatch(errorOccured('캠페인 생성에 실패했습니다.'));
-    }
+  function handleRequestPaymentButtonClick() {
+    requestPay({
+      merchantId: campaign?._id,
+      title: campaign?.title,
+      dailyBudget: campaign?.dailyBudget,
+      expiresAt: campaign?.expiresAt,
+      userEmail: user.email,
+      userName: user.name,
+    }, 'reload', dispatch);
   }
 
   return (
