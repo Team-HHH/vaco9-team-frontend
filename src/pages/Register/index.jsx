@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import SplitLayout from '../../components/SplitLayout';
 import RegisterForm from '../../components/RegisterForm';
-import { errorOccured } from '../../reducers/error';
+import { errorOccurred } from '../../reducers/error';
 import { saveRegistrationData } from '../../apis/register';
 import { registerMessage } from '../../constants/message';
 
@@ -18,13 +18,13 @@ export default function Register() {
       const { message } = await response.json();
 
       if (!response.ok) {
-        dispatch(errorOccured(message));
+        dispatch(errorOccurred(message));
         return;
       }
 
       history.push('/login');
     } catch (error) {
-      dispatch(errorOccured(registerMessage.SIGN_UP_FAILED));
+      dispatch(errorOccurred(registerMessage.SIGN_UP_FAILED));
     }
   }
 

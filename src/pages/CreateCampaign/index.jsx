@@ -6,14 +6,14 @@ import Header from '../../components/Header';
 import CampaignForm from '../../components/CampaignForm';
 import { requestPay } from '../../utils/requestPay';
 import { checkFileSize } from '../../utils/index';
-import { errorOccured } from '../../reducers/error';
+import { errorOccurred } from '../../reducers/error';
 import { getEstimate } from '../../reducers/estimate';
 import { fetchImageFile } from '../../apis/image';
 import { fetchNewCampaign } from '../../apis/campaigns';
 import { campaignMessage, imageUploadMessage } from '../../constants/message';
 
 export default function CreateCampaign() {
-  const [url, setUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [targetData, setTargetData] = useState({
     minAge: null,
     maxAge: null,
@@ -42,13 +42,13 @@ export default function CreateCampaign() {
       const response = await fetchNewCampaign({
         ...data,
         ...targetData,
-        content: url,
+        content: imageUrl,
       });
       const responseBody = await response.json();
       const { merchantId } = responseBody.data;
 
       if (!response.ok) {
-        dispatch(errorOccured(campaignMessage.CAMPAIGN_CREATION_FAILED));
+        dispatch(errorOccurred(campaignMessage.CAMPAIGN_CREATION_FAILED));
         return;
       }
 
@@ -61,7 +61,7 @@ export default function CreateCampaign() {
         userName: user.name,
       }, '/dashboard', dispatch);
     } catch (err) {
-      dispatch(errorOccured(campaignMessage.CAMPAIGN_CREATION_FAILED));
+      dispatch(errorOccurred(campaignMessage.CAMPAIGN_CREATION_FAILED));
     }
   }
 
@@ -72,12 +72,12 @@ export default function CreateCampaign() {
     const file = event.target.image.files[0];
 
     if (!file) {
-      dispatch(errorOccured(imageUploadMessage.FILE_NOT_EXIST));
+      dispatch(errorOccurred(imageUploadMessage.FILE_NOT_EXIST));
       return;
     }
 
     if (!checkFileSize(file)) {
-      dispatch(errorOccured(imageUploadMessage.MAXIMIM_FILE_SIZE_EXCEEDED));
+      dispatch(errorOccurred(imageUploadMessage.MAXIMIM_FILE_SIZE_EXCEEDED));
       return;
     }
 
@@ -86,11 +86,11 @@ export default function CreateCampaign() {
     try {
       const response = await fetchImageFile(data);
       const responseBody = await response.json();
-      const url = responseBody.data.url;
+      const { url } = responseBody.data;
 
-      setUrl(url);
+      setImageUrl(url);
     } catch (error) {
-      dispatch(errorOccured(imageUploadMessage.FILE_UPLOAD_FAILED));
+      dispatch(errorOccurred(imageUploadMessage.FILE_UPLOAD_FAILED));
     }
   }
 
@@ -99,7 +99,7 @@ export default function CreateCampaign() {
       <Header />
       <CampaignForm
         estimate={estimate}
-        imageUrl={url}
+        imageUrl={imageUrl}
         targetData={targetData}
         setTargetData={setTargetData}
         onImageUpload={handleImageUpload}
