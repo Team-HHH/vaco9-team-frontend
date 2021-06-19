@@ -2,6 +2,7 @@ import { parseISO, differenceInCalendarDays } from 'date-fns';
 
 import { errorOccured } from '../reducers/error';
 import { fetchPaymentResult } from '../apis/payment';
+import { paymentMessage } from '../constants/message';
 
 export const requestPay = async (info, link, dispatch) => {
   const {
@@ -32,17 +33,17 @@ export const requestPay = async (info, link, dispatch) => {
         const response = await fetchPaymentResult({ imp_uid, merchant_uid });
 
         if (!response.ok) {
-          dispatch(errorOccured('결제에 실패했습니다.'));
+          dispatch(errorOccured(paymentMessage.PAYMENT_FAILED));
           return;
         }
 
-        dispatch(errorOccured('결제가 완료되었습니다.', link));
+        dispatch(errorOccured(paymentMessage.PAYMENT_SUCCESS, link));
       } else {
-        dispatch(errorOccured('결제에 실패했습니다.'));
+        dispatch(errorOccured(paymentMessage.PAYMENT_FAILED));
         return;
       }
     });
   } catch (error) {
-    dispatch(errorOccured('캠페인 생성에 실패했습니다.'));
+    dispatch(errorOccured(paymentMessage.PAYMENT_FAILED));
   }
 };

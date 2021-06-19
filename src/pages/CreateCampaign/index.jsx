@@ -10,6 +10,7 @@ import { errorOccured } from '../../reducers/error';
 import { getEstimate } from '../../reducers/estimate';
 import { fetchImageFile } from '../../apis/image';
 import { fetchNewCampaign } from '../../apis/campaigns';
+import { campaignMessage, imageUploadMessage } from '../../constants/message';
 
 export default function CreateCampaign() {
   const [url, setUrl] = useState('');
@@ -47,7 +48,7 @@ export default function CreateCampaign() {
       const { merchantId } = responseBody.data;
 
       if (!response.ok) {
-        dispatch(errorOccured('캠페인 생성에 실패했습니다.'));
+        dispatch(errorOccured(campaignMessage.CAMPAIGN_CREATION_FAILED));
         return;
       }
 
@@ -60,7 +61,7 @@ export default function CreateCampaign() {
         userName: user.name,
       }, '/dashboard', dispatch);
     } catch (err) {
-      dispatch(errorOccured('캠페인 생성에 실패했습니다.'));
+      dispatch(errorOccured(campaignMessage.CAMPAIGN_CREATION_FAILED));
     }
   }
 
@@ -71,12 +72,12 @@ export default function CreateCampaign() {
     const file = event.target.image.files[0];
 
     if (!file) {
-      dispatch(errorOccured('파일이 존재하지 않습니다.'));
+      dispatch(errorOccured(imageUploadMessage.FILE_NOT_EXIST));
       return;
     }
 
     if (!checkFileSize(file)) {
-      dispatch(errorOccured('파일이 최대 크기(150KB)를 초과하였습니다.'));
+      dispatch(errorOccured(imageUploadMessage.MAXIMIM_FILE_SIZE_EXCEEDED));
       return;
     }
 
@@ -89,7 +90,7 @@ export default function CreateCampaign() {
 
       setUrl(url);
     } catch (error) {
-      dispatch(errorOccured('파일 업로드에 실패하였습니다.'));
+      dispatch(errorOccured(imageUploadMessage.FILE_UPLOAD_FAILED));
     }
   }
 

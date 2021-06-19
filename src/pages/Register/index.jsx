@@ -6,6 +6,7 @@ import SplitLayout from '../../components/SplitLayout';
 import RegisterForm from '../../components/RegisterForm';
 import { errorOccured } from '../../reducers/error';
 import { saveRegistrationData } from '../../apis/register';
+import { registerMessage } from '../../constants/message';
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function Register() {
 
       history.push('/login');
     } catch (error) {
-      dispatch(errorOccured('회원가입에 실패했습니다.'));
+      dispatch(errorOccured(registerMessage.SIGN_UP_FAILED));
     }
   }
 
