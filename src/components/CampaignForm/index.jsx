@@ -11,7 +11,14 @@ import Modal from '../Modal';
 import AdPreview from '../AdPreview';
 import { campaignCountries } from '../../constants';
 
-export default function CampaignForm({ estimate, imageUrl, onImageUpload, onFormSubmit, onCountrySelect, setMinAge, setMaxAge, setGender, setDailyBudget, dailyBudget }) {
+export default function CampaignForm({
+  estimate,
+  imageUrl,
+  targetData,
+  setTargetData,
+  onImageUpload,
+  onFormSubmit,
+}) {
   const [isAdPreview, setIsAdPreview] = useState(false);
   const {
     register,
@@ -104,8 +111,11 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                         min="18"
                         max="65"
                         name={name}
-                        onChange={(e) => {
-                          setMinAge(e.target.value);
+                        onChange={(event) => {
+                          setTargetData({
+                            ...targetData,
+                            minAge: event.target.value,
+                          });
                         }}
                       />
                     )}
@@ -121,8 +131,11 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                         min="18"
                         max="65"
                         name={name}
-                        onChange={(e) => {
-                          setMaxAge(e.target.value);
+                        onChange={(event) => {
+                          setTargetData({
+                            ...targetData,
+                            maxAge: event.target.value,
+                          });
                         }}
                       />
                     )}
@@ -137,8 +150,11 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                     render={({ onChange, name }) => (
                       <S.TargetGenderAndCountrySelect
                         name={name}
-                        onChange={(e) => {
-                          setGender(e.target.value);
+                        onChange={(event) => {
+                          setTargetData({
+                            ...targetData,
+                            gender: event.target.value,
+                          });
                         }}
                       >
                         <option value='male'>남성</option>
@@ -152,7 +168,12 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                   <S.Label>국가</S.Label>
                   <S.ReactSelectWrapper>
                     <Select
-                      onChange={onCountrySelect}
+                      onChange={(selectedOption) => {
+                        setTargetData({
+                          ...targetData,
+                          country: selectedOption,
+                        });
+                      }}
                       options={campaignCountries}
                       isMulti
                     />
@@ -186,7 +207,7 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                 </Card>
                 <Card title='일일 예산'>
                   <S.SliderWrapper>
-                    <S.SliderPrice>{(dailyBudget * 1).toLocaleString()} 원</S.SliderPrice>
+                    <S.SliderPrice>{(targetData.dailyBudget * 1).toLocaleString()} 원</S.SliderPrice>
                     <Controller
                       control={control}
                       name="dailyBudget"
@@ -197,8 +218,11 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                           max="200000"
                           step="5000"
                           name={name}
-                          onChange={(e) => {
-                            setDailyBudget(e.target.value);
+                          onChange={(event) => {
+                            setTargetData({
+                              ...targetData,
+                              dailyBudget: event.target.value,
+                            });
                           }}
                         />
                       )}
@@ -224,13 +248,13 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                   <S.DailyEstimateResultsContainer>
                     <S.DailyEstimateReachAndClick>도달</S.DailyEstimateReachAndClick>
                     <S.DailyEstimateResults>
-                      {estimate.cpm ? `${(Math.floor(dailyBudget / estimate.cpm * 1000 * 0.95)).toLocaleString()} ~ ${(Math.floor(dailyBudget / estimate.cpm * 1000 * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
+                      {estimate.cpm ? `${(Math.floor(targetData.dailyBudget / estimate.cpm * 1000 * 0.95)).toLocaleString()} ~ ${(Math.floor(targetData.dailyBudget / estimate.cpm * 1000 * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
                     </S.DailyEstimateResults>
                   </S.DailyEstimateResultsContainer>
                   <S.DailyEstimateResultsContainer>
                     <S.DailyEstimateReachAndClick>링크 클릭</S.DailyEstimateReachAndClick>
                     <S.DailyEstimateResults>
-                      {estimate.cpm ? `${(Math.floor(dailyBudget / estimate.cpc * 0.95)).toLocaleString()} ~ ${(Math.floor(dailyBudget / estimate.cpc * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
+                      {estimate.cpm ? `${(Math.floor(targetData.dailyBudget / estimate.cpc * 0.95)).toLocaleString()} ~ ${(Math.floor(targetData.dailyBudget / estimate.cpc * 1.05)).toLocaleString()}명` : '타겟을 설정하세요'}
                     </S.DailyEstimateResults>
                   </S.DailyEstimateResultsContainer>
                 </S.DailyEstimateResultsWrapper>
@@ -242,9 +266,9 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
                 <S.PaymentAmountContainer>
                   <S.PaymentAmountDescription>
                     <S.PaymentAmountText>총 결제금액</S.PaymentAmountText>
-                    <S.PaymentAmountSubText>일일 {(dailyBudget * 1).toLocaleString()}원X{campaignDuration}일</S.PaymentAmountSubText>
+                    <S.PaymentAmountSubText>일일 {(targetData.dailyBudget * 1).toLocaleString()}원X{campaignDuration}일</S.PaymentAmountSubText>
                   </S.PaymentAmountDescription>
-                  <S.TotalPaymentAmout>{(dailyBudget * campaignDuration).toLocaleString()} 원</S.TotalPaymentAmout>
+                  <S.TotalPaymentAmout>{(targetData.dailyBudget * campaignDuration).toLocaleString()} 원</S.TotalPaymentAmout>
                 </S.PaymentAmountContainer>
               </S.Estimate>
               <S.ButtonWrapper>
@@ -270,7 +294,10 @@ export default function CampaignForm({ estimate, imageUrl, onImageUpload, onForm
 }
 
 CampaignForm.propTypes = {
+  estimate: PropTypes.object.isRequired,
   imageUrl: PropTypes.string.isRequired,
+  targetData: PropTypes.object.isRequired,
+  setTargetData: PropTypes.func.isRequired,
   onImageUpload: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
 };

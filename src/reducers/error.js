@@ -1,8 +1,8 @@
-const ERROR_OCCURED = 'ERROR_OCCURED';
+const ERROR_OCCURRED = 'ERROR_OCCURRED';
 const ERROR_SETTLED = 'ERROR_SETTLED';
 
-export const errorOccured = (message, link) => ({
-  type: ERROR_OCCURED,
+export const errorOccurred = (message, link) => ({
+  type: ERROR_OCCURRED,
   payload: {
     message,
     link,
@@ -21,7 +21,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case ERROR_OCCURED: {
+    case ERROR_OCCURRED: {
       return {
         ...state,
         display: true,
