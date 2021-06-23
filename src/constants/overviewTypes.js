@@ -40,8 +40,3 @@ export const mapOverviewTypesToString = {
   remainingBudget: '예산 잔액',
   dailyBudget: '일일 지출 한도',
 };
-
-export const overviewProperties = {
-  reach: '도달수',
-  click: '클릭수',
-};

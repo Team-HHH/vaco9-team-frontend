@@ -59,29 +59,6 @@ DashboardMain.Button = styled.button`
   }
 `;
 
-DashboardMain.DropdownContent = styled.div`
-  display: none;
-  position: absolute;
-  top: 40px;
-  background-color: #f9f9f9;
-  width: 160px;
-  margin-left: -58px;
-  min-width: 80px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 10px 12px;
-  z-index: 1;
-`;
-
-DashboardMain.Dropdown = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  &:hover ${DashboardMain.DropdownContent}{
-    display: block;
-  }
-`;
-
 DashboardMain.OverviewContainer = styled.div`
   width: 100%;
   height: 15%;
@@ -139,24 +116,6 @@ DashboardMain.ChartContainer = styled.div`
   background-color: white;
   border-radius: 10px;
   align-self: center;
-`;
-
-DashboardMain.TargetWrapper = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-content: center;
-  background-color: white;
-  width: 100%;
-  height: 7%;
-`;
-
-DashboardMain.TargetItem = styled.div`
-  display: flex;
-  height: 100%;
-`;
-
-DashboardMain.TargetText = styled.span`
-  margin: auto;
 `;
 
 DashboardMain.GeoWrapper = styled.div`

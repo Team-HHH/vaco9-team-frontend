@@ -4,8 +4,7 @@ import {
   format,
   isEqual,
   parseISO,
-  startOfDay,
-  differenceInCalendarDays
+  startOfDay
 } from 'date-fns';
 import {
   Bar,
@@ -21,6 +20,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
+import Target from '../Target';
 import Overview from '../Overview';
 import GeoChart from '../GeoChart';
 import noData from '../../assets/no-data.png';
@@ -29,11 +29,18 @@ import { requestPay } from '../../utils/requestPay';
 import {
   typeConfigs,
   overviewTypes,
-  overviewProperties as properties
+  mapOverviewTypesToString
 } from '../../constants/overviewTypes';
+import {
+  paymentStatus,
+  mapPaymentStatusToString
+} from '../../constants/paymentStatus';
 import getOverviewData from '../../utils/getOverviewData';
 import sortByProperty from '../../utils/sortByCountry';
+import customizeGraphAxisTick from '../../utils/customizeGraphAxisTick';
+import formatGraphTick from '../../utils/formatGraphTick';
 import { DashboardMain as S } from './styles';
+import theme from '../../styles/theme';
 
 const {
   all,
@@ -46,26 +53,11 @@ const {
   country
 } = overviewTypes;
 
-const CustomizedAxisTick = ({ x, y, payload }) => {
-  const dateTip = parseISO(payload.value).toDateString();
-  const formattedDate = `${dateTip.slice(4, 7)}, ${dateTip.slice(8, 10)}`;
-
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={23}
-        y={0}
-        dy={14}
-        fontSize="0.90em"
-        fontFamily="bold"
-        textAnchor="end"
-        fill="#363636"
-      >
-        {formattedDate}
-      </text>
-    </g>
-  );
-};
+const {
+  opened,
+  pending,
+  closed
+} = mapPaymentStatusToString;
 
 export default function DashboardMain() {
   const dispatch = useDispatch();
@@ -88,7 +80,7 @@ export default function DashboardMain() {
   const countryData = {};
   const demographicData = {};
   const countryNames = campaign?.country;
-  const [property, setProperty] = useState('reach');
+  const [property, setProperty] = useState(reach);
 
   campaign?.exposed.forEach(elem => {
     if (!demographicData[elem.age]) {
@@ -126,9 +118,10 @@ export default function DashboardMain() {
           <S.DateText>{format(today, 'yyyy년 M월 d일 (eee)')}</S.DateText>
         </S.DateItem>
         <S.CampaignStatus status={campaign?.status}>
-          {campaign?.status === 'opened' ? '진행중' : campaign?.status === 'pending' ? '결제대기' : '기간종료'}
+          {campaign?.status === paymentStatus.opened
+            ? opened : campaign?.status === paymentStatus.pending ? pending : closed}
         </S.CampaignStatus>
-        {campaign?.status === 'pending' && (
+        {campaign?.status === paymentStatus.pending && (
           <S.DateItem>
             <S.Button
               onClick={handleRequestPaymentButtonClick}
@@ -138,28 +131,10 @@ export default function DashboardMain() {
           </S.DateItem>
         )}
       </S.DateWrapper>
-      <S.TargetWrapper>
-        <S.TargetItem>
-          <S.TargetText>~{campaign?.expiresAt && format(parseISO(campaign?.expiresAt), 'yyyy년 M월 d일')}</S.TargetText>
-        </S.TargetItem>
-        <S.TargetItem>
-          <S.TargetText>{`연령 : ${campaign?.minAge}세 ~ ${campaign?.maxAge}세`}</S.TargetText>
-        </S.TargetItem>
-        <S.TargetItem>
-          <S.TargetText></S.TargetText>
-          <S.TargetText>{campaign?.gender === 'both' ? `성별 : 무관` : campaign?.gender === 'male' ? `성별 : 남성` : `성별 : 여성`}</S.TargetText>
-        </S.TargetItem>
-        <S.TargetItem>
-          <S.Dropdown>
-            <span>선택 국가</span>
-            <S.DropdownContent>
-              {countryNames?.map(name => {
-                return (<p key={name}>{name}</p>);
-              })}
-            </S.DropdownContent>
-          </S.Dropdown>
-        </S.TargetItem>
-      </S.TargetWrapper>
+      <Target
+        campaign={campaign}
+        countryNames={countryNames}
+      />
       <Overview
         overviewData={overviewData}
         setType={setType}
@@ -176,23 +151,23 @@ export default function DashboardMain() {
         {marketingChartData?.length > 0 && (type === all && (
           <ResponsiveContainer>
             <AreaChart data={marketingChartData}>
-              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+              <XAxis dataKey="date" tickCount={10} tick={customizeGraphAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
               <YAxis yAxisId={1} domain={['dataMin', 'dataMax']} />
               <Tooltip />
-              <Area type='natural' dataKey='reach' stackId="1" stroke={typeConfigs['reach'].color} fill={typeConfigs['reach'].color} yAxisId={1} />
-              <Area type='natural' dataKey='click' stackId="2" stroke={typeConfigs['click'].color} fill={typeConfigs['click'].color} yAxisId={1} />
-              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={'#363636'} />
+              <Area type='natural' dataKey={reach} stackId="1" stroke={typeConfigs[reach].color} fill={typeConfigs[reach].color} yAxisId={1} />
+              <Area type='natural' dataKey={click} stackId="2" stroke={typeConfigs[click].color} fill={typeConfigs[click].color} yAxisId={1} />
+              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={theme.STROKE} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
         )) || ((type === reach || type === click || type === cpm || type === ctr || type === cpc) && (
           <ResponsiveContainer>
             <AreaChart data={marketingChartData}>
-              <XAxis dataKey="date" tickCount={10} tick={CustomizedAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
-              <YAxis yAxisId={1} type="number" domain={type === 'ctr' ? [0.005, 0.015] : ['dataMin', 'dataMax']} />
+              <XAxis dataKey="date" tickCount={10} tick={customizeGraphAxisTick} minTickGap={2} tickSize={7} dx={14} allowDataOverflow={true} />
+              <YAxis yAxisId={1} type="number" domain={type === ctr ? [0.005, 0.015] : ['dataMin', 'dataMax']} />
               <Tooltip />
               <Area type='natural' dataKey={type} stackId="1" stroke={typeConfigs[type].color} fill={typeConfigs[type].color} yAxisId={1} />
-              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={'#363636'} />
+              <Brush dataKey="date" startIndex={Math.round(marketingChartData?.length * 0.45)} stroke={theme.STROKE} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
@@ -201,28 +176,12 @@ export default function DashboardMain() {
             <BarChart data={Object.values(demographicData)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="age" />
-              <YAxis yAxisId="left" orientation="left" stroke="#000000" domain={['dataMin', 'dataMax']} tickFormatter={tick => {
-                if (tick > 1000000000) {
-                  return Math.round(tick / 100000000) / 10 + 'Bn';
-                } else if (tick > 1000000) {
-                  return Math.round(tick / 100000) / 10 + 'M';
-                } else {
-                  return Math.round(tick / 100) / 10 + 'K';
-                }
-              }} />
-              <YAxis yAxisId="right" orientation="right" stroke="#000000" domain={['dataMin', 'dataMax']} tickFormatter={tick => {
-                if (tick > 1000000000) {
-                  return Math.round(tick / 100000000) / 10 + 'Bn';
-                } else if (tick > 1000000) {
-                  return Math.round(tick / 100000) / 10 + 'M';
-                } else {
-                  return Math.round(tick / 100) / 10 + 'K';
-                }
-              }} />
+              <YAxis yAxisId="left" orientation="left" stroke={theme.STROKE} domain={['dataMin', 'dataMax']} tickFormatter={formatGraphTick} />
+              <YAxis yAxisId="right" orientation="right" stroke={theme.STROKE} domain={['dataMin', 'dataMax']} tickFormatter={formatGraphTick} />
               <Tooltip />
               <Legend />
-              <Bar yAxisId="left" dataKey="reach" fill="#ffab73" />
-              <Bar yAxisId="right" dataKey="click" fill="#8ac4d0" />
+              <Bar yAxisId="left" dataKey={reach} fill={theme.LEFT_Y_AXIS} />
+              <Bar yAxisId="right" dataKey={click} fill={theme.RIGHT_Y_AXIS} />
             </BarChart>
           </ResponsiveContainer>
         )) || ((type === country) && (
@@ -236,20 +195,20 @@ export default function DashboardMain() {
                   value={property}
                   onChange={event => setProperty(event.target.value)}
                 >
-                  <option value="reach">Reach</option>
-                  <option value="click">Click</option>
+                  <option value={reach}>Reach</option>
+                  <option value={click}>Click</option>
                 </S.Selector>
               </S.SelectorWrapper>
-              <S.RankTitle>{properties[property]}</S.RankTitle>
+              <S.RankTitle>{mapOverviewTypesToString[property]}</S.RankTitle>
               <ol>
-                {sortByProperty(countryData, property).map((el, index) => {
+                {sortByProperty(countryData, property).map((country, index) => {
                   return (
                     <S.RankWrapper
-                      key={el}
-                      backgroundColor={index % 2 ? 'white' : 'beige'}
+                      key={country}
+                      backgroundColor={index % 2 ? theme.WHITE : theme.BEIGE}
                     >
-                      <S.Rank>{el}</S.Rank>
-                      <S.Rank>{(countryData[el][property]).toLocaleString()}명</S.Rank>
+                      <S.Rank>{country}</S.Rank>
+                      <S.Rank>{(countryData[country][property]).toLocaleString()}명</S.Rank>
                     </S.RankWrapper>
                   );
                 })}

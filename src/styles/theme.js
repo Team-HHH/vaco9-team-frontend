@@ -11,8 +11,12 @@ const theme = {
   LIGHT: '#efefef',
   DARK: '#e2e2e2',
   WHITE: '#ffffff',
+  BEIGE: '#f5f5dc',
   TARGET_SUB_TITLE: '#65676B',
   CAMPAIGN_FORM_BACKGROUND: '#fffef8',
+  LEFT_Y_AXIS: '#ffab73',
+  RIGHT_Y_AXIS: '#8ac4d0',
+  STROKE: '#363636',
 };
 
 export default theme;

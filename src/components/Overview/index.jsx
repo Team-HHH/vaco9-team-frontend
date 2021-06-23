@@ -1,6 +1,9 @@
 import React from 'react';
 import { Overview as S } from './styles';
-import { mapOverviewTypesToString } from '../../constants/overviewTypes';
+import {
+  mapOverviewTypesToString,
+  overviewTypes as Types
+} from '../../constants/overviewTypes';
 
 export default function Overview(props) {
   const {
@@ -27,7 +30,7 @@ export default function Overview(props) {
   return (
     <S.OverviewContainer>
       <S.Overview
-        id="reach"
+        id={Types.reach}
         onClick={handleOverviewClick}
       >
         <S.Key>{reach}</S.Key>
@@ -37,7 +40,7 @@ export default function Overview(props) {
         </S.CompareValue>
       </S.Overview>
       <S.Overview
-        id="click"
+        id={Types.click}
         onClick={handleOverviewClick}
       >
         <S.Key>{click}</S.Key>
@@ -47,7 +50,7 @@ export default function Overview(props) {
         </S.CompareValue>
       </S.Overview>
       <S.Overview
-        id="cpm"
+        id={Types.cpm}
         onClick={handleOverviewClick}
       >
         <S.Key>{cpm}</S.Key>
@@ -57,7 +60,7 @@ export default function Overview(props) {
         </S.CompareValue>
       </S.Overview>
       <S.Overview
-        id="ctr"
+        id={Types.ctr}
         onClick={handleOverviewClick}
       >
         <S.Key>{ctr}</S.Key>
@@ -67,7 +70,7 @@ export default function Overview(props) {
         </S.CompareValue>
       </S.Overview>
       <S.Overview
-        id="cpc"
+        id={Types.cpc}
         onClick={handleOverviewClick}
       >
         <S.Key>{cpc}</S.Key>
@@ -77,19 +80,19 @@ export default function Overview(props) {
         </S.CompareValue>
       </S.Overview>
       <S.Overview
-        id="bio"
+        id={Types.bio}
         onClick={handleOverviewClick}
       >
         <S.Key>{bio}</S.Key>
       </S.Overview>
       <S.Overview
-        id="country"
+        id={Types.country}
         onClick={handleOverviewClick}
       >
         <S.Key>{country}</S.Key>
       </S.Overview>
       <S.Overview
-        id="all"
+        id={Types.all}
         onClick={handleOverviewClick}
       >
         <S.Key textAlign="center">{remainingBudget}</S.Key>
