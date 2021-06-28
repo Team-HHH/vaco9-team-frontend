@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const DashboardMain = {};
+export const Overview = {};
 
-DashboardMain.Container = styled.div`
+Overview.Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -13,24 +13,24 @@ DashboardMain.Container = styled.div`
   overflow-y: hidden;
 `;
 
-DashboardMain.DateWrapper = styled.div`
+Overview.DateWrapper = styled.div`
   margin-bottom: 10px;
   height: 30px;
   display: flex;
 `;
 
-DashboardMain.DateItem = styled.div`
+Overview.DateItem = styled.div`
   display: flex;
 `;
 
-DashboardMain.DateText = styled.span`
+Overview.DateText = styled.span`
   margin: 0 10px 0 0;
   font-size: 20px;
   height: 100%;
   padding: 5px;
 `;
 
-DashboardMain.CampaignStatus = styled.div`
+Overview.CampaignStatus = styled.div`
   display: flex;
   justify-content: center;
   width: fit-content;
@@ -41,7 +41,7 @@ DashboardMain.CampaignStatus = styled.div`
   margin: 0 10px 0 0;
 `;
 
-DashboardMain.Button = styled.button`
+Overview.Button = styled.button`
   border: none;
   border-radius: 5px;
   padding: 5px;
@@ -59,7 +59,30 @@ DashboardMain.Button = styled.button`
   }
 `;
 
-DashboardMain.OverviewContainer = styled.div`
+Overview.DropdownContent = styled.div`
+  display: none;
+  position: absolute;
+  top: 40px;
+  background-color: #f9f9f9;
+  width: 160px;
+  margin-left: -58px;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 10px 12px;
+  z-index: 1;
+`;
+
+Overview.Dropdown = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &:hover ${Overview.DropdownContent}{
+    display: block;
+  }
+`;
+
+Overview.OverviewContainer = styled.div`
   width: 100%;
   height: 15%;
   display: grid;
@@ -69,7 +92,7 @@ DashboardMain.OverviewContainer = styled.div`
   box-sizing: border-box;
 `;
 
-DashboardMain.StaticOverview = styled.div`
+Overview.StaticOverview = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -80,7 +103,7 @@ DashboardMain.StaticOverview = styled.div`
   padding: 20px;
 `;
 
-DashboardMain.Overview = styled(DashboardMain.StaticOverview)`
+Overview.Overview = styled(Overview.StaticOverview)`
   transition: transform 0.3s ease;
   &:hover {
     transform: scale(1.05);
@@ -88,7 +111,7 @@ DashboardMain.Overview = styled(DashboardMain.StaticOverview)`
   }
 `;
 
-DashboardMain.Key = styled.p`
+Overview.Key = styled.p`
   font-size: 20px;
   text-align: ${props => props.textAlign || 'left'};
   padding: 0;
@@ -96,19 +119,19 @@ DashboardMain.Key = styled.p`
   margin: 0;
 `;
 
-DashboardMain.Value = styled.p`
+Overview.Value = styled.p`
   font-size: 14px;
   text-align: center;
   padding: 0;
   margin: 0;
 `;
 
-DashboardMain.CompareValue = styled(DashboardMain.Value)`
+Overview.CompareValue = styled(Overview.Value)`
   font-size: 17px;
   color: ${props => props.color && props.color[0] === '-' ? 'blue' : 'red'};
 `;
 
-DashboardMain.ChartContainer = styled.div`
+Overview.ChartContainer = styled.div`
   display: flex;
   padding: 30px;
   width: 100%;
@@ -118,22 +141,40 @@ DashboardMain.ChartContainer = styled.div`
   align-self: center;
 `;
 
-DashboardMain.GeoWrapper = styled.div`
+Overview.TargetWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  background-color: white;
+  width: 100%;
+  height: 7%;
+`;
+
+Overview.TargetItem = styled.div`
+  display: flex;
+  height: 100%;
+`;
+
+Overview.TargetText = styled.span`
+  margin: auto;
+`;
+
+Overview.GeoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
 `;
 
-DashboardMain.GeoContainer = styled.div`
+Overview.GeoContainer = styled.div`
   width: ${props => props.width}
 `;
 
-DashboardMain.SelectorWrapper = styled.div`
+Overview.SelectorWrapper = styled.div`
   display: flex;
   place-content: flex-end;
 `;
 
-DashboardMain.Selector = styled.select`
+Overview.Selector = styled.select`
   border: 1px solid ${props => props.theme.OUTLINE};
   border-radius: 0.4rem;
   background-color: ${props => props.theme.BACKGROUND};
@@ -142,21 +183,21 @@ DashboardMain.Selector = styled.select`
   outline: none;
 `;
 
-DashboardMain.RankWrapper = styled.li`
+Overview.RankWrapper = styled.li`
   display: flex;
   justify-content: space-between;
   background: ${props => props.backgroundColor};
 `;
 
-DashboardMain.RankTitle = styled.h2`
+Overview.RankTitle = styled.h2`
   text-align: center;
 `;
 
-DashboardMain.Rank = styled.span`
+Overview.Rank = styled.span`
   margin: 10px;
 `;
 
-DashboardMain.WarningContainer = styled.div`
+Overview.WarningContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -164,6 +205,6 @@ DashboardMain.WarningContainer = styled.div`
   justify-content: center;
 `;
 
-DashboardMain.Warning = styled.h1`
+Overview.Warning = styled.h1`
   font-size: 36px;
 `;
